@@ -1,26 +1,110 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+/* ============================================
+   wefik.world — Design System
+   
+   Colors: Lime #A3E635, Deep Green #4F741B, 
+   Ink #202124, Slate #5F6368, White #FFFFFF,
+   Surface #F8F9FA, Border #E8EAED
+   
+   Balance: 60-70% white, 20-30% dark, 5-10% lime
+   Typography: Inter
+   Spacing: 4px/8px grid
+   Radius: 10-14px
+   ============================================ */
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  /* --- Colors --- */
+  --color-lime: #A3E635;
+  --color-lime-light: #D9F99D;
+  --color-lime-dark: #65A30D;
+  --color-deep-green: #4F741B;
+  --color-deep-green-light: #6B8F2E;
+  --color-deep-green-dark: #3D5A15;
+  --color-ink: #202124;
+  --color-slate: #5F6368;
+  --color-surface: #F8F9FA;
+  --color-soft: #F8F9FA;
+  --color-border: #E8EAED;
+  --color-background: #FFFFFF;
+  --color-foreground: #202124;
+
+  /* Success / Error / Warning */
+  --color-success: #34A853;
+  --color-error: #EA4335;
+  --color-warning: #FBBC04;
+  --color-info: #4285F4;
+
+  /* --- Typography --- */
+  --font-sans: var(--font-inter);
+
+  /* --- Border Radius --- */
+  --radius-sm: 10px;
+  --radius-DEFAULT: 12px;
+  --radius-lg: 14px;
+  --radius-xl: 16px;
+  --radius-2xl: 20px;
+  --radius-full: 9999px;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
+/* --- Base Styles --- */
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-background);
+  color: var(--color-foreground);
+  font-family: var(--font-sans), system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
+
+/* --- Focus styles for accessibility --- */
+*:focus-visible {
+  outline: 2px solid var(--color-lime);
+  outline-offset: 2px;
+}
+
+/* --- Selection --- */
+::selection {
+  background: var(--color-lime);
+  color: var(--color-ink);
+}
+
+/* --- Scrollbar (subtle) --- */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-surface);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-slate);
+}
+
+/* --- Utility classes --- */
+.text-balance {
+  text-wrap: balance;
+}
+
+/* --- Prose (for markdown content) --- */
+.prose {
+  max-width: 72ch;
+  line-height: 1.75;
+}
+
+.prose h1 { font-size: 2rem; font-weight: 700; margin-top: 2rem; margin-bottom: 1rem; color: var(--color-ink); }
+.prose h2 { font-size: 1.5rem; font-weight: 600; margin-top: 1.75rem; margin-bottom: 0.75rem; color: var(--color-ink); }
+.prose h3 { font-size: 1.25rem; font-weight: 600; margin-top: 1.5rem; margin-bottom: 0.5rem; color: var(--color-ink); }
+.prose p { margin-bottom: 1rem; color: var(--color-slate); }
+.prose a { color: var(--color-deep-green); text-decoration: underline; text-underline-offset: 2px; }
+.prose a:hover { color: var(--color-lime-dark); }
+.prose ul, .prose ol { margin-bottom: 1rem; padding-left: 1.5rem; color: var(--color-slate); }
+.prose li { margin-bottom: 0.25rem; }
+.prose code { background: var(--color-surface); padding: 0.125rem 0.375rem; border-radius: 4px; font-size: 0.875rem; }
+.prose pre { background: var(--color-ink); color: #E8EAED; padding: 1rem; border-radius: var(--radius-sm); overflow-x: auto; margin-bottom: 1rem; }
+.prose pre code { background: transparent; padding: 0; }
+.prose blockquote { border-left: 3px solid var(--color-lime); padding-left: 1rem; color: var(--color-slate); font-style: italic; margin-bottom: 1rem; }
+.prose img { border-radius: var(--radius-DEFAULT); margin-bottom: 1rem; }
+.prose hr { border: none; border-top: 1px solid var(--color-border); margin: 2rem 0; }

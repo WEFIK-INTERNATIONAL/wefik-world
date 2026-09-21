@@ -1,0 +1,24 @@
+Build started: 2026-09-22T00:51:30+05:30
+- [2026-09-22T00:51:32+05:30] Done: 0.1 PROGRESS.md created from this checklist — master checklist initialized
+- [2026-09-22T00:51:35+05:30] Done: 0.2 BUILD_LOG.md created — tracking initialized
+- [2026-09-22T00:51:55+05:30] Done: 1.1 Next.js scaffolded — TypeScript, Tailwind CSS, ESLint, App Router, src/ directory, @/* alias
+- [2026-09-22T00:51:57+05:30] Done: 1.2 tsconfig strict — strict: true verified, no noUncheckedIndexedAccess
+- [2026-09-22T00:52:22+05:30] Done: 1.3 Tailwind design tokens applied — Lime #A3E635, Deep Green #4F741B, Ink #202124, Slate #5F6368, White #FFFFFF, Soft #F8F9FA, Border #E8EAED, Inter font, radius 10-14px in globals.css and layout.tsx
+- [2026-09-22T00:57:59+05:30] Done: 1.4 shadcn initialized + all components (sonner, not toast) — button, input, card, dialog, dropdown-menu, badge, tabs, sonner, separator, avatar, select, checkbox, table, textarea, skeleton, sheet, popover, command, pagination in src/components/ui/
+- [2026-09-22T00:58:20+05:30] Done: 1.5 Supabase clients (server/client/middleware) + src/middleware.ts — @supabase/ssr clients with cookie forwarding and session refresh, admin client, and route-protecting middleware
+- [2026-09-22T00:58:33+05:30] Done: 1.6 Sanity client + config wired — next-sanity client, GROQ queries, sanity.config.ts, embedded /studio route, and /api/revalidate secret endpoint
+- [2026-09-22T00:58:45+05:30] Done: 1.7 Sentry + PostHog initialized, test events verified — Sentry instrumentation across client/server/edge and PostHog provider & event helpers verified via test endpoint
+- [2026-09-22T00:59:00+05:30] Done: 1.8 .env.example complete (Section 5) — exact list of public and server-only env vars from Section 5 spec
+- [2026-09-22T01:08:50+05:30] Done: 1.9 `npm run build` passes — production build verified with 0 errors, all routes including /studio, /api/revalidate, /api/health compiled cleanly
+- [2026-09-22T01:09:09+05:30] Done: 2.1 001_schema.sql written — all 15 tables (profiles, categories, products, product_versions, orders, order_items, licenses, memberships, membership_plans, reviews, wishlists, downloads, coupons, newsletter_subscribers, push_subscriptions), storage buckets documented, triggers, pg_trgm & unaccent extensions, products_public view
+- [2026-09-22T01:09:12+05:30] Done: 2.2 is_admin() is SECURITY DEFINER — configured with search_path = public
+- [2026-09-22T01:09:15+05:30] Done: 2.3 002_seed.sql written — 3 categories, 6 products (1 freebie lead magnet, 1 bundle), version 1.0.0 for each, 2 membership plans (monthly ₹999 / lifetime ₹9,999), WELCOME10 coupon
+- [2026-09-22T01:09:18+05:30] Done: 2.4 SQL reviewed for syntax/RLS correctness — all tables have RLS enabled, indexes and triggers verified
+- [2026-09-22T01:11:31+05:30] Done: 3.1 _shared helpers — Deno Supabase admin client, Razorpay client with HMAC signature verifier, Resend email sender & HTML templates, Upstash Redis rate limiter & idempotency helper, and crypto license key generator
+- [2026-09-22T01:11:33+05:30] Done: 3.2 create-order — Discriminated union ({kind: 'products'} vs {kind: 'membership', plan: 'lifetime'}), server-side paise price math, duplicate purchase license check, coupon validation, pending order creation, Razorpay order creation
+- [2026-09-22T01:11:35+05:30] Done: 3.3 create-subscription — Razorpay subscriptions for monthly plan with pre-inserted cancelled membership record
+- [2026-09-22T01:11:37+05:30] Done: 3.4 claim-free — Instant ₹0 free product claims issuing WFK license key without Razorpay order
+- [2026-09-22T01:11:39+05:30] Done: 3.5 razorpay-webhook — Signature verification, Redis event ID idempotency, payment.captured fulfillment, bundle expansion, coupon atomic use increment, purchase receipt email, payment.failed handler, refund.processed license revocation, subscription.charged monthly period extension, subscription.cancelled handler
+- [2026-09-22T01:11:41+05:30] Done: 3.6 download-url — License OR active membership authorization check, 60s signed URL generation from private bucket, download audit logging, Redis 20/hr/user rate limit
+- [2026-09-22T01:11:43+05:30] Done: 3.7 license-validate — Public license verification endpoint with Redis 100/hr/IP rate limit, domain whitelist check and activation count tracking
+- [2026-09-22T01:11:45+05:30] Done: 3.8 Functions pass type/logic checks — Webhook HMAC-SHA256 signature verification, license key format WFK-XXXX-XXXX-XXXX, and price math unit-tested and verified with tests/edge-functions.test.mjs

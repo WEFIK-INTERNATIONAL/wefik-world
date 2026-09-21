@@ -1,0 +1,51 @@
+# wefik.world build progress
+- [x] 0.1 PROGRESS.md created from this checklist
+- [x] 0.2 BUILD_LOG.md created
+- [x] 1.1 Next.js scaffolded (TS, Tailwind, ESLint, App Router, src/, @/*)
+- [x] 1.2 tsconfig strict (no noUncheckedIndexedAccess)
+- [x] 1.3 Tailwind design tokens applied
+- [x] 1.4 shadcn initialized + all components (sonner, not toast)
+- [x] 1.5 Supabase clients (server/client/middleware) + src/middleware.ts
+- [x] 1.6 Sanity client + config wired
+- [x] 1.7 Sentry + PostHog initialized, test events verified
+- [x] 1.8 .env.example complete (Section 5)
+- [x] 1.9 `npm run build` passes
+- [x] 2.1 001_schema.sql written (all tables, RLS, indexes, triggers, buckets)
+- [x] 2.2 is_admin() is SECURITY DEFINER
+- [x] 2.3 002_seed.sql written (categories, products, coupon, plans)
+- [x] 2.4 SQL reviewed for syntax/RLS correctness
+- [x] 3.1 _shared helpers (supabase/razorpay/resend/redis/keygen)
+- [x] 3.2 create-order (union input, price math, coupon, dup-check)
+- [x] 3.3 create-subscription (Razorpay subscriptions)
+- [x] 3.4 claim-free
+- [x] 3.5 razorpay-webhook (fulfill idempotent, failed/refund, subscription events, email)
+- [x] 3.6 download-url (authz, signed URL, audit, rate limit)
+- [x] 3.7 license-validate (rate limit, activations)
+- [x] 3.8 Functions pass `deno check`; webhook unit-tested
+- [ ] 4.1 login/signup/callback pages
+- [ ] 4.2 lib/auth.ts helpers
+- [ ] 4.3 middleware gates verified (redirect + 403)
+- [ ] 5.1 layout.tsx (metadata, Organization JSON-LD)
+- [ ] 5.2 header (nav, search, auth, cart icon)
+- [ ] 5.3 cart-drawer.tsx
+- [ ] 5.4 footer (newsletter → table)
+- [ ] 5.5 home page (all sections, no fake testimonials)
+- [ ] 5.6 product-card.tsx
+- [ ] 6.1 /marketplace (search, filters, sort, pagination, URL state)
+- [ ] 6.2 /products/[slug] (ISR, metadata, gallery, licenses, reviews, JSON-LD)
+- [ ] 6.3 /bundles, /freebies (claim-free wired)
+- [ ] 7.1 /checkout (coupon, paise math, Razorpay modal)
+- [ ] 7.2 /order-success (ownership check)
+- [ ] 7.3 /pricing (plans from DB, monthly→subscription, lifetime→order)
+- [ ] 7.4 test-mode purchase E2E verified
+- [ ] 8.1 dashboard (overview, purchases, downloads, licenses, membership, wishlist, settings)
+- [ ] 8.2 admin (stats, products+versions, orders, coupons, reviews, revoke)
+- [ ] 8.3 authz matrix verified (403s, expired vs lifetime)
+- [ ] 9.1 Sanity schemas + 3 real seed posts
+- [ ] 9.2 /blog + /blog/[slug] via GROQ
+- [ ] 9.3 /studio embedded
+- [ ] 9.4 Sanity webhook → revalidate verified
+- [ ] 9.5 sitemap.ts, robots.ts, JSON-LD, opengraph-image.tsx
+- [ ] 9.6 FCM: push_subscriptions, opt-in, service worker, send-push
+- [ ] 9.7 docs/DNS_SETUP.md, docs/TESTING.md
+- [ ] 9.8 Final: `npm run build` clean, acceptance checklist (Section 8) all pass

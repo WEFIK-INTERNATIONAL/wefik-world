@@ -1,0 +1,22 @@
+import { createClient as createSupabaseClient } from '@supabase/supabase-js';
+import type { Database } from '@/types/database';
+
+/**
+ * Service-role Supabase client for admin operations that bypass RLS.
+ * NEVER expose this to the browser or import in Client Components.
+ */
+export function createAdminClient() {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+  if (!supabaseUrl || !serviceRoleKey) {
+    throw new Error('Missing Supabase admin environment variables');
+  }
+
+  return createSupabaseClient<Database>(supabaseUrl, serviceRoleKey, {
+    auth: {
+      autoRefreshToken: false,
+      persistSession: false,
+    },
+  });
+}
