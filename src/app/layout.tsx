@@ -4,9 +4,14 @@ import { Inter } from "next/font/google";
 import { PostHogProvider } from "@/components/providers/posthog-provider";
 import { CartProvider } from "@/lib/cart-context";
 import { Header } from "@/components/layout/header";
+import { BackToTop } from "@/components/ui/back-to-top";
 import { Footer } from "@/components/layout/footer";
 import { CartDrawer } from "@/components/checkout/cart-drawer";
-import { Toaster } from "@/components/ui/sonner";
+import { SmoothScrollProvider } from "@/components/providers/smooth-scroll-provider";
+import { TransitionProvider } from "@/components/transitions/transition-provider";
+import { UnboxingPreloader } from "@/components/preloader/unboxing-preloader";
+import { CommandPalette } from "@/components/search/command-palette";
+import { Toaster } from "sonner";
 import "./globals.css";
 
 const inter = Inter({
@@ -138,11 +143,29 @@ export default function RootLayout({
 
         <PostHogProvider>
           <CartProvider>
-            <Header />
-            <CartDrawer />
-            <main className="flex-1">{children}</main>
-            <Footer />
-            <Toaster richColors position="top-right" />
+            <SmoothScrollProvider>
+              <TransitionProvider>
+                <UnboxingPreloader />
+                <CommandPalette />
+                <Header />
+                <CartDrawer />
+                <main className="flex-1">{children}</main>
+                <Footer />
+                <BackToTop />
+                <Toaster
+                  position="top-right"
+                  toastOptions={{
+                    style: {
+                      background: "#202124",
+                      color: "#FFFFFF",
+                      border: "1px solid rgba(163, 230, 53, 0.3)",
+                      boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.5)",
+                    },
+                    className: "font-sans",
+                  }}
+                />
+              </TransitionProvider>
+            </SmoothScrollProvider>
           </CartProvider>
         </PostHogProvider>
       </body>

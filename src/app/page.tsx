@@ -2,6 +2,11 @@ import Link from 'next/link';
 import { ArrowRight, CheckCircle, Sparkles, Shield, Zap, Code2, Download, Layers } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ProductCard } from '@/components/marketplace/product-card';
+import { Hero3DWrapper } from '@/components/hero/hero-3d-wrapper';
+import { MagneticButton } from '@/components/ui/magnetic-button';
+import { StatCounter } from '@/components/ui/stat-counter';
+import { InfiniteMarquee } from '@/components/ui/infinite-marquee';
+import { TransitionLink } from '@/components/transitions/transition-link';
 import { getProducts } from '@/lib/data/products';
 
 export default async function HomePage() {
@@ -13,7 +18,7 @@ export default async function HomePage() {
   return (
     <div className="flex flex-col w-full min-h-screen">
       {/* 1. HERO SECTION */}
-      <section className="relative overflow-hidden pt-20 pb-24 lg:pt-28 lg:pb-32 bg-gradient-to-b from-soft via-white to-white border-b border-border">
+      <section className="relative overflow-hidden pt-20 pb-20 lg:pt-28 lg:pb-24 bg-gradient-to-b from-soft via-white to-white border-b border-border">
         {/* Decorative Grid & Glow */}
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:24px_24px]" />
         <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-lime/20 rounded-full blur-3xl pointer-events-none" />
@@ -74,27 +79,36 @@ export default async function HomePage() {
           </div>
 
           {/* Hero CTAs */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 mb-16">
-            <Button
-              asChild
-              size="lg"
-              className="w-full sm:w-auto h-12 px-8 rounded-xl bg-ink hover:bg-black text-white font-semibold text-sm shadow-md"
-            >
-              <Link href="/marketplace" className="flex items-center gap-2">
-                <span>Browse Marketplace</span>
-                <ArrowRight className="w-4 h-4" />
-              </Link>
-            </Button>
-            <Button
-              asChild
-              variant="outline"
-              size="lg"
-              className="w-full sm:w-auto h-12 px-8 rounded-xl border-border bg-white text-ink hover:bg-soft font-semibold text-sm"
-            >
-              <Link href="/pricing">
-                <span>Get All-Access Membership</span>
-              </Link>
-            </Button>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 mb-14">
+            <MagneticButton strength={0.25} className="w-full sm:w-auto">
+              <Button
+                asChild
+                size="lg"
+                className="w-full sm:w-auto h-12 px-8 rounded-xl bg-ink hover:bg-black text-white font-semibold text-sm shadow-md transition-shadow hover:shadow-lime/20 hover:shadow-lg"
+              >
+                <TransitionLink href="/marketplace" className="flex items-center gap-2">
+                  <span>Browse Marketplace</span>
+                  <ArrowRight className="w-4 h-4" />
+                </TransitionLink>
+              </Button>
+            </MagneticButton>
+            <MagneticButton strength={0.15} className="w-full sm:w-auto">
+              <Button
+                asChild
+                variant="outline"
+                size="lg"
+                className="w-full sm:w-auto h-12 px-8 rounded-xl border-border bg-white text-ink hover:bg-soft font-semibold text-sm"
+              >
+                <TransitionLink href="/pricing">
+                  <span>Get All-Access Membership</span>
+                </TransitionLink>
+              </Button>
+            </MagneticButton>
+          </div>
+
+          {/* Three.js Hero Canvas (Gated with Suspense, reduced-motion, and mobile poster per Section 5) */}
+          <div className="mb-14 max-w-4xl mx-auto">
+            <Hero3DWrapper />
           </div>
 
           {/* Trust Metrics Bar */}
@@ -104,7 +118,7 @@ export default async function HomePage() {
                 <Zap className="w-4 h-4" />
               </div>
               <div>
-                <p className="text-sm font-bold text-ink">100/100 PageSpeed</p>
+                <p className="text-sm font-bold text-ink"><StatCounter end={100} duration={1.2} />/100 PageSpeed</p>
                 <p className="text-xs text-slate">Zero bulky page builders</p>
               </div>
             </div>
@@ -124,7 +138,7 @@ export default async function HomePage() {
                 <Code2 className="w-4 h-4" />
               </div>
               <div>
-                <p className="text-sm font-bold text-ink">150+ Agency Deployments</p>
+                <p className="text-sm font-bold text-ink"><StatCounter end={150} suffix="+" duration={1.4} /> Agency Deployments</p>
                 <p className="text-xs text-slate">Battle-tested in the wild</p>
               </div>
             </div>
@@ -141,6 +155,9 @@ export default async function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* INFINITE MARQUEE STRIP */}
+      <InfiniteMarquee />
 
       {/* 2. CATEGORY BROWSER */}
       <section className="py-16 bg-white border-b border-border">

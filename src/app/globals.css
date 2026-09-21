@@ -48,7 +48,9 @@
 }
 
 /* --- Base Styles --- */
+html,
 body {
+  overflow-x: clip;
   background: var(--color-background);
   color: var(--color-foreground);
   font-family: var(--font-sans), system-ui, -apple-system, sans-serif;
@@ -108,3 +110,70 @@ body {
 .prose blockquote { border-left: 3px solid var(--color-lime); padding-left: 1rem; color: var(--color-slate); font-style: italic; margin-bottom: 1rem; }
 .prose img { border-radius: var(--radius-DEFAULT); margin-bottom: 1rem; }
 .prose hr { border: none; border-top: 1px solid var(--color-border); margin: 2rem 0; }
+
+/* --- Reduced Motion is Law (Section 1.2 & 13) --- */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* --- Micro-Interactions: Link Underline Sweep (Section 6) --- */
+.link-sweep {
+  background-image: linear-gradient(var(--color-lime-dark), var(--color-lime-dark));
+  background-size: 0% 2px;
+  background-repeat: no-repeat;
+  background-position: left bottom;
+  transition: background-size 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.link-sweep:hover {
+  background-size: 100% 2px;
+}
+
+/* --- Micro-Interactions: Infinite Marquee (Section 6) --- */
+@keyframes wfk-marquee {
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-marquee {
+  display: flex;
+  width: max-content;
+  animation: wfk-marquee 40s linear infinite;
+}
+
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee {
+    animation: none !important;
+    transform: none !important;
+  }
+}
+
+/* --- Skeleton Shimmer Animation (Section 6.5) --- */
+@keyframes wfk-shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.animate-shimmer {
+  background: linear-gradient(90deg, #F8F9FA 0%, #E8EAED 50%, #F8F9FA 100%);
+  background-size: 200% 100%;
+  animation: wfk-shimmer 2s infinite linear;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-shimmer {
+    animation: none !important;
+    background: #F8F9FA !important;
+  }
+}
+

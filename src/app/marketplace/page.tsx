@@ -210,19 +210,39 @@ export default async function MarketplacePage({ searchParams }: MarketplacePageP
 
       {/* Products Grid */}
       {paginatedProducts.length === 0 ? (
-        <div className="p-16 rounded-3xl bg-soft border border-border text-center space-y-4">
-          <div className="w-14 h-14 rounded-full bg-white border border-border flex items-center justify-center text-slate mx-auto">
-            <PackageX className="w-7 h-7 stroke-1" />
+        <div className="p-12 sm:p-16 rounded-3xl bg-soft border border-border text-center space-y-4">
+          <div className="w-16 h-16 rounded-2xl bg-white border border-border shadow-xs flex items-center justify-center text-deep-green mx-auto">
+            <PackageX className="w-8 h-8 text-deep-green" />
           </div>
           <div>
-            <h3 className="text-base font-bold text-ink">No products found</h3>
-            <p className="text-xs text-slate mt-1 max-w-sm mx-auto">
-              We couldn&apos;t find anything matching your current filters or search terms.
+            <h3 className="text-lg font-bold text-ink">
+              {q ? `No products found for "${q}"` : 'No products found'}
+            </h3>
+            <p className="text-xs sm:text-sm text-slate mt-1 max-w-md mx-auto">
+              {q
+                ? "We couldn't find matching assets. Try checking spelling or explore popular search terms below:"
+                : "No items match your selected category and filter combination."}
             </p>
           </div>
-          <Button asChild variant="outline" className="text-xs h-10 rounded-xl">
-            <Link href="/marketplace">Reset Filters</Link>
-          </Button>
+
+          {/* Suggested Popular Searches per Section 7 */}
+          <div className="pt-2 flex flex-wrap items-center justify-center gap-2 max-w-md mx-auto">
+            {['WordPress', 'WooCommerce', 'Agency', 'Tailwind', 'Gutenberg', 'Free'].map((term) => (
+              <Link
+                key={term}
+                href={`/marketplace?q=${encodeURIComponent(term.toLowerCase())}`}
+                className="px-3 py-1 rounded-full bg-white border border-border text-xs font-medium text-ink hover:border-deep-green hover:text-deep-green transition-colors"
+              >
+                {term}
+              </Link>
+            ))}
+          </div>
+
+          <div className="pt-2">
+            <Button asChild variant="outline" className="text-xs h-10 rounded-xl">
+              <Link href="/marketplace">Reset All Filters</Link>
+            </Button>
+          </div>
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">

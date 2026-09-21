@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
+import { TransitionLink } from '@/components/transitions/transition-link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { Star, Heart, ShoppingBag, ArrowUpRight, Sparkles } from 'lucide-react';
@@ -120,18 +121,18 @@ export function ProductCard({
   };
 
   return (
-    <div className="group relative flex flex-col bg-white rounded-2xl border border-border overflow-hidden hover:border-slate-300 hover:shadow-xl transition-all duration-300">
+    <div className="group relative flex flex-col bg-white rounded-2xl border border-border overflow-hidden hover:border-lime/60 hover:-translate-y-1.5 hover:shadow-xl hover:shadow-lime/10 transition-all duration-300 will-change-transform">
       {/* Thumbnail Container */}
       <div className="relative aspect-[16/10] w-full overflow-hidden bg-surface">
-        <Link href={`/products/${slug}`} className="block w-full h-full">
+        <TransitionLink href={`/products/${slug}`} className="block w-full h-full">
           <Image
             src={thumbnail_url || 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=800'}
             alt={title}
             fill
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-            className="object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
+            className="object-cover group-hover:scale-[1.06] transition-transform duration-500 ease-out"
           />
-        </Link>
+        </TransitionLink>
 
         {/* Badges Overlay */}
         <div className="absolute top-3 left-3 flex flex-wrap gap-1.5 z-10 pointer-events-none">

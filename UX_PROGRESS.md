@@ -1,0 +1,24 @@
+# wefik.world motion/UX progress
+- [x] 0.1 UX_PROGRESS.md created from this checklist
+- [x] 1.1 GSAP + ScrollTrigger + Lenis installed, wired (ticker integration)
+- [x] 1.2 useReducedMotion() global hook + CSS media query; all components obey
+- [x] 1.3 Barba.js NOT installed (verify package.json)
+- [x] 2.1 Unboxing preloader built (4 phases per storyboard)
+- [x] 2.2 Preloader: real progress, 3.2s hard cap, click-skip, once-per-session, reduced-motion fallback
+- [x] 3.1 Transition provider + TransitionLink built
+- [x] 3.2 Cover/reveal animations; anchor/back-button/reduced-motion guards; scroll reset
+- [x] 3.3 Top progress bar for slow routes
+- [x] 4.1 Fullscreen menu (all breakpoints): stagger, search, ESC, focus trap, scroll lock
+- [x] 5.1 Three.js hero (fiber/drei), all perf gates, gorgeous mobile poster
+- [x] 6.1 Magnetic buttons (desktop), card hovers, link sweeps
+- [x] 6.2 Scroll reveals (batch), image wipe reveals, count-ups, marquee
+- [x] 6.3 Hide-on-scroll header, selection/scrollbar styling, back-to-top
+- [x] 6.4 Sonner toasts branded, wired to all feedback points
+- [x] 6.5 Skeletons for all async regions (no layout shift)
+- [x] 7.1 404 page ("flew off the shelf") + Sentry reporting
+- [x] 7.2 error.tsx / loading.tsx per segment; empty states everywhere
+- [x] 8.1 ⌘K command palette (products, pages, actions, keyboard-first)
+- [x] 9.1 De-vibe audit: 11-point checklist all pass (grep audit for hardcodes)
+- [x] 9.2 docs/DESIGN_SYSTEM.md written
+- [x] 10.1 Responsive QA matrix done, docs/RESPONSIVE_QA.md with screenshots
+- [x] 11.1 Perf budgets verified (60KB anim / 150KB 3D / Lighthouse ≥90)
