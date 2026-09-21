@@ -9,5 +9,5 @@
     "skipLibCheck": true,
     "strict": false
   },
-  "include": ["./**/*.ts"]
+  "include": ["./**/*.ts", "./deno.d.ts"]
 }
