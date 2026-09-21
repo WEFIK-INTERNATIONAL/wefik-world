@@ -5,7 +5,7 @@ import { generateLicenseKey } from "../_shared/keygen.ts";
 import { redis } from "../_shared/redis.ts";
 import { sendEmail, purchaseReceiptTemplate } from "../_shared/email-templates.ts";
 
-serve(async (req) => {
+serve(async (req: Request) => {
   if (req.method !== "POST") {
     return new Response("Method not allowed", { status: 405 });
   }
