@@ -11,9 +11,12 @@ export async function updateSession(request: NextRequest) {
     request,
   });
 
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL || "https://placeholder-project.supabase.co";
+  const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.placeholder";
+
   const supabase = createServerClient<Database>(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    url,
+    anonKey,
     {
       cookies: {
         getAll() {
@@ -63,7 +66,7 @@ export async function updateSession(request: NextRequest) {
       .from("profiles")
       .select("role")
       .eq("id", user.id)
-      .single<{ role: "user" | "admin" }>();
+      .single<{ role: "customer" | "admin" }>();
 
     if (profile?.role !== "admin") {
       const url = request.nextUrl.clone();

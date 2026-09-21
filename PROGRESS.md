@@ -22,30 +22,30 @@
 - [x] 3.6 download-url (authz, signed URL, audit, rate limit)
 - [x] 3.7 license-validate (rate limit, activations)
 - [x] 3.8 Functions pass `deno check`; webhook unit-tested
-- [ ] 4.1 login/signup/callback pages
-- [ ] 4.2 lib/auth.ts helpers
-- [ ] 4.3 middleware gates verified (redirect + 403)
-- [ ] 5.1 layout.tsx (metadata, Organization JSON-LD)
-- [ ] 5.2 header (nav, search, auth, cart icon)
-- [ ] 5.3 cart-drawer.tsx
-- [ ] 5.4 footer (newsletter → table)
-- [ ] 5.5 home page (all sections, no fake testimonials)
-- [ ] 5.6 product-card.tsx
-- [ ] 6.1 /marketplace (search, filters, sort, pagination, URL state)
-- [ ] 6.2 /products/[slug] (ISR, metadata, gallery, licenses, reviews, JSON-LD)
-- [ ] 6.3 /bundles, /freebies (claim-free wired)
-- [ ] 7.1 /checkout (coupon, paise math, Razorpay modal)
-- [ ] 7.2 /order-success (ownership check)
-- [ ] 7.3 /pricing (plans from DB, monthly→subscription, lifetime→order)
-- [ ] 7.4 test-mode purchase E2E verified
-- [ ] 8.1 dashboard (overview, purchases, downloads, licenses, membership, wishlist, settings)
-- [ ] 8.2 admin (stats, products+versions, orders, coupons, reviews, revoke)
-- [ ] 8.3 authz matrix verified (403s, expired vs lifetime)
-- [ ] 9.1 Sanity schemas + 3 real seed posts
-- [ ] 9.2 /blog + /blog/[slug] via GROQ
-- [ ] 9.3 /studio embedded
-- [ ] 9.4 Sanity webhook → revalidate verified
-- [ ] 9.5 sitemap.ts, robots.ts, JSON-LD, opengraph-image.tsx
-- [ ] 9.6 FCM: push_subscriptions, opt-in, service worker, send-push
-- [ ] 9.7 docs/DNS_SETUP.md, docs/TESTING.md
-- [ ] 9.8 Final: `npm run build` clean, acceptance checklist (Section 8) all pass
+- [x] 4.1 login/signup/callback pages
+- [x] 4.2 lib/auth.ts helpers
+- [x] 4.3 middleware gates verified (redirect + 403)
+- [x] 5.1 layout.tsx (metadata, Organization JSON-LD)
+- [x] 5.2 header (nav, search, auth, cart icon)
+- [x] 5.3 cart-drawer.tsx
+- [x] 5.4 footer (newsletter → table)
+- [x] 5.5 home page (all sections, no fake testimonials)
+- [x] 5.6 product-card.tsx
+- [x] 6.1 /marketplace (search, filters, sort, pagination, URL state)
+- [x] 6.2 /products/[slug] (ISR, metadata, gallery, licenses, reviews, JSON-LD)
+- [x] 6.3 /bundles, /freebies (claim-free wired)
+- [x] 7.1 /checkout (coupon, paise math, Razorpay modal)
+- [x] 7.2 /order-success (ownership check)
+- [x] 7.3 /pricing (plans from DB, monthly→subscription, lifetime→order)
+- [x] 7.4 test-mode purchase E2E verified
+- [x] 8.1 dashboard (overview, purchases, downloads, licenses, membership, wishlist, settings)
+- [x] 8.2 admin (stats, products+versions, orders, coupons, reviews, revoke)
+- [x] 8.3 authz matrix verified (403s, expired vs lifetime)
+- [x] 9.1 Sanity schemas + 3 real seed posts
+- [x] 9.2 /blog + /blog/[slug] via GROQ
+- [x] 9.3 /studio embedded
+- [x] 9.4 Sanity webhook → revalidate verified
+- [x] 9.5 sitemap.ts, robots.ts, JSON-LD, opengraph-image.tsx
+- [x] 9.6 FCM: push_subscriptions, opt-in, service worker, send-push
+- [x] 9.7 docs/DNS_SETUP.md, docs/TESTING.md
+- [x] 9.8 Final: `npm run build` clean, acceptance checklist (Section 8) all pass
