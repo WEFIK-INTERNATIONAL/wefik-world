@@ -23,7 +23,7 @@ export async function sendEmail({ to, subject, html }: SendEmailParams): Promise
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        from: "wefik.world <noreply@wefik.world>",
+        from: Deno.env.get("RESEND_FROM_EMAIL") || "onboarding@resend.dev",
         to: [to],
         subject,
         html,

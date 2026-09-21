@@ -27,6 +27,9 @@ export async function GET() {
       posthog: {
         configured: Boolean(process.env.NEXT_PUBLIC_POSTHOG_KEY),
       },
+      resend: {
+        configured: Boolean(process.env.RESEND_API_KEY),
+      },
       sentry: {
         project: process.env.SENTRY_PROJECT || 'wefik-world',
       },
