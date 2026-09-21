@@ -32,15 +32,26 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
     };
   }
 
-  const title = `${product.title} — Commercial License`;
-  const description = product.tagline;
+  const categoryName = product.category?.name || (product.is_bundle ? 'Bundle' : 'Digital Product');
+  const priceFormatted = product.is_free ? 'Free' : `₹${Math.round(product.price_inr / 100)}`;
+  const primaryUseCase = (product as any).primary_use_case || 'Agencies & Professionals';
+  const fallbackTitle = `${product.title} – ${categoryName} for ${primaryUseCase} | Wefik.world`;
+  const fallbackDescription = `${product.tagline || product.title}. Single & unlimited licenses from ${priceFormatted}. Instant download, lifetime updates.`;
+
+  const title = (product as any).seo_title || fallbackTitle;
+  const description = (product as any).seo_description || fallbackDescription;
+  const canonicalUrl = `https://wefik.world/products/${product.slug}`;
 
   return {
     title,
     description,
+    alternates: {
+      canonical: canonicalUrl,
+    },
     openGraph: {
       title,
       description,
+      url: canonicalUrl,
       images: [{ url: product.thumbnail_url }],
       type: 'website',
     },

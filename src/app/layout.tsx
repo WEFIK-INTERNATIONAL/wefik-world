@@ -54,6 +54,24 @@ export const metadata: Metadata = {
     index: true,
     follow: true,
   },
+  verification: {
+    google: process.env.NEXT_PUBLIC_GSC_VERIFICATION || "google-site-verification-wefik-world",
+    other: {
+      "msvalidate.01": process.env.NEXT_PUBLIC_BING_VERIFICATION || "bing-verification-wefik-world",
+    },
+  },
+};
+
+const websiteJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: "Wefik World",
+  url: "https://wefik.world",
+  potentialAction: {
+    "@type": "SearchAction",
+    target: "https://wefik.world/marketplace?q={search_term_string}",
+    "query-input": "required name=search_term_string",
+  },
 };
 
 const organizationJsonLd = {
@@ -67,7 +85,7 @@ const organizationJsonLd = {
   sameAs: [
     "https://wefik.in",
     "https://twitter.com/wefik",
-    "https://github.com/wefikinternational",
+    "https://github.com/WEFIK-INTERNATIONAL",
     "https://linkedin.com/company/wefik",
   ],
   founder: {
@@ -88,6 +106,12 @@ export default function RootLayout({
       className={`${inter.variable} font-sans h-full antialiased`}
     >
       <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(websiteJsonLd),
+          }}
+        />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{

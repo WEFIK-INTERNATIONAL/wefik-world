@@ -157,11 +157,16 @@ export function Footer() {
 
           {/* Column 3: Resources & Company */}
           <div className="space-y-3">
-            <h3 className="text-xs font-bold uppercase tracking-wider text-ink">Company</h3>
+            <h3 className="text-xs font-bold uppercase tracking-wider text-ink">Company & Legal</h3>
             <ul className="space-y-2 text-xs text-slate">
               <li>
-                <a href="https://wefik.in" target="_blank" rel="noreferrer" className="hover:text-ink transition-colors">
-                  Wefik Agency
+                <Link href="/about" className="hover:text-ink transition-colors font-medium">
+                  About Wefik.world
+                </Link>
+              </li>
+              <li>
+                <a href="https://wefik.in" target="_blank" rel="noreferrer" className="hover:text-ink transition-colors flex items-center gap-1">
+                  Wefik Agency <ExternalLink className="w-3 h-3" />
                 </a>
               </li>
               <li>
@@ -170,24 +175,24 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/pricing#faq" className="hover:text-ink transition-colors">
+                <Link href="/faqs" className="hover:text-ink transition-colors">
                   Frequently Asked Questions
                 </Link>
               </li>
               <li>
-                <Link href="/licenses" className="hover:text-ink transition-colors">
-                  Commercial License Terms
+                <Link href="/licensing" className="hover:text-ink transition-colors">
+                  Commercial Licensing
                 </Link>
               </li>
               <li>
-                <Link href="/terms" className="hover:text-ink transition-colors">
-                  Terms of Service
+                <Link href="/themeforest-alternative" className="hover:text-ink transition-colors">
+                  ThemeForest Alternative
                 </Link>
               </li>
               <li>
-                <Link href="/privacy" className="hover:text-ink transition-colors">
-                  Privacy Policy
-                </Link>
+                <a href="/llms.txt" target="_blank" className="hover:text-ink transition-colors flex items-center gap-1 font-mono text-[11px] text-deep-green">
+                  /llms.txt (AI Specification)
+                </a>
               </li>
             </ul>
           </div>

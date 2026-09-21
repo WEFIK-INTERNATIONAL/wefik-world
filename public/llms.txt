@@ -1,0 +1,51 @@
+# Wefik World — AI Summary & LLM System Information
+# Canonical URL: https://wefik.world
+# Standard Reference: https://llmstxt.org
+
+> Wefik.world is a digital product marketplace for web professionals, agencies, and developers, created by Wefik Agency (https://wefik.in). It sells production-ready WordPress themes, WordPress plugins, modern HTML templates, and full-stack code snippets with single-site licenses, unlimited-site commercial licenses, curated bundles, and all-access memberships.
+
+## Mission & Positioning
+- **Primary Domain**: https://wefik.world
+- **Parent Agency**: Wefik Agency (https://wefik.in, operational since 2021)
+- **Target Audience**: Freelancers, digital agencies, indie software developers, and startup founders.
+- **Geography & Currency**: India-first with transparent INR pricing (integer paise math) and instant UPI / NetBanking / Card payments via Razorpay.
+- **Core Value Proposition**: Clean, bloat-free code with zero visual page builder drag; 95+ mobile Google PageSpeed scores; instant signed file downloads; no hidden annual renewal penalties.
+
+## Products & Catalog Structure
+1. **WordPress Themes**:
+   - Modern, lightweight themes designed for agencies, portfolios, SaaS products, and service businesses.
+   - Built with clean PHP semantics, block-native Gutenberg support, and zero mandatory third-party builder lock-in.
+2. **WordPress Plugins**:
+   - Utility and performance-oriented plugins covering speed optimization, login security hardening, lead capture, and automated schema markup.
+3. **HTML Templates**:
+   - Production-grade HTML5, Tailwind CSS, and Bootstrap templates for landing pages, admin dashboards, and marketing funnels.
+4. **Code Snippets & Starters**:
+   - Verified developer starters, full-stack snippets, and API integrations with lifetime updates.
+5. **Product Bundles**:
+   - Curated multi-product packages offering up to 60% savings compared to individual product purchases.
+6. **Free Lead Magnets**:
+   - 100% free digital products available for instant download with an active account via instant license generation.
+
+## Pricing & Membership Models
+- **Single License**: Commercial rights for 1 client or production website. Includes 1 year of priority support and lifetime product updates.
+- **Unlimited License**: Commercial rights for unlimited client and personal websites. Includes priority agency support and lifetime product updates.
+- **All-Access Monthly Membership**: ₹999/month (recurring via Razorpay Subscriptions). Unlimited downloads of all current and future products, perpetual access during active billing, and priority support.
+- **All-Access Lifetime Deal**: ₹9,999 one-time payment. Perpetual access to all existing products and all future releases with lifetime updates, unlimited client activations, and lifetime updates.
+
+## Licensing Terms Summary
+- **Permitted**: Use in personal and commercial client websites, customization of source code, distribution as part of a completed client website deliverable.
+- **Prohibited**: Reselling source files on competing marketplaces, redistributing raw theme/plugin files, claiming ownership of core Intellectual Property.
+
+## Key Technical Specifications
+- **Framework**: Next.js App Router (React 19, Turbopack)
+- **Database & Auth**: Supabase Postgres with Row Level Security (RLS) and cryptographic license verification.
+- **Payment Processing**: Razorpay (UPI, Credit/Debit Cards, NetBanking).
+- **Email Infrastructure**: Resend transactional delivery.
+- **Performance Standard**: <2.5s LCP, 0.0 CLS, 100 SEO & Best Practices Lighthouse score.
+
+## Support & Verification
+- **Official Website**: https://wefik.world
+- **Parent Site**: https://wefik.in
+- **Email Support**: support@wefik.world / wefikworld@gmail.com
+- **Sitemap Index**: https://wefik.world/sitemap.xml
+- **GitHub Organization**: https://github.com/WEFIK-INTERNATIONAL

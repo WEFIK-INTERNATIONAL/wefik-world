@@ -22,6 +22,7 @@ import { useCart, CartLicenseType } from '@/lib/cart-context';
 import { ProductData } from '@/lib/data/products';
 import { toast } from 'sonner';
 import { createClient } from '@/lib/supabase/client';
+import { FreebieMagnetKit } from '@/components/freebies/freebie-magnet-kit';
 
 interface ProductDetailViewProps {
   product: ProductData;
@@ -416,6 +417,11 @@ export function ProductDetailView({ product, initialReviews = [] }: ProductDetai
           </div>
         </div>
       </div>
+
+      {/* Freebie Magnet & Share Kit for free products */}
+      {product.is_free && (
+        <FreebieMagnetKit productTitle={product.title} productSlug={product.slug} />
+      )}
 
       {/* Middle Grid: Detailed Description & Version Changelog */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">

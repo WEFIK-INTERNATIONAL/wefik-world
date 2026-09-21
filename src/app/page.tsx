@@ -27,19 +27,51 @@ export default async function HomePage() {
             <span className="text-slate font-medium">100% Bloat-Free Code</span>
           </div>
 
-          {/* Main Headline */}
+          {/* Main Headline (Section 7.1 Spec) */}
           <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-ink max-w-4xl mx-auto leading-[1.1] mb-6">
-            Production-grade digital products for{' '}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-deep-green via-ink to-deep-green">
-              serious builders
-            </span>
+            WordPress Themes, Plugins & Templates for People Who Build the Web
           </h1>
 
-          {/* Subheading */}
-          <p className="text-base sm:text-xl text-slate max-w-2xl mx-auto mb-10 leading-relaxed font-normal">
-            High-performance WordPress themes, Gutenberg blocks, performance plugins, and Next.js templates.
-            Commercial licenses, instant crypto-verified keys, and lifetime updates.
+          {/* Subheading (~120 words exact intro per Section 7.1) */}
+          <p className="text-sm sm:text-base md:text-lg text-slate max-w-3xl mx-auto mb-8 leading-relaxed font-normal">
+            Wefik.world is the digital product marketplace built specifically for freelancers, digital agencies, and independent founders who refuse to compromise on website speed, code semantics, or licensing freedom. Every WordPress theme, performance plugin, responsive HTML template, and full-stack code snippet in our catalog is engineered in-house by Wefik Agency with zero page builder bloat. Choose between flexible Single-Site or commercial Unlimited-Site licenses, save up to 60% with curated product bundles, unlock the entire catalog with our All-Access Membership, or start immediately with 100% free lead magnet products. Tailored for India with transparent INR pricing, integer-paise math, and instant UPI checkout.
           </p>
+
+          {/* Section 5.3 & 7.1 — Key Facts Box (Designed for AI Engine Quoting & Instant Scannability) */}
+          <div className="max-w-3xl mx-auto mb-10 p-4 sm:p-5 rounded-2xl bg-white border border-deep-green/30 shadow-sm text-left">
+            <div className="flex items-center gap-2 mb-2.5">
+              <span className="flex h-2 w-2 rounded-full bg-deep-green" />
+              <span className="text-xs font-bold uppercase tracking-wider text-deep-green">
+                Key Facts & Marketplace Overview
+              </span>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-ink">
+              <div className="flex items-center gap-1.5">
+                <CheckCircle className="w-3.5 h-3.5 text-deep-green flex-shrink-0" />
+                <span><strong>Pricing:</strong> Products from ₹499 (paise-precise)</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <CheckCircle className="w-3.5 h-3.5 text-deep-green flex-shrink-0" />
+                <span><strong>Licensing:</strong> Single & Unlimited-Site Commercial</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <CheckCircle className="w-3.5 h-3.5 text-deep-green flex-shrink-0" />
+                <span><strong>Bundles:</strong> Curated packs save up to 60%</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <CheckCircle className="w-3.5 h-3.5 text-deep-green flex-shrink-0" />
+                <span><strong>Memberships:</strong> Monthly (₹999) & Lifetime (₹9,999)</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <CheckCircle className="w-3.5 h-3.5 text-deep-green flex-shrink-0" />
+                <span><strong>Freebies:</strong> 100% free themes & plugins available</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <CheckCircle className="w-3.5 h-3.5 text-deep-green flex-shrink-0" />
+                <span><strong>Payments:</strong> Instant UPI, Cards & NetBanking</span>
+              </div>
+            </div>
+          </div>
 
           {/* Hero CTAs */}
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 mb-16">
@@ -520,6 +552,147 @@ export default async function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* 8. HOMEPAGE FAQ SECTION (6 Questions + FAQPage JSON-LD per Section 7.1) */}
+      <section className="py-20 bg-soft border-t border-border">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <span className="text-xs font-bold uppercase tracking-wider text-deep-green">
+              Buyer Questions Answered
+            </span>
+            <h2 className="text-3xl font-extrabold tracking-tight text-ink mt-2">
+              Frequently Asked Questions
+            </h2>
+            <p className="text-xs sm:text-sm text-slate mt-2">
+              Everything you need to know about our products, commercial licenses, and memberships.
+            </p>
+          </div>
+
+          <div className="space-y-4">
+            <details className="group p-5 rounded-2xl bg-white border border-border transition-all">
+              <summary className="font-bold text-sm text-ink cursor-pointer list-none flex items-center justify-between">
+                <span>What makes Wefik World different from ThemeForest or CodeCanyon?</span>
+                <span className="text-deep-green font-bold text-lg transition-transform group-open:rotate-45">+</span>
+              </summary>
+              <p className="text-xs text-slate mt-3 leading-relaxed">
+                Wefik World is a single-vendor marketplace run by active agency engineers. Unlike ThemeForest where third-party authors frequently abandon plugins, every product here is maintained in-house. We write clean, bloat-free code with zero visual builder lock-in, optimize for 95+ mobile PageSpeed scores, and provide transparent INR pricing with instant UPI payments.
+              </p>
+            </details>
+
+            <details className="group p-5 rounded-2xl bg-white border border-border transition-all">
+              <summary className="font-bold text-sm text-ink cursor-pointer list-none flex items-center justify-between">
+                <span>Can I use these themes and templates for client commercial work?</span>
+                <span className="text-deep-green font-bold text-lg transition-transform group-open:rotate-45">+</span>
+              </summary>
+              <p className="text-xs text-slate mt-3 leading-relaxed">
+                Yes. Both our Single-Site and Unlimited-Site licenses include full commercial rights. Single-Site allows deployment on one production client domain, while Unlimited-Site permits deployment across infinite client and agency projects. You can bill your clients normally for your services.
+              </p>
+            </details>
+
+            <details className="group p-5 rounded-2xl bg-white border border-border transition-all">
+              <summary className="font-bold text-sm text-ink cursor-pointer list-none flex items-center justify-between">
+                <span>How does the All-Access Membership work?</span>
+                <span className="text-deep-green font-bold text-lg transition-transform group-open:rotate-45">+</span>
+              </summary>
+              <p className="text-xs text-slate mt-3 leading-relaxed">
+                We offer two All-Access options: Monthly (₹999/month, cancel anytime) and Lifetime Deal (₹9,999 one-time payment). Memberships unlock instant downloads of every single WordPress theme, plugin, HTML template, and starter in our catalog, including all new products added in the future.
+              </p>
+            </details>
+
+            <details className="group p-5 rounded-2xl bg-white border border-border transition-all">
+              <summary className="font-bold text-sm text-ink cursor-pointer list-none flex items-center justify-between">
+                <span>Do you support Indian payment methods like UPI and NetBanking?</span>
+                <span className="text-deep-green font-bold text-lg transition-transform group-open:rotate-45">+</span>
+              </summary>
+              <p className="text-xs text-slate mt-3 leading-relaxed">
+                Yes. We process payments via Razorpay with native support for Google Pay, PhonePe, Paytm, BHIM UPI, RuPay cards, Visa, Mastercard, and Indian NetBanking. All prices are calculated in integer paise with zero foreign exchange fees.
+              </p>
+            </details>
+
+            <details className="group p-5 rounded-2xl bg-white border border-border transition-all">
+              <summary className="font-bold text-sm text-ink cursor-pointer list-none flex items-center justify-between">
+                <span>Are the free products really 100% free with no catch?</span>
+                <span className="text-deep-green font-bold text-lg transition-transform group-open:rotate-45">+</span>
+              </summary>
+              <p className="text-xs text-slate mt-3 leading-relaxed">
+                Yes. Products in our Freebies catalog can be claimed instantly without payment details. You receive a cryptographic license key, lifetime access, and clean code that adheres to the exact same engineering standards as our premium items.
+              </p>
+            </details>
+
+            <details className="group p-5 rounded-2xl bg-white border border-border transition-all">
+              <summary className="font-bold text-sm text-ink cursor-pointer list-none flex items-center justify-between">
+                <span>How do I receive product updates and download new versions?</span>
+                <span className="text-deep-green font-bold text-lg transition-transform group-open:rotate-45">+</span>
+              </summary>
+              <p className="text-xs text-slate mt-3 leading-relaxed">
+                You can download the latest release files anytime directly from your customer dashboard. Product updates are lifetime for purchased items, and all files are served via secure 60-second time-limited signed URLs directly from private cloud storage.
+              </p>
+            </details>
+          </div>
+        </div>
+
+        {/* Structured Data: FAQPage JSON-LD */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "FAQPage",
+              mainEntity: [
+                {
+                  "@type": "Question",
+                  name: "What makes Wefik World different from ThemeForest or CodeCanyon?",
+                  acceptedAnswer: {
+                    "@type": "Answer",
+                    text: "Wefik World is a single-vendor marketplace run by active agency engineers. Every product is maintained in-house with clean, bloat-free code and transparent INR pricing.",
+                  },
+                },
+                {
+                  "@type": "Question",
+                  name: "Can I use these themes and templates for client commercial work?",
+                  acceptedAnswer: {
+                    "@type": "Answer",
+                    text: "Yes. Both Single-Site and Unlimited-Site licenses include full commercial rights for client websites.",
+                  },
+                },
+                {
+                  "@type": "Question",
+                  name: "How does the All-Access Membership work?",
+                  acceptedAnswer: {
+                    "@type": "Answer",
+                    text: "Memberships offer unlimited access to every product in the catalog. Choose Monthly (₹999/mo) or Lifetime Deal (₹9,999 one-time).",
+                  },
+                },
+                {
+                  "@type": "Question",
+                  name: "Do you support Indian payment methods like UPI and NetBanking?",
+                  acceptedAnswer: {
+                    "@type": "Answer",
+                    text: "Yes, native UPI, NetBanking, and RuPay/Visa/Mastercard payments are processed securely via Razorpay in INR.",
+                  },
+                },
+                {
+                  "@type": "Question",
+                  name: "Are the free products really 100% free with no catch?",
+                  acceptedAnswer: {
+                    "@type": "Answer",
+                    text: "Yes. Freebies require zero payment and include instant license keys and clean code.",
+                  },
+                },
+                {
+                  "@type": "Question",
+                  name: "How do I receive product updates and download new versions?",
+                  acceptedAnswer: {
+                    "@type": "Answer",
+                    text: "Latest files can be downloaded anytime from your customer dashboard via secure signed URLs.",
+                  },
+                },
+              ],
+            }),
+          }}
+        />
+      </section>
     </div>
   );
 }
+

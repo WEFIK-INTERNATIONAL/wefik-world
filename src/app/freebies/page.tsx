@@ -2,6 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import { getProducts } from '@/lib/data/products';
 import { FreebieClaimCard } from '@/components/marketplace/freebie-claim-card';
+import { FreebieMagnetKit } from '@/components/freebies/freebie-magnet-kit';
 import { Gift, Zap, ShieldCheck, CheckCircle2 } from 'lucide-react';
 
 export const metadata = {
@@ -94,6 +95,9 @@ export default async function FreebiesPage() {
           </div>
         </div>
       </div>
+
+      {/* Freebie Magnet & Share Kit per Section 10 */}
+      <FreebieMagnetKit />
     </div>
   );
 }

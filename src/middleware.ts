@@ -1,7 +1,26 @@
-import { type NextRequest } from "next/server";
+import { NextResponse, type NextRequest } from "next/server";
 import { updateSession } from "@/lib/supabase/middleware";
 
+const PERMANENT_REDIRECTS: Record<string, string> = {
+  "/themes": "/wordpress-themes",
+  "/plugins": "/wordpress-plugins",
+  "/templates": "/html-templates",
+  "/snippets": "/code-snippets",
+  "/products/agency-bundle": "/bundles",
+  "/products/free-tools": "/freebies",
+  "/deals": "/pricing",
+  "/elementor-alternatives": "/alternatives/elementor",
+  "/astra-alternatives": "/alternatives/astra",
+  "/yoast-alternatives": "/alternatives/yoast",
+};
+
 export async function middleware(request: NextRequest) {
+  const { pathname } = request.nextUrl;
+  
+  if (PERMANENT_REDIRECTS[pathname]) {
+    return NextResponse.redirect(new URL(PERMANENT_REDIRECTS[pathname], request.url), 301);
+  }
+
   return await updateSession(request);
 }
 

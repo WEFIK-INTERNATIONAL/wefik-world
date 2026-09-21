@@ -1,0 +1,11 @@
+from,to,statusCode,reason
+/themes,/wordpress-themes,301,Category consolidation
+/plugins,/wordpress-plugins,301,Category consolidation
+/templates,/html-templates,301,Category consolidation
+/snippets,/code-snippets,301,Category consolidation
+/products/agency-bundle,/bundles,301,Redirect legacy bundle slug to /bundles
+/products/free-tools,/freebies,301,Redirect legacy free tools to /freebies
+/deals,/pricing,301,Pricing consolidation
+/elementor-alternatives,/alternatives/elementor,301,Programmatic taxonomy alignment
+/astra-alternatives,/alternatives/astra,301,Programmatic taxonomy alignment
+/yoast-alternatives,/alternatives/yoast,301,Programmatic taxonomy alignment

@@ -84,12 +84,31 @@ export default async function BlogPostDetailPage({ params }: BlogPostPageProps) 
     },
   };
 
+  const faqJsonLd = post.faqs && post.faqs.length > 0 ? {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: post.faqs.map((faq) => ({
+      '@type': 'Question',
+      name: faq.q,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: faq.a,
+      },
+    })),
+  } : null;
+
   return (
     <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
       />
+      {faqJsonLd && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+        />
+      )}
 
       <article className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 space-y-10">
         {/* Back Link */}
@@ -158,6 +177,21 @@ export default async function BlogPostDetailPage({ params }: BlogPostPageProps) 
         <div className="prose prose-sm sm:prose-base max-w-none text-slate leading-relaxed font-sans whitespace-pre-line space-y-6">
           {post.content}
         </div>
+
+        {/* FAQs Section */}
+        {post.faqs && post.faqs.length > 0 && (
+          <div className="pt-8 border-t border-border space-y-6">
+            <h2 className="text-xl font-bold text-ink">Frequently Asked Questions</h2>
+            <div className="space-y-4">
+              {post.faqs.map((faq, idx) => (
+                <div key={idx} className="p-5 rounded-2xl bg-soft border border-border/80 space-y-2">
+                  <h3 className="font-bold text-sm text-ink">{faq.q}</h3>
+                  <p className="text-xs text-slate leading-relaxed">{faq.a}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Bottom CTA Banner */}
         <div className="bg-soft p-8 rounded-3xl border border-border text-center space-y-4">

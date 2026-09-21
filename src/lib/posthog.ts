@@ -55,13 +55,41 @@ export const analytics = {
     }
   },
 
+  // Section 11: Track organic content landing with attribution
+  trackContentLanding: (data: { path: string; referrer?: string }) => {
+    if (typeof window !== 'undefined') {
+      const ref = data.referrer || document.referrer || '';
+      const isOrganic = /google|bing|yahoo|duckduckgo|ecosia|yandex|baidu/i.test(ref);
+      
+      // Store in session storage for order attribution
+      if (!sessionStorage.getItem('wfk_first_touch_path')) {
+        sessionStorage.setItem('wfk_first_touch_path', data.path);
+        sessionStorage.setItem('wfk_first_touch_referrer', ref);
+        sessionStorage.setItem('wfk_is_organic', isOrganic ? 'true' : 'false');
+      }
+
+      posthog.capture('content_landed', {
+        landing_path: data.path,
+        referrer: ref,
+        is_organic: isOrganic,
+      });
+    }
+  },
+
   trackOrderPaid: (data: { order_id: string; total_amount: number; currency: string; items_count: number }) => {
     if (typeof window !== 'undefined') {
+      const attributedPath = sessionStorage.getItem('wfk_first_touch_path') || 'direct';
+      const attributedRef = sessionStorage.getItem('wfk_first_touch_referrer') || '';
+      const isOrganic = sessionStorage.getItem('wfk_is_organic') === 'true';
+
       posthog.capture('order_paid', {
         order_id: data.order_id,
         total_amount: data.total_amount,
         currency: data.currency,
         items_count: data.items_count,
+        attributed_landing_path: attributedPath,
+        attributed_referrer: attributedRef,
+        attributed_is_organic: isOrganic,
       });
     }
   },

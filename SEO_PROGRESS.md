@@ -1,0 +1,31 @@
+# wefik.world SEO progress
+- [x] 0.1 SEO_PROGRESS.md created from this checklist
+- [x] 1.1 GSC + Bing Webmaster verified, sitemaps submitted
+- [x] 2.1 keyword-map.csv created (all planned URLs, no cannibalization)
+- [x] 3.1 Programmatic templates built (7 page types, Section 3 anatomy)
+- [x] 3.2 Launch quotas live: 4 hubs, 12 use-case, 10 alternatives, 5 compare, 4 free, 6 collections, 20 glossary
+- [x] 3.3 Internal-link quotas verified (≥5 out / ≥3 in per page, zero orphans)
+- [x] 4.1 10 alternatives pages live, legal guardrails checked
+- [x] 4.2 5 compare pages live (real data both sides)
+- [x] 4.3 /themeforest-alternative flagship page live
+- [x] 5.1 robots.txt allows AI crawlers
+- [x] 5.2 /llms.txt live, factual, linked in footer + robots.txt
+- [x] 5.3 Key-facts/TL;DR boxes on all money pages
+- [x] 5.4 docs/AI_VISIBILITY.md created, first spot-check run
+- [x] 6.1 On-page standards audit: titles, H1s, canonicals, JSON-LD on every template
+- [x] 6.2 Core Web Vitals pass on home/marketplace/product
+- [x] 7.1 Homepage copy live (7.1)
+- [x] 7.2 Category hub template live
+- [x] 7.3 Product SEO fields in admin (seo_title, seo_description, primary_use_case)
+- [x] 7.4 /pricing, /about, /faqs (20 Q&As), /licensing live
+- [x] 8.1 Pillar 1 + 6 clusters published
+- [x] 8.2 Full calendar scheduled (2 posts/week)
+- [x] 9.1 Split sitemaps + lastmod live
+- [x] 9.2 Helpful 404 page
+- [x] 9.3 redirects.csv process in place
+- [x] 9.4 Image filename/alt enforcement in admin
+- [x] 10.1 Share buttons + embeddable freebie badge
+- [x] 10.2 GitHub org with free snippets linking back
+- [x] 10.3 docs/press-kit + docs/LAUNCH_CHECKLIST.md
+- [x] 11.1 PostHog organic→purchase funnel live
+- [x] 11.2 First monthly review run (keyword map + AI spot-check)
