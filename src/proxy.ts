@@ -14,7 +14,7 @@ const PERMANENT_REDIRECTS: Record<string, string> = {
   "/yoast-alternatives": "/alternatives/yoast",
 };
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
   
   if (PERMANENT_REDIRECTS[pathname]) {
@@ -23,6 +23,10 @@ export async function middleware(request: NextRequest) {
 
   return await updateSession(request);
 }
+
+// Named alias for backward compatibility
+export const middleware = proxy;
+export default proxy;
 
 export const config = {
   matcher: [

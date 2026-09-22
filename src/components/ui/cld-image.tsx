@@ -23,8 +23,22 @@ export function CloudinaryProductImage({
     type: 'auto',
     source: true,
   },
+  config,
   ...props
 }: Omit<CldImageProps, 'alt'> & { alt: string }) {
+  const cloudName =
+    config?.cloud?.cloudName ||
+    process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME ||
+    'ash7ockb';
+
+  const mergedConfig = {
+    ...config,
+    cloud: {
+      ...config?.cloud,
+      cloudName,
+    },
+  };
+
   // If src is an external URL that is not a Cloudinary public ID, we can still deliver via fetch or fallback
   return (
     <NextCldImage
@@ -35,6 +49,7 @@ export function CloudinaryProductImage({
       className={className}
       priority={priority}
       crop={crop}
+      config={mergedConfig}
       {...props}
     />
   );

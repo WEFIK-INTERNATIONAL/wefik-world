@@ -32,6 +32,8 @@ export default function TestServicesPage() {
     setPosthogStatus('captured event: product_viewed');
   }
 
+  const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME || 'ash7ockb';
+
   return (
     <div className="min-h-screen bg-zinc-950 text-zinc-100 p-8 flex flex-col items-center">
       <div className="max-w-3xl w-full space-y-8">
@@ -49,7 +51,7 @@ export default function TestServicesPage() {
           <div className="flex items-center justify-between">
             <h2 className="text-xl font-semibold text-white">1. Cloudinary CldImage</h2>
             <span className="text-xs bg-emerald-500/10 text-emerald-400 px-2.5 py-1 rounded-full border border-emerald-500/20">
-              Cloud: ash7ockb
+              Cloud: {cloudName}
             </span>
           </div>
           <p className="text-sm text-zinc-400">
@@ -62,6 +64,11 @@ export default function TestServicesPage() {
               height="400"
               alt="Cloudinary sample image"
               className="rounded-lg shadow-lg"
+              config={{
+                cloud: {
+                  cloudName,
+                },
+              }}
               crop={{
                 type: 'auto',
                 source: true,
