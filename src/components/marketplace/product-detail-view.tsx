@@ -23,6 +23,7 @@ import { ProductData } from '@/lib/data/products';
 import { toast } from 'sonner';
 import { createClient } from '@/lib/supabase/client';
 import { FreebieMagnetKit } from '@/components/freebies/freebie-magnet-kit';
+import { DEFAULT_BLUR_DATA_URL } from '@/lib/image-placeholder';
 
 interface ProductDetailViewProps {
   product: ProductData;
@@ -189,6 +190,8 @@ export function ProductDetailView({ product, initialReviews = [] }: ProductDetai
               alt={product.title}
               fill
               priority
+              placeholder="blur"
+              blurDataURL={DEFAULT_BLUR_DATA_URL}
               sizes="(max-width: 1024px) 100vw, 60vw"
               className="object-cover"
             />
@@ -196,7 +199,7 @@ export function ProductDetailView({ product, initialReviews = [] }: ProductDetai
 
           {/* Thumbnail Gallery Row */}
           {gallery.length > 1 && (
-            <div className="flex items-center gap-3 overflow-x-auto pb-1">
+            <div data-lenis-prevent className="flex items-center gap-3 overflow-x-auto pb-1">
               {gallery.map((img, idx) => (
                 <button
                   key={idx}
@@ -207,7 +210,15 @@ export function ProductDetailView({ product, initialReviews = [] }: ProductDetai
                       : 'border-border opacity-70 hover:opacity-100'
                   }`}
                 >
-                  <Image src={img} alt={`Thumbnail ${idx + 1}`} fill className="object-cover" sizes="80px" />
+                  <Image
+                    src={img}
+                    alt={`Thumbnail ${idx + 1}`}
+                    fill
+                    placeholder="blur"
+                    blurDataURL={DEFAULT_BLUR_DATA_URL}
+                    className="object-cover"
+                    sizes="80px"
+                  />
                 </button>
               ))}
             </div>

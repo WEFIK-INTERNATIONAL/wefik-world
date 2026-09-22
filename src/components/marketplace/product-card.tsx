@@ -11,6 +11,7 @@ import { createClient } from '@/lib/supabase/client';
 import { toast } from 'sonner';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { DEFAULT_BLUR_DATA_URL } from '@/lib/image-placeholder';
 
 export interface ProductCardProps {
   id: string;
@@ -129,7 +130,9 @@ export function ProductCard({
             src={thumbnail_url || 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=800'}
             alt={title}
             fill
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            placeholder="blur"
+            blurDataURL={DEFAULT_BLUR_DATA_URL}
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
             className="object-cover group-hover:scale-[1.06] transition-transform duration-500 ease-out"
           />
         </TransitionLink>

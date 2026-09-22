@@ -10,6 +10,7 @@ import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
 import { createClient } from '@/lib/supabase/client';
 import { ProductData } from '@/lib/data/products';
+import { DEFAULT_BLUR_DATA_URL } from '@/lib/image-placeholder';
 
 export function FreebieClaimCard({ product }: { product: ProductData }) {
   const router = useRouter();
@@ -66,7 +67,9 @@ export function FreebieClaimCard({ product }: { product: ProductData }) {
             src={product.thumbnail_url}
             alt={product.title}
             fill
-            sizes="(max-width: 768px) 100vw, 33vw"
+            placeholder="blur"
+            blurDataURL={DEFAULT_BLUR_DATA_URL}
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
             className="object-cover hover:scale-105 transition-transform duration-500"
           />
         </Link>

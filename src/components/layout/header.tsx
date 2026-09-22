@@ -42,6 +42,25 @@ export function Header() {
   const [isAdmin, setIsAdmin] = useState(false);
   const [loading, setLoading] = useState(true);
   const lastScrollY = useRef(0);
+  const headerRef = useRef<HTMLElement | null>(null);
+
+  // Measure real header height into CSS variable --header-height (FIX B)
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    const updateHeaderHeight = () => {
+      if (headerRef.current) {
+        const height = headerRef.current.offsetHeight;
+        if (height > 0) {
+          document.documentElement.style.setProperty('--header-height', `${height}px`);
+        }
+      }
+    };
+
+    updateHeaderHeight();
+    window.addEventListener('resize', updateHeaderHeight);
+    return () => window.removeEventListener('resize', updateHeaderHeight);
+  }, []);
 
   const supabase = createClient();
 
@@ -120,6 +139,7 @@ export function Header() {
   return (
     <>
       <header
+        ref={headerRef}
         className={`fixed top-0 inset-x-0 z-40 w-full transition-all duration-300 ${
           showHeader ? 'translate-y-0' : '-translate-y-full'
         } ${

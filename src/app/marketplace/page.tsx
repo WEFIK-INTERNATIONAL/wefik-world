@@ -92,7 +92,7 @@ export default async function MarketplacePage({ searchParams }: MarketplacePageP
   ];
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-[calc(var(--header-height)+2rem)] pb-16">
       {/* Top Header */}
       <div className="mb-8">
         <div className="flex items-center gap-2 text-xs text-slate mb-2">
@@ -167,7 +167,7 @@ export default async function MarketplacePage({ searchParams }: MarketplacePageP
         </div>
 
         {/* Category Pills */}
-        <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none pt-1">
+        <div data-lenis-prevent className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none pt-1">
           {categories.map((cat) => {
             const isActive = category === cat.slug;
             const params = new URLSearchParams();

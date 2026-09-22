@@ -5,6 +5,7 @@ import { getProducts } from '@/lib/data/products';
 import { ProductCard } from '@/components/marketplace/product-card';
 import { Sparkles, CheckCircle2, ShieldCheck, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { DEFAULT_BLUR_DATA_URL } from '@/lib/image-placeholder';
 
 export const metadata = {
   title: 'Agency Product Bundles — Save up to 60%',
@@ -17,7 +18,7 @@ export default async function BundlesPage() {
   const bundles = allProducts.filter((p) => p.is_bundle);
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 space-y-16">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-[calc(var(--header-height)+2.5rem)] pb-16 space-y-16">
       {/* Bundles Hero */}
       <div className="text-center max-w-3xl mx-auto space-y-4">
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-deep-green/10 text-deep-green text-xs font-bold border border-deep-green/20">
@@ -87,6 +88,8 @@ export default async function BundlesPage() {
                 src={bundles[0].thumbnail_url}
                 alt={bundles[0].title}
                 fill
+                placeholder="blur"
+                blurDataURL={DEFAULT_BLUR_DATA_URL}
                 sizes="(max-width: 768px) 100vw, 50vw"
                 className="object-cover"
               />

@@ -43,7 +43,7 @@ export function FullscreenMenu({ isOpen, onClose }: FullscreenMenuProps) {
     if (!isOpen) return;
 
     // Stop Lenis smooth scrolling
-    stopScroll();
+    stopScroll('fullscreen-menu');
 
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
@@ -57,7 +57,7 @@ export function FullscreenMenu({ isOpen, onClose }: FullscreenMenuProps) {
     }, 150);
 
     return () => {
-      startScroll();
+      startScroll('fullscreen-menu');
       window.removeEventListener('keydown', handleKeyDown);
     };
   }, [isOpen, stopScroll, startScroll, onClose]);
@@ -143,6 +143,7 @@ export function FullscreenMenu({ isOpen, onClose }: FullscreenMenuProps) {
       aria-modal="true"
       aria-label="Navigation Menu"
       style={{ display: 'none' }}
+      data-lenis-prevent
       className="fixed inset-0 z-[9990] bg-ink text-white flex flex-col justify-between overflow-y-auto px-6 sm:px-12 lg:px-20 py-8 lg:py-10 select-none"
     >
       {/* Top Header Row inside overlay */}

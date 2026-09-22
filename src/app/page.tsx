@@ -9,6 +9,7 @@ import { StatCounter } from '@/components/ui/stat-counter';
 import { InfiniteMarquee } from '@/components/ui/infinite-marquee';
 import { TransitionLink } from '@/components/transitions/transition-link';
 import { getProducts } from '@/lib/data/products';
+import { DEFAULT_BLUR_DATA_URL } from '@/lib/image-placeholder';
 
 export default async function HomePage() {
   const featuredProducts = await getProducts({ featuredOnly: true, limit: 3 });
@@ -301,6 +302,8 @@ export default async function HomePage() {
                     src={bundleProduct.thumbnail_url}
                     alt={bundleProduct.title}
                     fill
+                    placeholder="blur"
+                    blurDataURL={DEFAULT_BLUR_DATA_URL}
                     sizes="(max-width: 768px) 100vw, 50vw"
                     className="object-cover"
                   />

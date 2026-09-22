@@ -4,14 +4,26 @@ import React, { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { usePreloaderProgress } from '@/hooks/use-preloader-progress';
 import { useMotionGates } from '@/hooks/use-reduced-motion';
+import { useLenis } from '@/components/providers/smooth-scroll-provider';
 import { Logo } from '@/components/brand/logo';
 import { Zap, Palette, Code, Sparkles, Cpu } from 'lucide-react';
 
 export function UnboxingPreloader() {
   const { progress, isLoaded } = usePreloaderProgress();
   const { disableHeavyMotion } = useMotionGates();
+  const { stopScroll, startScroll } = useLenis();
   const [mounted, setMounted] = useState(true);
   const [isReturnVisitor, setIsReturnVisitor] = useState(false);
+
+  // Lock scroll while preloader is mounted; unlock on completion / unmount
+  useEffect(() => {
+    if (mounted) {
+      stopScroll('unboxing-preloader');
+    }
+    return () => {
+      startScroll('unboxing-preloader');
+    };
+  }, [mounted, stopScroll, startScroll]);
 
   const containerRef = useRef<HTMLDivElement | null>(null);
   const boxRef = useRef<HTMLDivElement | null>(null);

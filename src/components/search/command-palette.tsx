@@ -21,6 +21,7 @@ import {
 import { FALLBACK_PRODUCTS } from '@/lib/data/fallback-products';
 import { useCart } from '@/lib/cart-context';
 import { usePageTransition } from '@/components/transitions/transition-provider';
+import { useLenis } from '@/components/providers/smooth-scroll-provider';
 
 export function CommandPalette() {
   const [open, setOpen] = useState(false);
@@ -28,6 +29,17 @@ export function CommandPalette() {
   const router = useRouter();
   const { setIsOpen: setCartOpen } = useCart();
   const { navigate } = usePageTransition();
+  const { stopScroll, startScroll } = useLenis();
+
+  // Scroll lock when palette is open
+  useEffect(() => {
+    if (open) {
+      stopScroll('command-palette');
+    }
+    return () => {
+      startScroll('command-palette');
+    };
+  }, [open, stopScroll, startScroll]);
 
   // Toggle on Cmd+K or Ctrl+K
   useEffect(() => {
@@ -60,6 +72,7 @@ export function CommandPalette() {
     <div
       role="dialog"
       aria-modal="true"
+      data-lenis-prevent
       className="fixed inset-0 z-[99999] bg-black/60 backdrop-blur-sm flex items-start justify-center p-4 pt-16 sm:pt-24 select-none animate-in fade-in duration-150"
       onClick={() => setOpen(false)}
     >
@@ -88,7 +101,7 @@ export function CommandPalette() {
           </div>
 
           {/* Results List */}
-          <Command.List className="max-h-80 overflow-y-auto p-2 divide-y divide-[var(--border)] text-xs">
+          <Command.List data-lenis-prevent className="max-h-80 overflow-y-auto p-2 divide-y divide-[var(--border)] text-xs">
             <Command.Empty className="py-8 text-center text-[var(--muted)]">
               No results found for &ldquo;{search}&rdquo;.
             </Command.Empty>

@@ -70,7 +70,8 @@ export function HeroLightweight() {
   return (
     <div
       ref={containerRef}
-      className="relative w-full overflow-hidden pt-12 pb-16 lg:pt-16 lg:pb-20 select-none"
+      style={{ paddingTop: 'calc(var(--header-height) + 3rem)' }}
+      className="relative w-full overflow-hidden pb-16 lg:pb-20 select-none"
     >
       {/* 1. Layered Radial Gradients & Subtle Grid */}
       <div className="absolute inset-0 pointer-events-none">

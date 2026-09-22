@@ -13,6 +13,8 @@ import {
 import { Button } from '@/components/ui/button';
 import { useCart, CartLicenseType } from '@/lib/cart-context';
 import { Trash2, ShoppingBag, ArrowRight, ShieldCheck } from 'lucide-react';
+import { useLenis } from '@/components/providers/smooth-scroll-provider';
+import { DEFAULT_BLUR_DATA_URL } from '@/lib/image-placeholder';
 
 export function CartDrawer() {
   const {
@@ -24,6 +26,17 @@ export function CartDrawer() {
     totalPaise,
     totalCount,
   } = useCart();
+  const { stopScroll, startScroll } = useLenis();
+
+  // Lock scroll when cart drawer is open
+  useEffect(() => {
+    if (isOpen) {
+      stopScroll('cart-drawer');
+    }
+    return () => {
+      startScroll('cart-drawer');
+    };
+  }, [isOpen, stopScroll, startScroll]);
 
   const formattedTotal = (totalPaise / 100).toLocaleString('en-IN', {
     maximumFractionDigits: 0,
@@ -31,7 +44,7 @@ export function CartDrawer() {
 
   return (
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
-      <SheetContent className="flex flex-col h-full w-full sm:max-w-md p-6 bg-white">
+      <SheetContent data-lenis-prevent className="flex flex-col h-full w-full sm:max-w-md p-6 bg-white">
         <SheetHeader className="pb-4 border-b border-border">
           <SheetTitle className="flex items-center gap-2 text-xl font-bold tracking-tight text-ink">
             <ShoppingBag className="w-5 h-5 text-deep-green" />
@@ -59,7 +72,7 @@ export function CartDrawer() {
             </Button>
           </div>
         ) : (
-          <div className="flex-1 overflow-y-auto py-4 space-y-4 divide-y divide-border/60">
+          <div data-lenis-prevent className="flex-1 overflow-y-auto py-4 space-y-4 divide-y divide-border/60">
             {items.map((item) => {
               const itemFormattedPrice = (item.pricePaise / 100).toLocaleString('en-IN', {
                 maximumFractionDigits: 0,
@@ -69,9 +82,11 @@ export function CartDrawer() {
                 <div key={item.productId} className="pt-4 first:pt-0 flex gap-4 items-start">
                   <div className="relative w-16 h-16 rounded-lg overflow-hidden bg-surface border border-border flex-shrink-0">
                     <Image
-                      src={item.thumbnailUrl || '/placeholder.png'}
+                      src={item.thumbnailUrl || 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=800'}
                       alt={item.title}
                       fill
+                      placeholder="blur"
+                      blurDataURL={DEFAULT_BLUR_DATA_URL}
                       className="object-cover"
                       sizes="64px"
                     />
