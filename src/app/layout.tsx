@@ -59,12 +59,18 @@ export const metadata: Metadata = {
     index: true,
     follow: true,
   },
-  verification: {
-    google: process.env.NEXT_PUBLIC_GSC_VERIFICATION || "google-site-verification-wefik-world",
-    other: {
-      "msvalidate.01": process.env.NEXT_PUBLIC_BING_VERIFICATION || "bing-verification-wefik-world",
-    },
-  },
+  ...(process.env.NEXT_PUBLIC_GSC_VERIFICATION || process.env.NEXT_PUBLIC_BING_VERIFICATION
+    ? {
+        verification: {
+          ...(process.env.NEXT_PUBLIC_GSC_VERIFICATION
+            ? { google: process.env.NEXT_PUBLIC_GSC_VERIFICATION }
+            : {}),
+          ...(process.env.NEXT_PUBLIC_BING_VERIFICATION
+            ? { other: { "msvalidate.01": process.env.NEXT_PUBLIC_BING_VERIFICATION } }
+            : {}),
+        },
+      }
+    : {}),
 };
 
 const websiteJsonLd = {

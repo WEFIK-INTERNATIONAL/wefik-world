@@ -17,6 +17,18 @@ const PERMANENT_REDIRECTS: Record<string, string> = {
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
   
+  // Google Search Console auto-verification for any google*.html verification file
+  if (pathname.startsWith("/google") && pathname.endsWith(".html")) {
+    const filename = pathname.replace("/", "");
+    return new NextResponse(`google-site-verification: ${filename}`, {
+      status: 200,
+      headers: {
+        "Content-Type": "text/html; charset=utf-8",
+        "Cache-Control": "public, max-age=86400",
+      },
+    });
+  }
+
   if (PERMANENT_REDIRECTS[pathname]) {
     return NextResponse.redirect(new URL(PERMANENT_REDIRECTS[pathname], request.url), 301);
   }
