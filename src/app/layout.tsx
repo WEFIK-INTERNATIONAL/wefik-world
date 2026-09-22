@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Script from "next/script";
 import { Inter } from "next/font/google";
 import { PostHogProvider } from "@/components/providers/posthog-provider";
 import { CartProvider } from "@/lib/cart-context";
@@ -111,6 +110,22 @@ export default function RootLayout({
       className={`${inter.variable} font-sans h-full antialiased`}
     >
       <head>
+        {/* Google tag (gtag.js) */}
+        <script
+          async
+          src="https://www.googletagmanager.com/gtag/js?id=G-CM63W67CQY"
+        />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+
+              gtag('config', 'G-CM63W67CQY');
+            `,
+          }}
+        />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -125,21 +140,6 @@ export default function RootLayout({
         />
       </head>
       <body className="min-h-full flex flex-col bg-white text-ink selection:bg-lime/30 selection:text-ink">
-        {/* Google tag (gtag.js) */}
-        <Script
-          src="https://www.googletagmanager.com/gtag/js?id=G-CM63W67CQY"
-          strategy="afterInteractive"
-        />
-        <Script id="google-analytics" strategy="afterInteractive">
-          {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'G-CM63W67CQY', {
-              page_path: window.location.pathname,
-            });
-          `}
-        </Script>
 
         <PostHogProvider>
           <CartProvider>
