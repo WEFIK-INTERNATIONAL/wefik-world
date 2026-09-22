@@ -64,7 +64,7 @@ export function CommandPalette() {
       onClick={() => setOpen(false)}
     >
       <div
-        className="w-full max-w-xl bg-white rounded-2xl shadow-2xl border border-border overflow-hidden"
+        className="w-full max-w-xl bg-[var(--surface)] text-[var(--text)] rounded-2xl shadow-2xl border border-[var(--border)] overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
         <Command
@@ -73,28 +73,28 @@ export function CommandPalette() {
           className="w-full font-sans"
         >
           {/* Input Header */}
-          <div className="flex items-center gap-3 px-4 border-b border-border">
-            <Search className="w-4 h-4 text-slate flex-shrink-0" />
+          <div className="flex items-center gap-3 px-4 border-b border-[var(--border)]">
+            <Search className="w-4 h-4 text-[var(--muted)] flex-shrink-0" />
             <Command.Input
               autoFocus
               value={search}
               onValueChange={setSearch}
               placeholder="Search products, pages, guides, actions... (ESC to close)"
-              className="w-full py-4 text-sm text-ink placeholder:text-slate bg-transparent focus:outline-none"
+              className="w-full py-4 text-sm text-[var(--text)] placeholder:text-[var(--muted)] bg-transparent focus:outline-none"
             />
-            <span className="text-[10px] font-mono text-slate bg-soft px-2 py-0.5 rounded border border-border">
+            <span className="text-[10px] font-mono text-[var(--muted)] bg-[var(--surface-2)] px-2 py-0.5 rounded border border-[var(--border)]">
               ESC
             </span>
           </div>
 
           {/* Results List */}
-          <Command.List className="max-h-80 overflow-y-auto p-2 divide-y divide-border/50 text-xs">
-            <Command.Empty className="py-8 text-center text-slate">
+          <Command.List className="max-h-80 overflow-y-auto p-2 divide-y divide-[var(--border)] text-xs">
+            <Command.Empty className="py-8 text-center text-[var(--muted)]">
               No results found for &ldquo;{search}&rdquo;.
             </Command.Empty>
 
             {/* Group 1: Products */}
-            <Command.Group heading="Digital Products" className="py-2 text-[10px] font-bold uppercase tracking-wider text-slate px-2">
+            <Command.Group heading="Digital Products" className="py-2 text-[10px] font-mono font-bold uppercase tracking-wider text-[var(--muted)] px-2">
               {FALLBACK_PRODUCTS.filter((p) =>
                 p.title.toLowerCase().includes(search.toLowerCase()) ||
                 p.tagline.toLowerCase().includes(search.toLowerCase())
@@ -102,7 +102,7 @@ export function CommandPalette() {
                 <Command.Item
                   key={p.id}
                   onSelect={() => handleSelect(() => navigate(`/products/${p.slug}`))}
-                  className="flex items-center justify-between p-2.5 rounded-xl cursor-pointer hover:bg-soft transition-colors aria-selected:bg-soft aria-selected:text-ink text-ink font-semibold"
+                  className="flex items-center justify-between p-2.5 rounded-xl cursor-pointer hover:bg-[var(--surface-2)] transition-colors aria-selected:bg-[var(--surface-2)] text-[var(--text)] font-semibold"
                 >
                   <div className="flex items-center gap-2.5">
                     <Package className="w-4 h-4 text-deep-green" />
@@ -119,105 +119,105 @@ export function CommandPalette() {
             </Command.Group>
 
             {/* Group 2: Core Pages */}
-            <Command.Group heading="Navigation" className="py-2 text-[10px] font-bold uppercase tracking-wider text-slate px-2">
+            <Command.Group heading="Navigation" className="py-2 text-[10px] font-mono font-bold uppercase tracking-wider text-[var(--muted)] px-2">
               <Command.Item
                 onSelect={() => handleSelect(() => navigate('/marketplace'))}
-                className="flex items-center gap-2.5 p-2.5 rounded-xl cursor-pointer hover:bg-soft transition-colors aria-selected:bg-soft text-ink font-semibold"
+                className="flex items-center gap-2.5 p-2.5 rounded-xl cursor-pointer hover:bg-[var(--surface-2)] transition-colors aria-selected:bg-[var(--surface-2)] text-[var(--text)] font-semibold"
               >
-                <Layers className="w-4 h-4 text-slate" />
+                <Layers className="w-4 h-4 text-[var(--muted)]" />
                 <span>Marketplace Catalog</span>
               </Command.Item>
               <Command.Item
                 onSelect={() => handleSelect(() => navigate('/wordpress-themes'))}
-                className="flex items-center gap-2.5 p-2.5 rounded-xl cursor-pointer hover:bg-soft transition-colors aria-selected:bg-soft text-ink font-semibold"
+                className="flex items-center gap-2.5 p-2.5 rounded-xl cursor-pointer hover:bg-[var(--surface-2)] transition-colors aria-selected:bg-[var(--surface-2)] text-[var(--text)] font-semibold"
               >
-                <FileCode className="w-4 h-4 text-slate" />
+                <FileCode className="w-4 h-4 text-[var(--muted)]" />
                 <span>WordPress Themes (Gutenberg FSE)</span>
               </Command.Item>
               <Command.Item
                 onSelect={() => handleSelect(() => navigate('/wordpress-plugins'))}
-                className="flex items-center gap-2.5 p-2.5 rounded-xl cursor-pointer hover:bg-soft transition-colors aria-selected:bg-soft text-ink font-semibold"
+                className="flex items-center gap-2.5 p-2.5 rounded-xl cursor-pointer hover:bg-[var(--surface-2)] transition-colors aria-selected:bg-[var(--surface-2)] text-[var(--text)] font-semibold"
               >
-                <Package className="w-4 h-4 text-slate" />
+                <Package className="w-4 h-4 text-[var(--muted)]" />
                 <span>WordPress Plugins (High Performance)</span>
               </Command.Item>
               <Command.Item
                 onSelect={() => handleSelect(() => navigate('/bundles'))}
-                className="flex items-center gap-2.5 p-2.5 rounded-xl cursor-pointer hover:bg-soft transition-colors aria-selected:bg-soft text-ink font-semibold"
+                className="flex items-center gap-2.5 p-2.5 rounded-xl cursor-pointer hover:bg-[var(--surface-2)] transition-colors aria-selected:bg-[var(--surface-2)] text-[var(--text)] font-semibold"
               >
                 <Tag className="w-4 h-4 text-amber-500" />
                 <span>Curated Bundles (Save 60%)</span>
               </Command.Item>
               <Command.Item
                 onSelect={() => handleSelect(() => navigate('/freebies'))}
-                className="flex items-center gap-2.5 p-2.5 rounded-xl cursor-pointer hover:bg-soft transition-colors aria-selected:bg-soft text-ink font-semibold"
+                className="flex items-center gap-2.5 p-2.5 rounded-xl cursor-pointer hover:bg-[var(--surface-2)] transition-colors aria-selected:bg-[var(--surface-2)] text-[var(--text)] font-semibold"
               >
                 <Sparkles className="w-4 h-4 text-deep-green" />
                 <span>100% Free Templates & Code</span>
               </Command.Item>
               <Command.Item
                 onSelect={() => handleSelect(() => navigate('/pricing'))}
-                className="flex items-center gap-2.5 p-2.5 rounded-xl cursor-pointer hover:bg-soft transition-colors aria-selected:bg-soft text-ink font-semibold"
+                className="flex items-center gap-2.5 p-2.5 rounded-xl cursor-pointer hover:bg-[var(--surface-2)] transition-colors aria-selected:bg-[var(--surface-2)] text-[var(--text)] font-semibold"
               >
-                <CreditCard className="w-4 h-4 text-slate" />
+                <CreditCard className="w-4 h-4 text-[var(--muted)]" />
                 <span>All-Access Membership Pricing</span>
               </Command.Item>
               <Command.Item
                 onSelect={() => handleSelect(() => navigate('/blog'))}
-                className="flex items-center gap-2.5 p-2.5 rounded-xl cursor-pointer hover:bg-soft transition-colors aria-selected:bg-soft text-ink font-semibold"
+                className="flex items-center gap-2.5 p-2.5 rounded-xl cursor-pointer hover:bg-[var(--surface-2)] transition-colors aria-selected:bg-[var(--surface-2)] text-[var(--text)] font-semibold"
               >
-                <BookOpen className="w-4 h-4 text-slate" />
+                <BookOpen className="w-4 h-4 text-[var(--muted)]" />
                 <span>Engineering Blog & Guides</span>
               </Command.Item>
             </Command.Group>
 
             {/* Group 3: Quick Actions */}
-            <Command.Group heading="Quick Actions" className="py-2 text-[10px] font-bold uppercase tracking-wider text-slate px-2">
+            <Command.Group heading="Quick Actions" className="py-2 text-[10px] font-mono font-bold uppercase tracking-wider text-[var(--muted)] px-2">
               <Command.Item
                 onSelect={() => handleSelect(() => setCartOpen(true))}
-                className="flex items-center justify-between p-2.5 rounded-xl cursor-pointer hover:bg-soft transition-colors aria-selected:bg-soft text-ink font-semibold"
+                className="flex items-center justify-between p-2.5 rounded-xl cursor-pointer hover:bg-[var(--surface-2)] transition-colors aria-selected:bg-[var(--surface-2)] text-[var(--text)] font-semibold"
               >
                 <div className="flex items-center gap-2.5">
-                  <ShoppingBag className="w-4 h-4 text-slate" />
+                  <ShoppingBag className="w-4 h-4 text-[var(--muted)]" />
                   <span>Open Shopping Cart</span>
                 </div>
-                <ArrowRight className="w-3.5 h-3.5 text-slate" />
+                <ArrowRight className="w-3.5 h-3.5 text-[var(--muted)]" />
               </Command.Item>
               <Command.Item
                 onSelect={() => handleSelect(() => navigate('/dashboard/licenses'))}
-                className="flex items-center justify-between p-2.5 rounded-xl cursor-pointer hover:bg-soft transition-colors aria-selected:bg-soft text-ink font-semibold"
+                className="flex items-center justify-between p-2.5 rounded-xl cursor-pointer hover:bg-[var(--surface-2)] transition-colors aria-selected:bg-[var(--surface-2)] text-[var(--text)] font-semibold"
               >
                 <div className="flex items-center gap-2.5">
-                  <KeyRound className="w-4 h-4 text-slate" />
+                  <KeyRound className="w-4 h-4 text-[var(--muted)]" />
                   <span>View My License Keys</span>
                 </div>
-                <ArrowRight className="w-3.5 h-3.5 text-slate" />
+                <ArrowRight className="w-3.5 h-3.5 text-[var(--muted)]" />
               </Command.Item>
               <Command.Item
                 onSelect={() => handleSelect(() => navigate('/dashboard/downloads'))}
-                className="flex items-center justify-between p-2.5 rounded-xl cursor-pointer hover:bg-soft transition-colors aria-selected:bg-soft text-ink font-semibold"
+                className="flex items-center justify-between p-2.5 rounded-xl cursor-pointer hover:bg-[var(--surface-2)] transition-colors aria-selected:bg-[var(--surface-2)] text-[var(--text)] font-semibold"
               >
                 <div className="flex items-center gap-2.5">
-                  <Download className="w-4 h-4 text-slate" />
+                  <Download className="w-4 h-4 text-[var(--muted)]" />
                   <span>Download Product ZIPs</span>
                 </div>
-                <ArrowRight className="w-3.5 h-3.5 text-slate" />
+                <ArrowRight className="w-3.5 h-3.5 text-[var(--muted)]" />
               </Command.Item>
               <Command.Item
                 onSelect={() => handleSelect(() => navigate('/admin'))}
-                className="flex items-center justify-between p-2.5 rounded-xl cursor-pointer hover:bg-soft transition-colors aria-selected:bg-soft text-ink font-semibold"
+                className="flex items-center justify-between p-2.5 rounded-xl cursor-pointer hover:bg-[var(--surface-2)] transition-colors aria-selected:bg-[var(--surface-2)] text-[var(--text)] font-semibold"
               >
                 <div className="flex items-center gap-2.5">
                   <ShieldAlert className="w-4 h-4 text-rose-500" />
                   <span>Admin Console</span>
                 </div>
-                <ArrowRight className="w-3.5 h-3.5 text-slate" />
+                <ArrowRight className="w-3.5 h-3.5 text-[var(--muted)]" />
               </Command.Item>
             </Command.Group>
           </Command.List>
 
           {/* Footer Guide */}
-          <div className="flex items-center justify-between px-4 py-2 bg-soft border-t border-border text-[10px] text-slate">
+          <div className="flex items-center justify-between px-4 py-2 bg-[var(--surface-2)] border-t border-[var(--border)] text-[10px] text-[var(--muted)] font-mono">
             <span>Navigation: ↑ ↓ to navigate, Enter to select</span>
             <span>Wefik Command Palette</span>
           </div>

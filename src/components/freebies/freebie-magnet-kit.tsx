@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import Image from 'next/image';
 import { Share2, Code2, Check, Copy, MessageCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
@@ -130,8 +131,7 @@ export function FreebieMagnetKit({ productTitle, productSlug }: FreebieMagnetKit
         <div className="flex flex-col sm:flex-row items-center gap-4 bg-white p-3.5 rounded-2xl border border-border">
           {/* Badge Preview */}
           <div className="flex-shrink-0">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
+            <Image
               src="/badges/free-from-wefik.svg"
               alt="Free from Wefik.world preview badge"
               width={160}

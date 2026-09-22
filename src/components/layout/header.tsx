@@ -7,6 +7,8 @@ import { useCart } from '@/lib/cart-context';
 import { Button } from '@/components/ui/button';
 import { TransitionLink } from '@/components/transitions/transition-link';
 import { FullscreenMenu } from './fullscreen-menu';
+import { Logo } from '@/components/brand/logo';
+import { ThemeToggle } from '@/components/ui/theme-toggle';
 import { openCommandPalette } from '@/components/search/command-palette';
 import {
   DropdownMenu,
@@ -122,37 +124,15 @@ export function Header() {
           showHeader ? 'translate-y-0' : '-translate-y-full'
         } ${
           scrolled
-            ? 'border-b border-border/80 bg-white/90 backdrop-blur-md shadow-xs'
-            : 'border-b border-transparent bg-white/60 backdrop-blur-xs'
+            ? 'border-b border-[var(--border)] bg-[var(--bg)]/90 backdrop-blur-md shadow-xs'
+            : 'border-b border-transparent bg-[var(--bg)]/60 backdrop-blur-xs'
         }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
           {/* Logo */}
           <div className="flex items-center gap-6">
-            <TransitionLink href="/" className="flex items-center gap-2 group">
-              <div className="w-9 h-9 rounded-xl bg-ink flex items-center justify-center text-lime shadow-sm group-hover:bg-black transition-colors">
-                <svg
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M4 6L8 18L12 9L16 18L20 6"
-                    stroke="currentColor"
-                    strokeWidth="2.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                  <circle cx="12" cy="5" r="1.5" fill="#A3E635" />
-                </svg>
-              </div>
-              <div className="flex flex-col">
-                <span className="text-xl font-bold tracking-tight text-ink">
-                  wefik<span className="text-deep-green">.world</span>
-                </span>
-              </div>
+            <TransitionLink href="/" className="flex items-center group">
+              <Logo size="md" showWordmark={true} />
             </TransitionLink>
 
             {/* Desktop Navigation */}
@@ -312,21 +292,24 @@ export function Header() {
               </div>
             )}
 
-            {/* Fullscreen Hamburger Menu Morph Trigger (Available on ALL breakpoints per Section 4) */}
+            {/* Theme Toggle */}
+            <ThemeToggle className="ml-1" />
+
+            {/* Fullscreen Hamburger Menu Morph Trigger (Available on ALL breakpoints per Section 5) */}
             <button
               onClick={() => setFullscreenOpen(!fullscreenOpen)}
               aria-expanded={fullscreenOpen}
               aria-label={fullscreenOpen ? 'Close Navigation Takeover' : 'Open Navigation Takeover'}
-              className="relative w-10 h-10 rounded-xl bg-soft hover:bg-soft/90 border border-border flex flex-col items-center justify-center gap-1.5 transition-colors group z-50"
+              className="relative w-10 h-10 rounded-xl bg-[var(--surface)] hover:bg-[var(--surface-2)] border border-[var(--border)] flex flex-col items-center justify-center gap-1.5 transition-colors group z-50"
             >
               <span
-                className={`w-4 h-0.5 bg-ink rounded-full transition-all duration-300 ease-out ${
-                  fullscreenOpen ? 'rotate-45 translate-y-2 bg-white' : ''
+                className={`w-4 h-0.5 bg-[var(--text)] rounded-full transition-all duration-300 ease-out ${
+                  fullscreenOpen ? 'rotate-45 translate-y-2 !bg-white' : ''
                 }`}
               />
               <span
-                className={`w-4 h-0.5 bg-ink rounded-full transition-all duration-300 ease-out ${
-                  fullscreenOpen ? '-rotate-45 -translate-y-0 bg-white' : ''
+                className={`w-4 h-0.5 bg-[var(--text)] rounded-full transition-all duration-300 ease-out ${
+                  fullscreenOpen ? '-rotate-45 -translate-y-0 !bg-white' : ''
                 }`}
               />
             </button>

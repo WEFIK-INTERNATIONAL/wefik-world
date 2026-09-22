@@ -121,9 +121,9 @@ export function ProductCard({
   };
 
   return (
-    <div className="group relative flex flex-col bg-white rounded-2xl border border-border overflow-hidden hover:border-lime/60 hover:-translate-y-1.5 hover:shadow-xl hover:shadow-lime/10 transition-all duration-300 will-change-transform">
+    <div className="group relative flex flex-col bg-[var(--surface)] rounded-2xl border border-[var(--border)] overflow-hidden hover:border-lime/60 hover:-translate-y-1.5 hover:shadow-xl hover:shadow-lime/10 transition-all duration-300 will-change-transform">
       {/* Thumbnail Container */}
-      <div className="relative aspect-[16/10] w-full overflow-hidden bg-surface">
+      <div className="relative aspect-[16/10] w-full overflow-hidden bg-[var(--surface-2)]">
         <TransitionLink href={`/products/${slug}`} className="block w-full h-full">
           <Image
             src={thumbnail_url || 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=800'}
@@ -137,18 +137,18 @@ export function ProductCard({
         {/* Badges Overlay */}
         <div className="absolute top-3 left-3 flex flex-wrap gap-1.5 z-10 pointer-events-none">
           {category && (
-            <Badge variant="secondary" className="bg-white/90 backdrop-blur-sm text-ink font-semibold text-[10px] px-2 py-0.5 shadow-sm border border-border">
+            <Badge variant="secondary" className="bg-[var(--surface)]/90 backdrop-blur-sm text-[var(--text)] font-semibold text-[10px] px-2 py-0.5 shadow-sm border border-[var(--border)]">
               {category.name}
             </Badge>
           )}
           {is_bundle && (
-            <Badge className="bg-deep-green text-white font-bold text-[10px] px-2 py-0.5 shadow-sm border-0">
+            <Badge className="bg-lime text-ink font-bold text-[10px] px-2 py-0.5 shadow-sm">
               Bundle Deal
             </Badge>
           )}
           {is_free && (
-            <Badge className="bg-lime text-ink font-extrabold text-[10px] px-2 py-0.5 shadow-sm border-0">
-              FREE
+            <Badge className="bg-deep-green text-white font-bold text-[10px] px-2 py-0.5 shadow-sm">
+              Freebie
             </Badge>
           )}
           {is_featured && !is_free && (
@@ -163,59 +163,66 @@ export function ProductCard({
         <button
           onClick={handleWishlistToggle}
           disabled={wishlistLoading}
-          aria-label={wishlisted ? 'Remove from wishlist' : 'Add to wishlist'}
-          className={`absolute top-3 right-3 w-8 h-8 rounded-full flex items-center justify-center backdrop-blur-md transition-all shadow-sm z-10 ${
-            wishlisted
-              ? 'bg-red-500 text-white'
-              : 'bg-white/85 text-slate hover:text-red-500 hover:bg-white'
-          }`}
+          aria-label={wishlisted ? `Remove ${title} from wishlist` : `Save ${title} to wishlist`}
+          className="absolute top-3 right-3 z-10 w-8 h-8 rounded-full bg-[var(--surface)]/90 backdrop-blur-sm border border-[var(--border)] flex items-center justify-center text-[var(--muted)] hover:text-red-500 hover:scale-110 active:scale-95 transition-all shadow-sm"
         >
-          <Heart className={`w-4 h-4 ${wishlisted ? 'fill-current' : ''}`} />
+          <Heart
+            className={`w-4 h-4 transition-colors ${
+              wishlisted ? 'fill-red-500 text-red-500' : ''
+            }`}
+          />
         </button>
       </div>
 
       {/* Card Content */}
-      <div className="flex-1 flex flex-col p-5">
+      <div className="p-5 flex flex-col flex-1">
         {/* Rating and Tech Stack */}
         <div className="flex items-center justify-between gap-2 mb-2 text-xs">
-          <div className="flex items-center gap-1 text-slate font-medium">
+          <div className="flex items-center gap-1 text-[var(--text)] font-medium">
             <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
-            <span className="font-bold text-ink">
+            <span>
               {rating_avg > 0 ? rating_avg.toFixed(1) : '5.0'}
             </span>
-            <span className="text-[11px] text-slate/70">
+            <span className="text-[var(--muted)]">
               ({rating_count > 0 ? rating_count : 1})
             </span>
           </div>
 
           {tech_stack.length > 0 && (
-            <div className="flex items-center gap-1 text-[10px] text-slate truncate font-medium">
-              <span>{tech_stack.slice(0, 2).join(' • ')}</span>
+            <div className="flex items-center gap-1">
+              {tech_stack.slice(0, 2).map((tech) => (
+                <span
+                  key={tech}
+                  className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-[var(--surface-2)] text-[var(--muted)] border border-[var(--border)]"
+                >
+                  {tech}
+                </span>
+              ))}
             </div>
           )}
         </div>
 
         {/* Title */}
-        <Link href={`/products/${slug}`} className="group-hover:text-deep-green transition-colors">
-          <h3 className="font-bold text-base text-ink tracking-tight line-clamp-1">
+        <Link href={`/products/${slug}`} className="group-hover:text-[var(--accent)] transition-colors">
+          <h3 className="heading-3 line-clamp-1">
             {title}
           </h3>
         </Link>
 
         {/* Tagline */}
-        <p className="text-xs text-slate line-clamp-2 mt-1 mb-4 flex-1">
+        <p className="body-small text-[var(--muted)] line-clamp-2 mt-1 mb-4 flex-1">
           {tagline}
         </p>
 
         {/* Price & Action Row */}
-        <div className="pt-3 border-t border-border flex items-center justify-between gap-2 mt-auto">
+        <div className="pt-3 border-t border-[var(--border)] flex items-center justify-between gap-2 mt-auto">
           <div>
-            <span className="text-[10px] uppercase font-semibold text-slate block leading-tight">
+            <span className="eyebrow text-[10px] text-[var(--muted)] block leading-tight">
               {is_free ? 'License' : 'From'}
             </span>
-            <div className="text-base font-extrabold text-ink tracking-tight">
+            <div className="text-base font-display font-bold text-[var(--text)] tracking-tight tabular-nums">
               {is_free ? (
-                <span className="text-deep-green font-black">Free Download</span>
+                <span className="text-[var(--accent)] font-bold">Free Download</span>
               ) : (
                 `₹${formattedPrice}`
               )}

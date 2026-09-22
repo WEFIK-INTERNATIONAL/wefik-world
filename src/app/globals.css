@@ -1,20 +1,56 @@
 @import "tailwindcss";
 
 /* ============================================
-   wefik.world — Design System
+   wefik.world — Design System (Motion & UX v2)
    
-   Colors: Lime #A3E635, Deep Green #4F741B, 
-   Ink #202124, Slate #5F6368, White #FFFFFF,
-   Surface #F8F9FA, Border #E8EAED
+   Display: Space Grotesk (600/700)
+   Body: Inter (400/500/600)
+   Mono: JetBrains Mono (500)
    
-   Balance: 60-70% white, 20-30% dark, 5-10% lime
-   Typography: Inter
-   Spacing: 4px/8px grid
-   Radius: 10-14px
+   Dark mode tokens + Light mode tokens via CSS vars
    ============================================ */
 
+:root {
+  --bg: #FFFFFF;
+  --surface: #F8F9FA;
+  --surface-2: #EFF1EE;
+  --text: #202124;
+  --muted: #5F6368;
+  --border: #E8EAED;
+  --border-subtle: #F1F3F4;
+  --ink: #202124;
+  --primary: #A3E635;
+  --on-primary: #202124;
+  --accent: #4F741B;
+}
+
+.dark {
+  --bg: #0B0D0B;
+  --surface: #141714;
+  --surface-2: #1C211C;
+  --text: #EDEFEA;
+  --muted: #9AA39A;
+  --border: #262B26;
+  --border-subtle: #1C201C;
+  --ink: #EDEFEA;
+  --primary: #A3E635;
+  --on-primary: #131603;
+  --accent: #8FCE3F;
+}
+
 @theme inline {
-  /* --- Colors --- */
+  /* --- Tokens --- */
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-text: var(--text);
+  --color-muted: var(--muted);
+  --color-border: var(--border);
+  --color-primary: var(--primary);
+  --color-on-primary: var(--on-primary);
+  --color-accent: var(--accent);
+
+  /* Brand Colors */
   --color-lime: #A3E635;
   --color-lime-light: #D9F99D;
   --color-lime-dark: #65A30D;
@@ -23,22 +59,20 @@
   --color-deep-green-dark: #3D5A15;
   --color-ink: #202124;
   --color-slate: #5F6368;
-  --color-surface: #F8F9FA;
-  --color-soft: #F8F9FA;
-  --color-border: #E8EAED;
-  --color-background: #FFFFFF;
-  --color-foreground: #202124;
+  --color-soft: var(--surface);
 
-  /* Success / Error / Warning */
+  /* Status Colors */
   --color-success: #34A853;
   --color-error: #EA4335;
   --color-warning: #FBBC04;
   --color-info: #4285F4;
 
-  /* --- Typography --- */
+  /* Fonts */
   --font-sans: var(--font-inter);
+  --font-display: var(--font-space-grotesk);
+  --font-mono: var(--font-jetbrains-mono);
 
-  /* --- Border Radius --- */
+  /* Border Radius */
   --radius-sm: 10px;
   --radius-DEFAULT: 12px;
   --radius-lg: 14px;
@@ -51,23 +85,32 @@
 html,
 body {
   overflow-x: clip;
-  background: var(--color-background);
-  color: var(--color-foreground);
+  background-color: var(--bg);
+  color: var(--text);
   font-family: var(--font-sans), system-ui, -apple-system, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  text-wrap: balance;
+}
+
+p {
+  text-wrap: pretty;
 }
 
 /* --- Focus styles for accessibility --- */
 *:focus-visible {
-  outline: 2px solid var(--color-lime);
+  outline: 2px solid var(--primary);
   outline-offset: 2px;
 }
 
 /* --- Selection --- */
 ::selection {
-  background: var(--color-lime);
-  color: var(--color-ink);
+  background: var(--primary);
+  color: var(--on-primary);
 }
 
 /* --- Scrollbar (subtle) --- */
@@ -75,43 +118,134 @@ body {
   width: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: var(--color-surface);
+  background: var(--surface);
 }
 ::-webkit-scrollbar-thumb {
-  background: var(--color-border);
+  background: var(--border);
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--color-slate);
+  background: var(--muted);
 }
 
-/* --- Utility classes --- */
-.text-balance {
+/* --- Typography Scale (Section 2) --- */
+.display-xl {
+  font-family: var(--font-display), system-ui, sans-serif;
+  font-size: 44px;
+  line-height: 1.0;
+  letter-spacing: -0.035em;
   text-wrap: balance;
+  font-weight: 700;
+}
+@media (min-width: 768px) {
+  .display-xl {
+    font-size: 76px;
+  }
 }
 
-/* --- Prose (for markdown content) --- */
-.prose {
-  max-width: 72ch;
-  line-height: 1.75;
+.display-title {
+  font-family: var(--font-display), system-ui, sans-serif;
+  font-size: 36px;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+  font-weight: 700;
+}
+@media (min-width: 768px) {
+  .display-title {
+    font-size: 56px;
+  }
 }
 
-.prose h1 { font-size: 2rem; font-weight: 700; margin-top: 2rem; margin-bottom: 1rem; color: var(--color-ink); }
-.prose h2 { font-size: 1.5rem; font-weight: 600; margin-top: 1.75rem; margin-bottom: 0.75rem; color: var(--color-ink); }
-.prose h3 { font-size: 1.25rem; font-weight: 600; margin-top: 1.5rem; margin-bottom: 0.5rem; color: var(--color-ink); }
-.prose p { margin-bottom: 1rem; color: var(--color-slate); }
-.prose a { color: var(--color-deep-green); text-decoration: underline; text-underline-offset: 2px; }
-.prose a:hover { color: var(--color-lime-dark); }
-.prose ul, .prose ol { margin-bottom: 1rem; padding-left: 1.5rem; color: var(--color-slate); }
-.prose li { margin-bottom: 0.25rem; }
-.prose code { background: var(--color-surface); padding: 0.125rem 0.375rem; border-radius: 4px; font-size: 0.875rem; }
-.prose pre { background: var(--color-ink); color: #E8EAED; padding: 1rem; border-radius: var(--radius-sm); overflow-x: auto; margin-bottom: 1rem; }
-.prose pre code { background: transparent; padding: 0; }
-.prose blockquote { border-left: 3px solid var(--color-lime); padding-left: 1rem; color: var(--color-slate); font-style: italic; margin-bottom: 1rem; }
-.prose img { border-radius: var(--radius-DEFAULT); margin-bottom: 1rem; }
-.prose hr { border: none; border-top: 1px solid var(--color-border); margin: 2rem 0; }
+.heading-1 {
+  font-family: var(--font-display), system-ui, sans-serif;
+  font-size: 32px;
+  line-height: 1.1;
+  letter-spacing: -0.025em;
+  text-wrap: balance;
+  font-weight: 600;
+}
+@media (min-width: 768px) {
+  .heading-1 {
+    font-size: 44px;
+  }
+}
 
-/* --- Reduced Motion is Law (Section 1.2 & 13) --- */
+.heading-2 {
+  font-family: var(--font-display), system-ui, sans-serif;
+  font-size: 27px;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+  font-weight: 600;
+}
+@media (min-width: 768px) {
+  .heading-2 {
+    font-size: 34px;
+  }
+}
+
+.heading-3 {
+  font-family: var(--font-display), system-ui, sans-serif;
+  font-size: 21px;
+  line-height: 1.25;
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+  font-weight: 600;
+}
+@media (min-width: 768px) {
+  .heading-3 {
+    font-size: 24px;
+  }
+}
+
+.body-lg {
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-size: 17px;
+  line-height: 1.65;
+  letter-spacing: 0;
+  text-wrap: pretty;
+}
+@media (min-width: 768px) {
+  .body-lg {
+    font-size: 18px;
+  }
+}
+
+.body-base {
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-size: 15.5px;
+  line-height: 1.6;
+  letter-spacing: 0;
+  text-wrap: pretty;
+}
+@media (min-width: 768px) {
+  .body-base {
+    font-size: 16px;
+  }
+}
+
+.body-small {
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-size: 14px;
+  line-height: 1.55;
+  letter-spacing: 0;
+}
+
+.eyebrow {
+  font-family: var(--font-mono), monospace;
+  font-size: 12px;
+  line-height: 1.4;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+/* --- Reduced Motion (Section 1.2 & 13) --- */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -123,9 +257,9 @@ body {
   }
 }
 
-/* --- Micro-Interactions: Link Underline Sweep (Section 6) --- */
+/* --- Micro-Interactions: Link Underline Sweep (Section 6 & 11) --- */
 .link-sweep {
-  background-image: linear-gradient(var(--color-lime-dark), var(--color-lime-dark));
+  background-image: linear-gradient(var(--primary), var(--primary));
   background-size: 0% 2px;
   background-repeat: no-repeat;
   background-position: left bottom;
@@ -135,7 +269,7 @@ body {
   background-size: 100% 2px;
 }
 
-/* --- Micro-Interactions: Infinite Marquee (Section 6) --- */
+/* --- Micro-Interactions: Infinite Marquee (Section 11) --- */
 @keyframes wfk-marquee {
   0% { transform: translateX(0%); }
   100% { transform: translateX(-50%); }
@@ -158,14 +292,14 @@ body {
   }
 }
 
-/* --- Skeleton Shimmer Animation (Section 6.5) --- */
+/* --- Skeleton Shimmer Animation (Section 11) --- */
 @keyframes wfk-shimmer {
   0% { background-position: 200% 0; }
   100% { background-position: -200% 0; }
 }
 
 .animate-shimmer {
-  background: linear-gradient(90deg, #F8F9FA 0%, #E8EAED 50%, #F8F9FA 100%);
+  background: linear-gradient(90deg, var(--surface) 0%, var(--border) 50%, var(--surface) 100%);
   background-size: 200% 100%;
   animation: wfk-shimmer 2s infinite linear;
 }
@@ -173,7 +307,6 @@ body {
 @media (prefers-reduced-motion: reduce) {
   .animate-shimmer {
     animation: none !important;
-    background: #F8F9FA !important;
+    background: var(--surface) !important;
   }
 }
-

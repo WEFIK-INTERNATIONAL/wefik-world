@@ -2,7 +2,7 @@
 
 import React, { useRef, useEffect } from 'react';
 import gsap from 'gsap';
-import { useReducedMotion } from '@/hooks/use-reduced-motion';
+import { useMotionGates } from '@/hooks/use-reduced-motion';
 
 interface MagneticButtonProps extends React.ButtonHTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
@@ -19,11 +19,11 @@ export function MagneticButton({
   ...props
 }: MagneticButtonProps) {
   const buttonRef = useRef<HTMLDivElement | null>(null);
-  const prefersReducedMotion = useReducedMotion();
+  const { disableHeavyMotion } = useMotionGates();
 
   useEffect(() => {
     const el = buttonRef.current;
-    if (!el || prefersReducedMotion || typeof window === 'undefined') return;
+    if (!el || disableHeavyMotion || typeof window === 'undefined') return;
 
     // Only enable magnetic pull on desktop devices with hover support
     if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
@@ -54,7 +54,7 @@ export function MagneticButton({
       el.removeEventListener('mouseleave', handleMouseLeave);
       gsap.killTweensOf(el);
     };
-  }, [strength, prefersReducedMotion]);
+  }, [strength, disableHeavyMotion]);
 
   return (
     <div

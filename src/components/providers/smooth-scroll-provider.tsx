@@ -4,7 +4,7 @@ import React, { createContext, useContext, useEffect, useRef, useState } from 'r
 import Lenis from 'lenis';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { useReducedMotion } from '@/hooks/use-reduced-motion';
+import { useReducedMotion, useLowEndDevice } from '@/hooks/use-reduced-motion';
 
 // Register ScrollTrigger plugin safely on client
 if (typeof window !== 'undefined') {
@@ -31,12 +31,14 @@ export function useLenis() {
 
 export function SmoothScrollProvider({ children }: { children: React.ReactNode }) {
   const prefersReducedMotion = useReducedMotion();
+  const isLowEnd = useLowEndDevice();
+  const shouldDisable = prefersReducedMotion || isLowEnd;
   const [lenisInstance, setLenisInstance] = useState<Lenis | null>(null);
   const lenisRef = useRef<Lenis | null>(null);
 
   useEffect(() => {
-    // Reduced motion is law: Lenis OFF, native scrolling used
-    if (prefersReducedMotion || typeof window === 'undefined') {
+    // Reduced motion & low-end gate: Lenis OFF, native scrolling used
+    if (shouldDisable || typeof window === 'undefined') {
       return;
     }
 
@@ -75,19 +77,19 @@ export function SmoothScrollProvider({ children }: { children: React.ReactNode }
       setLenisInstance(null);
       ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
     };
-  }, [prefersReducedMotion]);
+  }, [shouldDisable]);
 
   const scrollTo = (target: string | number | HTMLElement, options?: Record<string, unknown>) => {
     if (lenisRef.current) {
       lenisRef.current.scrollTo(target, options);
     } else if (typeof window !== 'undefined') {
       if (typeof target === 'number') {
-        window.scrollTo({ top: target, behavior: prefersReducedMotion ? 'auto' : 'smooth' });
+        window.scrollTo({ top: target, behavior: shouldDisable ? 'auto' : 'smooth' });
       } else if (typeof target === 'string') {
         const el = document.querySelector(target);
-        if (el) el.scrollIntoView({ behavior: prefersReducedMotion ? 'auto' : 'smooth' });
+        if (el) el.scrollIntoView({ behavior: shouldDisable ? 'auto' : 'smooth' });
       } else if (target instanceof HTMLElement) {
-        target.scrollIntoView({ behavior: prefersReducedMotion ? 'auto' : 'smooth' });
+        target.scrollIntoView({ behavior: shouldDisable ? 'auto' : 'smooth' });
       }
     }
   };

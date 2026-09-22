@@ -1,5 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { getProducts } from '@/lib/data/products';
 import { ProductCard } from '@/components/marketplace/product-card';
 import { Sparkles, CheckCircle2, ShieldCheck, ArrowRight } from 'lucide-react';
@@ -82,10 +83,12 @@ export default async function BundlesPage() {
             </div>
 
             <div className="relative aspect-video rounded-2xl overflow-hidden border border-white/10 shadow-lg bg-zinc-900">
-              <img
+              <Image
                 src={bundles[0].thumbnail_url}
                 alt={bundles[0].title}
-                className="w-full h-full object-cover"
+                fill
+                sizes="(max-width: 768px) 100vw, 50vw"
+                className="object-cover"
               />
             </div>
           </div>

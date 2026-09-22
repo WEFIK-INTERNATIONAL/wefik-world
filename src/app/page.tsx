@@ -1,8 +1,9 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { ArrowRight, CheckCircle, Sparkles, Shield, Zap, Code2, Download, Layers } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ProductCard } from '@/components/marketplace/product-card';
-import { Hero3DWrapper } from '@/components/hero/hero-3d-wrapper';
+import { HeroLightweight } from '@/components/hero/hero-lightweight';
 import { MagneticButton } from '@/components/ui/magnetic-button';
 import { StatCounter } from '@/components/ui/stat-counter';
 import { InfiniteMarquee } from '@/components/ui/infinite-marquee';
@@ -17,40 +18,20 @@ export default async function HomePage() {
 
   return (
     <div className="flex flex-col w-full min-h-screen">
-      {/* 1. HERO SECTION */}
-      <section className="relative overflow-hidden pt-20 pb-20 lg:pt-28 lg:pb-24 bg-gradient-to-b from-soft via-white to-white border-b border-border">
-        {/* Decorative Grid & Glow */}
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:24px_24px]" />
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-lime/20 rounded-full blur-3xl pointer-events-none" />
+      {/* 1. HERO SECTION (Lightweight Edition - Section 6) */}
+      <section className="relative overflow-hidden bg-[var(--bg)] border-b border-[var(--border)]">
+        <HeroLightweight />
 
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          {/* Live Agency Badge */}
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white border border-border shadow-xs text-xs font-semibold text-deep-green mb-6 animate-in fade-in slide-in-from-bottom-3 duration-500">
-            <span className="flex h-2 w-2 rounded-full bg-lime animate-pulse" />
-            <span>Curated by Wefik Agency Engineers</span>
-            <span className="text-slate/60">•</span>
-            <span className="text-slate font-medium">100% Bloat-Free Code</span>
-          </div>
-
-          {/* Main Headline (Section 7.1 Spec) */}
-          <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-ink max-w-4xl mx-auto leading-[1.1] mb-6">
-            WordPress Themes, Plugins & Templates for People Who Build the Web
-          </h1>
-
-          {/* Subheading (~120 words exact intro per Section 7.1) */}
-          <p className="text-sm sm:text-base md:text-lg text-slate max-w-3xl mx-auto mb-8 leading-relaxed font-normal">
-            Wefik.world is the digital product marketplace built specifically for freelancers, digital agencies, and independent founders who refuse to compromise on website speed, code semantics, or licensing freedom. Every WordPress theme, performance plugin, responsive HTML template, and full-stack code snippet in our catalog is engineered in-house by Wefik Agency with zero page builder bloat. Choose between flexible Single-Site or commercial Unlimited-Site licenses, save up to 60% with curated product bundles, unlock the entire catalog with our All-Access Membership, or start immediately with 100% free lead magnet products. Tailored for India with transparent INR pricing, integer-paise math, and instant UPI checkout.
-          </p>
-
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
           {/* Section 5.3 & 7.1 — Key Facts Box (Designed for AI Engine Quoting & Instant Scannability) */}
-          <div className="max-w-3xl mx-auto mb-10 p-4 sm:p-5 rounded-2xl bg-white border border-deep-green/30 shadow-sm text-left">
+          <div className="max-w-3xl mx-auto mb-10 p-4 sm:p-5 rounded-2xl bg-[var(--surface)] border border-deep-green/30 shadow-sm text-left">
             <div className="flex items-center gap-2 mb-2.5">
               <span className="flex h-2 w-2 rounded-full bg-deep-green" />
-              <span className="text-xs font-bold uppercase tracking-wider text-deep-green">
+              <span className="eyebrow text-xs text-deep-green">
                 Key Facts & Marketplace Overview
               </span>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-ink">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-[var(--text)]">
               <div className="flex items-center gap-1.5">
                 <CheckCircle className="w-3.5 h-3.5 text-deep-green flex-shrink-0" />
                 <span><strong>Pricing:</strong> Products from ₹499 (paise-precise)</span>
@@ -76,39 +57,6 @@ export default async function HomePage() {
                 <span><strong>Payments:</strong> Instant UPI, Cards & NetBanking</span>
               </div>
             </div>
-          </div>
-
-          {/* Hero CTAs */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 mb-14">
-            <MagneticButton strength={0.25} className="w-full sm:w-auto">
-              <Button
-                asChild
-                size="lg"
-                className="w-full sm:w-auto h-12 px-8 rounded-xl bg-ink hover:bg-black text-white font-semibold text-sm shadow-md transition-shadow hover:shadow-lime/20 hover:shadow-lg"
-              >
-                <TransitionLink href="/marketplace" className="flex items-center gap-2">
-                  <span>Browse Marketplace</span>
-                  <ArrowRight className="w-4 h-4" />
-                </TransitionLink>
-              </Button>
-            </MagneticButton>
-            <MagneticButton strength={0.15} className="w-full sm:w-auto">
-              <Button
-                asChild
-                variant="outline"
-                size="lg"
-                className="w-full sm:w-auto h-12 px-8 rounded-xl border-border bg-white text-ink hover:bg-soft font-semibold text-sm"
-              >
-                <TransitionLink href="/pricing">
-                  <span>Get All-Access Membership</span>
-                </TransitionLink>
-              </Button>
-            </MagneticButton>
-          </div>
-
-          {/* Three.js Hero Canvas (Gated with Suspense, reduced-motion, and mobile poster per Section 5) */}
-          <div className="mb-14 max-w-4xl mx-auto">
-            <Hero3DWrapper />
           </div>
 
           {/* Trust Metrics Bar */}
@@ -348,11 +296,13 @@ export default async function HomePage() {
                 </div>
 
                 <div className="relative aspect-video rounded-2xl overflow-hidden border border-white/10 shadow-2xl bg-zinc-900">
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent z-10" />
-                  <img
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent z-10 pointer-events-none" />
+                  <Image
                     src={bundleProduct.thumbnail_url}
                     alt={bundleProduct.title}
-                    className="w-full h-full object-cover"
+                    fill
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                    className="object-cover"
                   />
                   <div className="absolute bottom-4 left-4 z-20">
                     <span className="text-xs font-semibold uppercase tracking-wider text-lime">

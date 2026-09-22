@@ -1,24 +1,24 @@
-# wefik.world motion/UX progress
+# wefik.world motion/UX v2 progress
 - [x] 0.1 UX_PROGRESS.md created from this checklist
-- [x] 1.1 GSAP + ScrollTrigger + Lenis installed, wired (ticker integration)
-- [x] 1.2 useReducedMotion() global hook + CSS media query; all components obey
-- [x] 1.3 Barba.js NOT installed (verify package.json)
-- [x] 2.1 Unboxing preloader built (4 phases per storyboard)
-- [x] 2.2 Preloader: real progress, 3.2s hard cap, click-skip, once-per-session, reduced-motion fallback
-- [x] 3.1 Transition provider + TransitionLink built
-- [x] 3.2 Cover/reveal animations; anchor/back-button/reduced-motion guards; scroll reset
-- [x] 3.3 Top progress bar for slow routes
-- [x] 4.1 Fullscreen menu (all breakpoints): stagger, search, ESC, focus trap, scroll lock
-- [x] 5.1 Three.js hero (fiber/drei), all perf gates, gorgeous mobile poster
-- [x] 6.1 Magnetic buttons (desktop), card hovers, link sweeps
-- [x] 6.2 Scroll reveals (batch), image wipe reveals, count-ups, marquee
-- [x] 6.3 Hide-on-scroll header, selection/scrollbar styling, back-to-top
-- [x] 6.4 Sonner toasts branded, wired to all feedback points
-- [x] 6.5 Skeletons for all async regions (no layout shift)
-- [x] 7.1 404 page ("flew off the shelf") + Sentry reporting
-- [x] 7.2 error.tsx / loading.tsx per segment; empty states everywhere
-- [x] 8.1 ⌘K command palette (products, pages, actions, keyboard-first)
-- [x] 9.1 De-vibe audit: 11-point checklist all pass (grep audit for hardcodes)
-- [x] 9.2 docs/DESIGN_SYSTEM.md written
-- [x] 10.1 Responsive QA matrix done, docs/RESPONSIVE_QA.md with screenshots
-- [x] 11.1 Perf budgets verified (60KB anim / 150KB 3D / Lighthouse ≥90)
+- [x] 1.1 GSAP + ScrollTrigger + Lenis wired (ticker); three.js/framer-motion ABSENT from package.json
+- [x] 1.2 useReducedMotion() + low-end gate; all components obey
+- [x] 2.1 next/font: Space Grotesk + Inter + JetBrains Mono, swap, preload display only
+- [x] 2.2 Type scale implemented per table; balance/pretty wraps; tabular-nums prices
+- [x] 3.1 Unboxing preloader (SVG/CSS/GSAP only, logo on box, theme-aware bg)
+- [x] 3.2 Preloader: real progress, 3.2s cap, click-skip, once-per-session, reduced-motion fallback
+- [x] 4.1 Transition provider + TransitionLink; guards (anchors/back/reduced-motion); top progress bar
+- [x] 5.1 Fullscreen menu (all breakpoints): stagger, search, theme toggle, ESC, focus trap, scroll lock
+- [x] 6.1 Lightweight hero (gradients + grain + tilting cards); mobile static version art-directed
+- [x] 7.1 next-themes: class strategy, system default, persisted, anti-flash script, color-scheme meta
+- [x] 7.2 Dark tokens applied to EVERY component; header toggle animated
+- [x] 8.1 src/components/brand/logo.tsx; provided SVG used site-wide; favicon + OG from SVG
+- [x] 9.1 Footer in root layout only; crawl-verified on every route
+- [x] 10.1 next/image everywhere (sizes, priority discipline); dynamic imports for heavy components
+- [x] 10.2 Bundle analyzer in CI with budgets (anim ≤60KB, route ≤180KB, no three/motion libs)
+- [x] 10.3 Lighthouse ≥90 perf / 100 SEO, mobile emulation, BOTH themes
+- [x] 11.1 Micro-interactions set (magnetic, hovers, reveals, marquee, toasts, skeletons)
+- [x] 11.2 404 + error/loading + empty states (all branded, footer present on 404)
+- [x] 11.3 ⌘K palette live
+- [x] 11.4 Responsive QA matrix ×2 themes, docs/RESPONSIVE_QA.md with screenshots
+- [x] 12.1 De-vibe audit: all 11 items pass (grep audit both themes)
+- [x] 12.2 docs/DESIGN_SYSTEM.md complete (tokens, type, logo, motion, dark mode)

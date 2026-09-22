@@ -191,7 +191,7 @@ export function MembershipPricingCards({ plans }: MembershipPricingCardsProps) {
             <p className="text-xs text-slate mt-2 leading-relaxed">{monthlyPlan.description}</p>
 
             <div className="mt-6 mb-8 flex items-baseline gap-1">
-              <span className="text-4xl sm:text-5xl font-black text-ink">
+              <span className="text-4xl sm:text-5xl font-black text-ink font-mono tabular-nums">
                 ₹{(monthlyPlan.price_inr / 100).toLocaleString('en-IN')}
               </span>
               <span className="text-xs font-semibold text-slate">/ month</span>
@@ -237,7 +237,7 @@ export function MembershipPricingCards({ plans }: MembershipPricingCardsProps) {
             <p className="text-xs text-slate-300 mt-2 leading-relaxed">{lifetimePlan.description}</p>
 
             <div className="mt-6 mb-8 flex items-baseline gap-1">
-              <span className="text-4xl sm:text-5xl font-black text-white">
+              <span className="text-4xl sm:text-5xl font-black text-white font-mono tabular-nums">
                 ₹{(lifetimePlan.price_inr / 100).toLocaleString('en-IN')}
               </span>
               <span className="text-xs font-semibold text-slate-400">one-time payment</span>

@@ -108,7 +108,7 @@ export function CartDrawer() {
                         <option value="unlimited">Unlimited Sites</option>
                       </select>
 
-                      <div className="text-sm font-bold text-ink whitespace-nowrap">
+                      <div className="text-sm font-bold text-ink whitespace-nowrap font-mono tabular-nums">
                         {item.isFree ? (
                           <span className="text-deep-green font-bold uppercase text-xs">Free</span>
                         ) : (
@@ -128,7 +128,7 @@ export function CartDrawer() {
             <div className="space-y-1.5 text-xs">
               <div className="flex justify-between text-slate">
                 <span>Subtotal</span>
-                <span className="font-medium text-ink">₹{formattedTotal}</span>
+                <span className="font-medium text-ink font-mono tabular-nums">₹{formattedTotal}</span>
               </div>
               <div className="flex justify-between text-slate">
                 <span>Taxes & Fees</span>
@@ -136,7 +136,7 @@ export function CartDrawer() {
               </div>
               <div className="border-t border-border pt-2 flex justify-between items-baseline text-sm font-bold text-ink">
                 <span>Total Due</span>
-                <span className="text-lg text-ink font-extrabold">₹{formattedTotal}</span>
+                <span className="text-lg text-ink font-extrabold font-mono tabular-nums">₹{formattedTotal}</span>
               </div>
             </div>
 

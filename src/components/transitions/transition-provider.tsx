@@ -3,7 +3,7 @@
 import React, { createContext, useContext, useEffect, useRef, useState, useTransition } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import gsap from 'gsap';
-import { useReducedMotion } from '@/hooks/use-reduced-motion';
+import { useMotionGates } from '@/hooks/use-reduced-motion';
 import { useLenis } from '@/components/providers/smooth-scroll-provider';
 
 interface TransitionContextType {
@@ -23,7 +23,7 @@ export function usePageTransition() {
 export function TransitionProvider({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const pathname = usePathname();
-  const prefersReducedMotion = useReducedMotion();
+  const { prefersReducedMotion, disableHeavyMotion } = useMotionGates();
   const { scrollTo } = useLenis();
 
   const [isTransitioning, setIsTransitioning] = useState(false);
@@ -104,8 +104,8 @@ export function TransitionProvider({ children }: { children: React.ReactNode }) 
 
     targetHrefRef.current = href;
 
-    // Reduced motion guard: Instant cut
-    if (prefersReducedMotion) {
+    // Reduced motion & low-end device guard: Instant cut
+    if (disableHeavyMotion) {
       router.push(href);
       return;
     }
@@ -168,7 +168,7 @@ export function TransitionProvider({ children }: { children: React.ReactNode }) 
       <div
         ref={inkPanelRef}
         aria-hidden="true"
-        className="fixed inset-0 z-[99990] bg-[#202124] pointer-events-none will-change-transform"
+        className="fixed inset-0 z-[99990] bg-ink dark:bg-[#0B0D0B] pointer-events-none will-change-transform"
       />
       <div
         ref={limePanelRef}
