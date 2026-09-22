@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { PostHogProvider } from "@/components/providers/posthog-provider";
 import { CartProvider } from "@/lib/cart-context";
 import { Header } from "@/components/layout/header";
@@ -164,6 +165,7 @@ export default function RootLayout({
                     className: "font-sans",
                   }}
                 />
+                <SpeedInsights />
               </TransitionProvider>
             </SmoothScrollProvider>
           </CartProvider>
