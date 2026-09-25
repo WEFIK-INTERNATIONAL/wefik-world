@@ -166,7 +166,7 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
             <span>/</span>
             <Link href="/marketplace" className="hover:text-ink">Marketplace</Link>
             <span>/</span>
-            <span className="text-ink font-bold truncate max-w-[200px]">{product.title}</span>
+            <span className="text-[var(--text-primary)] font-bold truncate max-w-[160px] sm:max-w-[280px] md:max-w-[400px] inline-block align-bottom" title={product.title}>{product.title}</span>
           </div>
         </div>
 

@@ -69,24 +69,13 @@ export function Header() {
 
   const supabase = createClient();
 
-  // Hide on scroll down, show on scroll up with backdrop blur after 24px per Section 6.3
+  // Sticky header with backdrop blur and subtle border/shadow appearing after 8px scroll
   // Driven by Lenis scroll events with native window scroll fallback
   useEffect(() => {
     if (typeof window === 'undefined') return;
 
     const updateScrollState = (currentScrollY: number) => {
-      setScrolled(currentScrollY > 24);
-
-      if (currentScrollY > 100) {
-        if (currentScrollY > lastScrollY.current && !fullscreenOpen) {
-          setShowHeader(false); // scrolling down
-        } else {
-          setShowHeader(true); // scrolling up
-        }
-      } else {
-        setShowHeader(true);
-      }
-      lastScrollY.current = currentScrollY;
+      setScrolled(currentScrollY > 8);
     };
 
     if (lenis) {
@@ -104,7 +93,7 @@ export function Header() {
       window.addEventListener('scroll', handleWindowScroll, { passive: true });
       return () => window.removeEventListener('scroll', handleWindowScroll);
     }
-  }, [lenis, fullscreenOpen]);
+  }, [lenis]);
 
   useEffect(() => {
     async function checkUser() {
@@ -158,9 +147,7 @@ export function Header() {
     <>
       <header
         ref={headerRef}
-        className={`fixed top-0 inset-x-0 z-40 w-full transition-all duration-300 ${
-          showHeader ? 'translate-y-0' : '-translate-y-full'
-        } ${
+        className={`sticky top-0 inset-x-0 z-40 w-full transition-all duration-200 ${
           scrolled
             ? 'border-b border-[var(--border)] bg-[var(--bg)]/90 backdrop-blur-md shadow-xs'
             : 'border-b border-transparent bg-[var(--bg)]/60 backdrop-blur-xs'
@@ -177,30 +164,30 @@ export function Header() {
                 href="https://wefik.in"
                 target="_blank"
                 rel="noreferrer"
-                className="hidden sm:inline-flex items-center text-[10px] font-mono tracking-wider text-[var(--muted)] hover:text-deep-green dark:hover:text-lime transition-colors px-2 py-0.5 rounded-full border border-[var(--border)] bg-[var(--surface-2)]"
+                className="hidden sm:inline-flex items-center whitespace-nowrap text-[10px] font-mono tracking-wider text-[var(--muted)] hover:text-deep-green dark:hover:text-lime transition-colors px-2 py-0.5 rounded-full border border-[var(--border)] bg-[var(--surface-2)]"
                 title="Wefik Digital Agency (wefik.in)"
               >
                 by Wefik
               </a>
             </div>
 
-            {/* Desktop Navigation */}
-            <nav className="hidden md:flex items-center gap-1">
+            {/* Desktop Navigation: visible at >= 1024px */}
+            <nav className="hidden lg:flex items-center gap-1">
               {navLinks.map((link) => {
                 const isActive = pathname === link.href;
                 return (
                   <TransitionLink
                     key={link.href}
                     href={link.href}
-                    className={`relative px-3 py-1.5 rounded-lg text-xs font-semibold tracking-wide transition-colors ${
+                    className={`relative px-3 py-1.5 rounded-lg text-xs font-semibold tracking-wide transition-colors inline-flex items-center ${
                       isActive
                         ? 'text-deep-green bg-soft font-bold'
                         : 'text-slate hover:text-ink hover:bg-soft/60'
                     }`}
                   >
-                    {link.label}
+                    <span>{link.label}</span>
                     {link.badge && (
-                      <span className="ml-1.5 px-1.5 py-0.5 text-[9px] font-extrabold bg-lime/30 text-deep-green rounded-full border border-lime/50">
+                      <span className="ml-1.5 inline-flex items-center whitespace-nowrap px-1.5 py-0.5 text-[9px] font-bold bg-lime/20 text-[#2d5208] dark:text-lime rounded-full border border-lime/40">
                         {link.badge}
                       </span>
                     )}
@@ -226,7 +213,7 @@ export function Header() {
             </button>
           </div>
 
-          {/* Right Controls: Cart + ⌘K mobile + Auth + Fullscreen Hamburger */}
+          {/* Right Controls: Cart + ⌘K mobile + Auth + Hamburger (<1024px) */}
           <div className="flex items-center gap-2 sm:gap-3">
             {/* Quick ⌘K trigger icon for mobile/tablet */}
             <button
@@ -354,7 +341,9 @@ export function Header() {
                 </Button>
                 <Button
                   asChild
-                  className="bg-ink hover:bg-black text-white text-xs font-semibold h-9 px-3.5 rounded-xl"
+                  variant="primary"
+                  size="sm"
+                  className="h-9 px-3.5 rounded-xl font-semibold text-xs shadow-sm"
                 >
                   <TransitionLink href="/signup">Get Started</TransitionLink>
                 </Button>
@@ -364,12 +353,12 @@ export function Header() {
             {/* Theme Toggle */}
             <ThemeToggle className="ml-1" />
 
-            {/* Fullscreen Hamburger Menu Morph Trigger (Available on ALL breakpoints per Section 5) */}
+            {/* Fullscreen Hamburger Menu Morph Trigger — ONLY on screens <1024px per Fix Pack 03 A3 */}
             <button
               onClick={() => setFullscreenOpen(!fullscreenOpen)}
               aria-expanded={fullscreenOpen}
               aria-label={fullscreenOpen ? 'Close Navigation Takeover' : 'Open Navigation Takeover'}
-              className="relative w-10 h-10 rounded-xl bg-[var(--surface)] hover:bg-[var(--surface-2)] border border-[var(--border)] flex flex-col items-center justify-center gap-1.5 transition-colors group z-50"
+              className="lg:hidden relative w-10 h-10 rounded-xl bg-[var(--surface)] hover:bg-[var(--surface-2)] border border-[var(--border)] flex flex-col items-center justify-center gap-1.5 transition-colors group z-50 cursor-pointer"
             >
               <span
                 className={`w-4 h-0.5 bg-[var(--text)] rounded-full transition-all duration-300 ease-out ${

@@ -163,13 +163,13 @@ export default async function PricingPage() {
         </div>
 
         {/* Bottom Support Callout */}
-        <div className="bg-ink text-white p-8 sm:p-12 rounded-3xl text-center max-w-4xl mx-auto space-y-4">
+        <div className="bg-[#141714] text-white border border-white/10 dark:border-[var(--border)] p-8 sm:p-12 rounded-3xl text-center max-w-4xl mx-auto space-y-4 shadow-xl">
           <h3 className="text-xl sm:text-2xl font-bold">Have custom agency requirements?</h3>
           <p className="text-xs sm:text-sm text-slate-300 max-w-xl mx-auto">
             Need custom WordPress plugin development or enterprise white-label solutions? Our agency team is ready to assist.
           </p>
           <div className="pt-2">
-            <Button asChild className="bg-lime hover:bg-lime/90 text-ink font-bold text-xs h-10 px-6 rounded-xl">
+            <Button asChild className="bg-lime hover:bg-[#8fd32b] text-[#0a0f0a] font-bold text-xs h-10 px-6 rounded-xl shadow-md transition-all">
               <a href="https://wefik.in" target="_blank" rel="noreferrer">
                 Contact Agency Team
               </a>

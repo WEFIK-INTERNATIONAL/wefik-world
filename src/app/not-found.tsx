@@ -106,7 +106,7 @@ export default function NotFound() {
         />
         <button
           type="submit"
-          className="absolute right-1.5 top-1.5 bottom-1.5 px-4 bg-ink dark:bg-white hover:bg-black dark:hover:bg-slate-100 text-white dark:text-ink text-xs font-bold rounded-xl transition-colors"
+          className="absolute right-1.5 top-1.5 bottom-1.5 px-4 bg-[var(--surface-inverted)] text-[var(--text-inverted)] hover:opacity-90 text-xs font-bold rounded-xl transition-all cursor-pointer"
         >
           Search
         </button>
@@ -117,7 +117,7 @@ export default function NotFound() {
         <MagneticButton strength={0.3}>
           <TransitionLink
             href="/marketplace"
-            className="inline-flex items-center gap-2 px-8 py-3.5 rounded-2xl bg-ink dark:bg-white hover:bg-black dark:hover:bg-slate-100 text-white dark:text-ink font-semibold text-sm shadow-md hover:shadow-lime/20 hover:shadow-lg transition-all"
+            className="inline-flex items-center gap-2 px-8 py-3.5 rounded-2xl bg-[var(--surface-inverted)] text-[var(--text-inverted)] hover:opacity-90 font-semibold text-sm shadow-md hover:shadow-lime/20 hover:shadow-lg transition-all"
           >
             <Home className="w-4 h-4 text-lime" />
             <span>Go to Marketplace</span>

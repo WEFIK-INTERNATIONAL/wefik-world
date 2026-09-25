@@ -14,14 +14,22 @@
   --header-height: 4rem;
   --bg: #FFFFFF;
   --surface: #F8F9FA;
+  --surface-elevated: #FFFFFF;
   --surface-2: #EFF1EE;
+  --surface-inverted: #141714;
   --text: #202124;
+  --text-primary: #202124;
+  --text-secondary: #5F6368;
+  --text-inverted: #FFFFFF;
+  --text-on-brand: #0A0F0A;
   --muted: #5F6368;
   --border: #E8EAED;
   --border-subtle: #F1F3F4;
   --ink: #202124;
+  --brand: #4F741B;
+  --brand-strong: #3D5A15;
   --primary: #A3E635;
-  --on-primary: #202124;
+  --on-primary: #0A0F0A;
   --accent: #4F741B;
 }
 
@@ -29,25 +37,42 @@
   --header-height: 4rem;
   --bg: #0B0D0B;
   --surface: #141714;
-  --surface-2: #1C211C;
+  --surface-elevated: #1C211C;
+  --surface-2: #242B24;
+  --surface-inverted: #EDEFEA;
   --text: #EDEFEA;
+  --text-primary: #EDEFEA;
+  --text-secondary: #9AA39A;
+  --text-inverted: #0B0D0B;
+  --text-on-brand: #0A0F0A;
   --muted: #9AA39A;
   --border: #262B26;
   --border-subtle: #1C201C;
   --ink: #EDEFEA;
+  --brand: #8FCE3F;
+  --brand-strong: #A3E635;
   --primary: #A3E635;
-  --on-primary: #131603;
+  --on-primary: #0A0F0A;
   --accent: #8FCE3F;
 }
 
 @theme inline {
-  /* --- Tokens --- */
+  /* --- Semantic Tokens --- */
   --color-bg: var(--bg);
   --color-surface: var(--surface);
+  --color-surface-elevated: var(--surface-elevated);
   --color-surface-2: var(--surface-2);
-  --color-text: var(--text);
-  --color-muted: var(--muted);
+  --color-surface-inverted: var(--surface-inverted);
+  --color-text: var(--text-primary);
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-inverted: var(--text-inverted);
+  --color-text-on-brand: var(--text-on-brand);
+  --color-muted: var(--text-secondary);
   --color-border: var(--border);
+  --color-border-subtle: var(--border-subtle);
+  --color-brand: var(--brand);
+  --color-brand-strong: var(--brand-strong);
   --color-primary: var(--primary);
   --color-on-primary: var(--on-primary);
   --color-accent: var(--accent);
@@ -59,8 +84,8 @@
   --color-deep-green: #4F741B;
   --color-deep-green-light: #6B8F2E;
   --color-deep-green-dark: #3D5A15;
-  --color-ink: var(--ink);
-  --color-slate: var(--muted);
+  --color-ink: var(--text-primary);
+  --color-slate: var(--text-secondary);
   --color-soft: var(--surface);
 
   /* Status Colors */

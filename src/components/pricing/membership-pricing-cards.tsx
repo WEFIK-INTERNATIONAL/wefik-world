@@ -210,7 +210,7 @@ export function MembershipPricingCards({ plans }: MembershipPricingCardsProps) {
           <Button
             onClick={() => handleSelectPlan(monthlyPlan)}
             disabled={loadingPlan === 'monthly'}
-            className="w-full mt-10 bg-ink hover:bg-black text-white h-12 rounded-xl font-bold text-xs shadow-sm"
+            className="w-full mt-10 bg-[var(--surface-inverted)] text-[var(--text-inverted)] hover:opacity-90 h-12 rounded-xl font-bold text-xs shadow-sm transition-all"
           >
             {loadingPlan === 'monthly' ? (
               <Loader2 className="w-4 h-4 animate-spin mr-2" />
@@ -220,8 +220,8 @@ export function MembershipPricingCards({ plans }: MembershipPricingCardsProps) {
         </div>
 
         {/* Lifetime Deal Card (Highlighted) */}
-        <div className="bg-ink text-white p-8 sm:p-10 rounded-3xl border-2 border-deep-green shadow-2xl transition-all flex flex-col justify-between relative overflow-hidden">
-          <div className="absolute top-4 right-4 bg-lime text-ink text-[10px] font-black uppercase px-2.5 py-1 rounded-full shadow-sm flex items-center gap-1">
+        <div className="bg-[#141714] text-white p-8 sm:p-10 rounded-3xl border-2 border-lime/60 shadow-2xl transition-all flex flex-col justify-between relative overflow-hidden">
+          <div className="absolute top-4 right-4 bg-lime text-[#0a0f0a] text-[10px] font-black uppercase px-2.5 py-1 rounded-full shadow-sm flex items-center gap-1">
             <Sparkles className="w-3 h-3" />
             <span>Best Value</span>
           </div>
@@ -256,7 +256,7 @@ export function MembershipPricingCards({ plans }: MembershipPricingCardsProps) {
           <Button
             onClick={() => handleSelectPlan(lifetimePlan)}
             disabled={loadingPlan === 'lifetime'}
-            className="w-full mt-10 bg-deep-green hover:bg-deep-green/90 text-white h-12 rounded-xl font-bold text-xs shadow-lg"
+            className="w-full mt-10 bg-lime hover:bg-[#8fd32b] text-[#0a0f0a] h-12 rounded-xl font-bold text-xs shadow-lg transition-all"
           >
             {loadingPlan === 'lifetime' ? (
               <Loader2 className="w-4 h-4 animate-spin mr-2" />

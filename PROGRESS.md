@@ -49,3 +49,50 @@
 - [x] 9.6 FCM: push_subscriptions, opt-in, service worker, send-push
 - [x] 9.7 docs/DNS_SETUP.md, docs/TESTING.md
 - [x] 9.8 Final: `npm run build` clean, acceptance checklist (Section 8) all pass
+
+## Fix Pack 03 — Dark Mode Repair, UX Quality & Motion Master Checklist
+
+### Located Repository Paths
+- Global CSS & Theme Tokens: `src/app/globals.css`
+- Nav Component: `src/components/layout/header.tsx`
+- Mobile Fullscreen Menu: `src/components/layout/fullscreen-menu.tsx`
+- Button Component: `src/components/ui/button.tsx`
+- Hero Component: `src/components/hero/hero-lightweight.tsx`
+- Product Card: `src/components/marketplace/product-card.tsx`
+- Pricing Cards: `src/components/pricing/membership-pricing-cards.tsx`
+- Footer: `src/components/layout/footer.tsx`
+- Product Docs Renderer: `src/components/marketplace/product-detail-view.tsx` & `src/components/marketplace/product-markdown-docs.tsx`
+
+### Part A: P0 Critical Defects
+- [x] A1. Dark-mode color inversion: tokens repaired in globals.css, button component contrast guaranteed, all 10 broken inventory items readable in dark mode [VERIFIED 2026-09-25]
+- [x] A2. /marketplace hard error: retry button invalidates/reloads properly, schema-validated defensive parsing, zero console errors [VERIFIED 2026-09-25]
+- [x] A3. Nav bar rebuild: position: sticky with top: 0, scroll shadow, responsive collapse (desktop links ≥1024px, hamburger ONLY <1024px), Save 60% and by Wefik badges on single line [VERIFIED 2026-09-25]
+- [x] A4. Mobile full-screen menu: native app feel (100dvh, safe area insets), dark mode inversion fixed, body scroll-lock, GSAP staggered entrance, Esc & focus trap [VERIFIED 2026-09-25]
+- [x] A5. Button system: contrast table (variant × theme) all ≥ 4.5:1, lime accent buttons with near-black text (#0a0f0a) only, focus-visible rings present [VERIFIED 2026-09-25]
+
+### Part B: P1 Typography & Hero
+- [x] B1. Product card titles clamp to 2 lines with word-aware breaking, no mid-word cuts [VERIFIED 2026-09-25]
+- [x] B2. Product documentation renders styled HTML via markdown parser with syntax-styled code blocks and copy button [VERIFIED 2026-09-25]
+- [x] B3. Breadcrumbs truncate gracefully at container edge with title attribute [VERIFIED 2026-09-25]
+- [x] B4. Hero repair: card strip fits within viewport 360–2560px without horizontal clipping, no text collisions, zero unverified reviews [VERIFIED 2026-09-25]
+
+### Part C: Responsive Quality Consistency
+- [x] C1. Breakpoint QA matrix: 360, 390, 768, 1024, 1366, 1440, 1920, 2560 verified [VERIFIED 2026-09-25]
+- [x] C2. Mobile thumb-zone & touch targets (≥44×44px) [VERIFIED 2026-09-25]
+- [x] C3. 1366×768 budget panel spacing tightened, zero jank [VERIFIED 2026-09-25]
+- [x] C4. 2560px ultrawide content max-width capped [VERIFIED 2026-09-25]
+- [x] C5. QA evidence documented in /internal/qa/fix03/ [VERIFIED 2026-09-25]
+
+### Part D: Design Elevation
+- [x] D1. Color depth: layered surfaces in dark mode, subtle gradients, 1px low-opacity borders [VERIFIED 2026-09-25]
+- [x] D2. Micro-animations: button press scale 0.98, card lift, respects prefers-reduced-motion [VERIFIED 2026-09-25]
+- [x] D3. Lottie integration: lazy-loaded for empty/success states, <150KB payload [VERIFIED 2026-09-25]
+- [x] D4. 3D-style SVG iconography: zero WebGL, static SVG depth [VERIFIED 2026-09-25]
+- [x] D5. Preloader & smooth scroll: Lenis verified on all pages, reduced-motion aware [VERIFIED 2026-09-25]
+
+### Part E: Verification Sweep
+- [x] Automated contrast check passing on key routes in both themes [VERIFIED 2026-09-25]
+- [x] Theme token linting: zero rogue unthemed tokens [VERIFIED 2026-09-25]
+- [x] TypeScript check & unit test suite passing 100% [VERIFIED 2026-09-25]
+- [x] Clean Next.js production build (129+ routes) [VERIFIED 2026-09-25]
+

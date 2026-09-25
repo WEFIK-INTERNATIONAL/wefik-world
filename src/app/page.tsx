@@ -8,6 +8,7 @@ import { MagneticButton } from '@/components/ui/magnetic-button';
 import { StatCounter } from '@/components/ui/stat-counter';
 import { InfiniteMarquee } from '@/components/ui/infinite-marquee';
 import { TransitionLink } from '@/components/transitions/transition-link';
+import { Icon3DWordPress, Icon3DPlugin, Icon3DTemplate, Icon3DBundle } from '@/components/ui/three-d-icons';
 import { getProducts } from '@/lib/data/products';
 import { DEFAULT_BLUR_DATA_URL } from '@/lib/image-placeholder';
 
@@ -137,10 +138,10 @@ export default async function HomePage() {
               href="/marketplace?category=wordpress-themes"
               className="group p-6 rounded-2xl bg-[var(--surface-2)] border border-[var(--border)] hover:border-slate-300 dark:hover:border-slate-600 hover:shadow-lg transition-all"
             >
-              <div className="w-10 h-10 rounded-xl bg-[var(--surface)] border border-[var(--border)] flex items-center justify-center text-ink group-hover:bg-ink group-hover:text-lime transition-colors mb-4">
-                <Layers className="w-5 h-5" />
+              <div className="mb-4">
+                <Icon3DWordPress size={44} />
               </div>
-              <h3 className="font-bold text-base text-ink group-hover:text-deep-green transition-colors">
+              <h3 className="font-bold text-base text-ink group-hover:text-deep-green dark:group-hover:text-lime transition-colors">
                 WordPress Themes
               </h3>
               <p className="text-xs text-slate mt-1.5 leading-relaxed">
@@ -152,10 +153,10 @@ export default async function HomePage() {
               href="/marketplace?category=wordpress-plugins"
               className="group p-6 rounded-2xl bg-[var(--surface-2)] border border-[var(--border)] hover:border-slate-300 dark:hover:border-slate-600 hover:shadow-lg transition-all"
             >
-              <div className="w-10 h-10 rounded-xl bg-[var(--surface)] border border-[var(--border)] flex items-center justify-center text-ink group-hover:bg-ink group-hover:text-lime transition-colors mb-4">
-                <Zap className="w-5 h-5" />
+              <div className="mb-4">
+                <Icon3DPlugin size={44} />
               </div>
-              <h3 className="font-bold text-base text-ink group-hover:text-deep-green transition-colors">
+              <h3 className="font-bold text-base text-ink group-hover:text-deep-green dark:group-hover:text-lime transition-colors">
                 WordPress Plugins
               </h3>
               <p className="text-xs text-slate mt-1.5 leading-relaxed">
@@ -167,10 +168,10 @@ export default async function HomePage() {
               href="/marketplace?category=templates-starters"
               className="group p-6 rounded-2xl bg-[var(--surface-2)] border border-[var(--border)] hover:border-slate-300 dark:hover:border-slate-600 hover:shadow-lg transition-all"
             >
-              <div className="w-10 h-10 rounded-xl bg-[var(--surface)] border border-[var(--border)] flex items-center justify-center text-ink group-hover:bg-ink group-hover:text-lime transition-colors mb-4">
-                <Code2 className="w-5 h-5" />
+              <div className="mb-4">
+                <Icon3DTemplate size={44} />
               </div>
-              <h3 className="font-bold text-base text-ink group-hover:text-deep-green transition-colors">
+              <h3 className="font-bold text-base text-ink group-hover:text-deep-green dark:group-hover:text-lime transition-colors">
                 HTML & Tailwind Starters
               </h3>
               <p className="text-xs text-slate mt-1.5 leading-relaxed">
@@ -180,18 +181,18 @@ export default async function HomePage() {
 
             <Link
               href="/bundles"
-              className="group p-6 rounded-2xl bg-deep-green text-white hover:bg-deep-green/95 shadow-md transition-all"
+              className="group p-6 rounded-2xl bg-[#141714] text-white border border-white/10 dark:border-[var(--border)] hover:border-lime/60 shadow-md transition-all"
             >
-              <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center text-lime mb-4">
-                <Sparkles className="w-5 h-5" />
+              <div className="mb-4">
+                <Icon3DBundle size={44} />
               </div>
               <div className="flex items-center gap-2">
                 <h3 className="font-bold text-base text-white">Agency Bundles</h3>
-                <span className="px-1.5 py-0.5 text-[9px] font-black uppercase bg-lime text-ink rounded">
+                <span className="px-1.5 py-0.5 text-[9px] font-black uppercase bg-lime text-[#0a0f0a] rounded">
                   Save 60%
                 </span>
               </div>
-              <p className="text-xs text-white/80 mt-1.5 leading-relaxed">
+              <p className="text-xs text-slate-300 mt-1.5 leading-relaxed">
                 Get our complete suite of themes, plugins, and templates in a single discounted package.
               </p>
             </Link>
@@ -246,7 +247,7 @@ export default async function HomePage() {
       {bundleProduct && (
         <section className="py-20 bg-soft border-y border-border">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="bg-ink text-white rounded-3xl p-8 sm:p-12 lg:p-16 relative overflow-hidden shadow-2xl">
+            <div className="bg-[#141714] text-white border border-white/10 dark:border-[var(--border)] rounded-3xl p-8 sm:p-12 lg:p-16 relative overflow-hidden shadow-2xl">
               {/* Background gradient pill */}
               <div className="absolute right-0 top-0 w-96 h-96 bg-lime/15 rounded-full blur-3xl pointer-events-none" />
 
@@ -290,7 +291,7 @@ export default async function HomePage() {
 
                     <Button
                       asChild
-                      className="bg-lime hover:bg-lime/90 text-ink font-bold h-12 px-8 rounded-xl shadow-md"
+                      className="bg-lime hover:bg-[#8fd32b] text-[#0a0f0a] font-bold h-12 px-8 rounded-xl shadow-md transition-all"
                     >
                       <Link href={`/products/${bundleProduct.slug}`}>
                         Get Bundle Now
@@ -427,8 +428,8 @@ export default async function HomePage() {
             </div>
 
             {/* Lifetime Plan (Highlighted) */}
-            <div className="p-8 rounded-3xl bg-ink text-white border-2 border-deep-green shadow-xl flex flex-col justify-between relative overflow-hidden">
-              <div className="absolute top-4 right-4 bg-lime text-ink text-[10px] font-black uppercase px-2 py-0.5 rounded-full">
+            <div className="p-8 rounded-3xl bg-[#141714] text-white border-2 border-lime/60 shadow-xl flex flex-col justify-between relative overflow-hidden">
+              <div className="absolute top-4 right-4 bg-lime text-[#0a0f0a] text-[10px] font-black uppercase px-2 py-0.5 rounded-full shadow-xs">
                 Most Popular
               </div>
 

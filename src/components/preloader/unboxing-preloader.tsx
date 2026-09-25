@@ -346,7 +346,7 @@ export function UnboxingPreloader() {
         >
           {/* Lime Tape Stripe */}
           <div className="absolute inset-y-0 w-8 bg-lime/90 flex items-center justify-center shadow-inner">
-            <span className="text-[9px] font-mono font-bold text-ink tracking-widest rotate-90 uppercase">
+            <span className="text-[9px] font-mono font-black text-[#0a0f0a] tracking-widest rotate-90 uppercase">
               WEFIK
             </span>
           </div>
@@ -368,12 +368,12 @@ export function UnboxingPreloader() {
           {/* 1. Hero Card (Featured Theme - The one that dives in Phase 3) */}
           <div
             ref={heroCardRef}
-            className="unboxing-item hero-item absolute px-3.5 py-2.5 rounded-xl bg-ink border-2 border-lime text-white shadow-xl shadow-lime/20 flex items-center gap-2"
+            className="unboxing-item hero-item absolute px-3.5 py-2.5 rounded-xl bg-[#141714] border-2 border-lime text-white shadow-xl shadow-lime/20 flex items-center gap-2"
           >
-            <div className="w-4 h-4 rounded-md bg-lime text-ink flex items-center justify-center font-bold text-[10px]">
+            <div className="w-4 h-4 rounded-md bg-lime text-[#0a0f0a] flex items-center justify-center font-black text-[10px]">
               ★
             </div>
-            <span className="text-[11px] font-bold font-display tracking-tight">AgencyPro Theme</span>
+            <span className="text-[11px] font-bold font-display tracking-tight text-white">AgencyPro Theme</span>
           </div>
 
           {/* 2. Plugin Puzzle */}

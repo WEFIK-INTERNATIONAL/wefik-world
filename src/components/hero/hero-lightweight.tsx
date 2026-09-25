@@ -118,8 +118,9 @@ export function HeroLightweight() {
             <MagneticButton strength={0.25} className="w-full sm:w-auto">
               <Button
                 asChild
+                variant="primary"
                 size="lg"
-                className="w-full sm:w-auto h-12 px-8 rounded-xl bg-ink dark:bg-white text-white dark:text-ink hover:bg-black dark:hover:bg-slate-100 font-semibold text-sm shadow-md transition-shadow hover:shadow-lime/20 hover:shadow-lg"
+                className="w-full sm:w-auto h-12 px-8 rounded-xl font-semibold text-sm shadow-md transition-shadow hover:shadow-lime/20 hover:shadow-lg"
               >
                 <TransitionLink href="/wordpress-themes" className="flex items-center gap-2">
                   <span>Browse WordPress Themes</span>
@@ -144,7 +145,7 @@ export function HeroLightweight() {
 
         {/* 2. Interactive CSS 3D Tilting Product Cards (Section 6) */}
         <div
-          className="relative z-10 isolate w-full max-w-4xl mx-auto h-[380px] sm:h-[440px] mt-2 sm:mt-4 flex items-center justify-center pointer-events-auto"
+          className="relative z-10 isolate w-full max-w-5xl mx-auto h-[380px] sm:h-[440px] mt-2 sm:mt-4 flex items-center justify-center pointer-events-auto px-4 overflow-hidden"
           style={{ perspective: '1200px' }}
         >
           <div
@@ -155,7 +156,7 @@ export function HeroLightweight() {
             {/* Card 3: Left Back Tilt (Tailwind HTML Starter) */}
             <div
               ref={card3Ref}
-              className="absolute left-4 sm:left-12 top-10 sm:top-14 w-60 sm:w-72 p-4 sm:p-5 rounded-2xl bg-[var(--surface)] border border-[var(--border)] shadow-xl backdrop-blur-md -rotate-6 transition-transform hidden md:block select-none"
+              className="absolute left-2 sm:left-6 lg:left-10 top-12 sm:top-14 w-56 sm:w-68 p-4 sm:p-5 rounded-2xl bg-[var(--surface)] border border-[var(--border)] shadow-xl backdrop-blur-md -rotate-6 transition-transform hidden md:block select-none"
               style={{ transform: 'translateZ(-30px)' }}
             >
               <div className="flex items-center justify-between pb-2 mb-2 border-b border-[var(--border)]">
@@ -174,12 +175,12 @@ export function HeroLightweight() {
             {/* Card 2: Right Back Tilt (SuperCache Plugin) */}
             <div
               ref={card2Ref}
-              className="absolute right-4 sm:right-12 bottom-8 sm:bottom-12 w-60 sm:w-72 p-4 sm:p-5 rounded-2xl bg-[var(--surface)] border border-[var(--border)] shadow-xl backdrop-blur-md rotate-6 transition-transform hidden md:block select-none"
+              className="absolute right-2 sm:right-6 lg:right-10 bottom-8 sm:bottom-12 w-56 sm:w-68 p-4 sm:p-5 rounded-2xl bg-[var(--surface)] border border-[var(--border)] shadow-xl backdrop-blur-md rotate-6 transition-transform hidden md:block select-none"
               style={{ transform: 'translateZ(-15px)' }}
             >
               <div className="flex items-center justify-between pb-2 mb-2 border-b border-[var(--border)]">
-                <span className="eyebrow text-lime font-bold">WordPress Plugin</span>
-                <span className="font-mono text-xs font-bold text-lime">Freebie</span>
+                <span className="eyebrow text-[#2d5208] dark:text-lime font-bold">WordPress Plugin</span>
+                <span className="font-mono text-xs font-bold text-[#2d5208] dark:text-lime">Freebie</span>
               </div>
               <h4 className="heading-3 text-sm text-[var(--text)] mb-1">SuperCache Turbo</h4>
               <p className="body-small text-xs text-[var(--muted)] line-clamp-2">
@@ -194,12 +195,12 @@ export function HeroLightweight() {
             {/* Card 1: Foreground Center Hero Card (AgencyPro FSE) */}
             <div
               ref={card1Ref}
-              className="relative w-80 sm:w-[420px] p-6 sm:p-8 rounded-3xl bg-[var(--surface)]/95 dark:bg-[#141714]/95 border-2 border-lime/60 shadow-2xl shadow-lime/10 backdrop-blur-xl transition-all duration-300 z-20"
+              className="relative w-80 sm:w-[400px] p-6 sm:p-7 rounded-3xl bg-[var(--surface)]/95 dark:bg-[#141714]/95 border-2 border-lime/60 shadow-2xl shadow-lime/10 backdrop-blur-xl transition-all duration-300 z-20"
               style={{ transform: 'translateZ(40px)' }}
             >
               <div className="flex items-center justify-between pb-3 mb-3 border-b border-[var(--border)]">
                 <div className="flex items-center gap-2.5">
-                  <div className="w-8 h-8 rounded-xl bg-lime flex items-center justify-center font-black text-ink shadow-xs">
+                  <div className="w-8 h-8 rounded-xl bg-lime flex items-center justify-center font-black text-[#0a0f0a] shadow-xs">
                     W
                   </div>
                   <div className="text-left">
@@ -217,10 +218,9 @@ export function HeroLightweight() {
               </p>
 
               <div className="flex items-center justify-between pt-2 border-t border-[var(--border)] text-xs">
-                <div className="flex items-center gap-1 text-[var(--text)] font-semibold text-xs">
-                  <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
-                  <span>5.0</span>
-                  <span className="text-[var(--muted)] font-normal font-mono">(48 reviews)</span>
+                <div className="flex items-center gap-1.5 text-[var(--text)] font-semibold text-xs">
+                  <Shield className="w-3.5 h-3.5 text-lime" />
+                  <span className="text-[var(--text)]">Verified Gutenberg FSE</span>
                 </div>
                 <span className="eyebrow text-[10px] text-lime font-bold">Commercial License</span>
               </div>

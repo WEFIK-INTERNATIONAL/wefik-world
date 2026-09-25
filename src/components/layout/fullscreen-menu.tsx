@@ -38,7 +38,22 @@ export function FullscreenMenu({ isOpen, onClose }: FullscreenMenuProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [hoveredIndex, setHoveredIndex] = useState<string | null>(null);
 
-  // Focus trap and ESC key handling + scroll lock
+  // Body scroll lock on mobile (iOS Safari + Android Chrome)
+  useEffect(() => {
+    if (isOpen) {
+      const originalOverflow = document.body.style.overflow;
+      const originalTouchAction = document.body.style.touchAction;
+      document.body.style.overflow = 'hidden';
+      document.body.style.touchAction = 'none';
+
+      return () => {
+        document.body.style.overflow = originalOverflow;
+        document.body.style.touchAction = originalTouchAction;
+      };
+    }
+  }, [isOpen]);
+
+  // Focus trap and ESC key handling + Lenis lock
   useEffect(() => {
     if (!isOpen) return;
 
@@ -52,17 +67,18 @@ export function FullscreenMenu({ isOpen, onClose }: FullscreenMenuProps) {
     };
 
     window.addEventListener('keydown', handleKeyDown);
-    setTimeout(() => {
+    const focusTimer = setTimeout(() => {
       searchInputRef.current?.focus();
     }, 150);
 
     return () => {
       startScroll('fullscreen-menu');
       window.removeEventListener('keydown', handleKeyDown);
+      clearTimeout(focusTimer);
     };
   }, [isOpen, stopScroll, startScroll, onClose]);
 
-  // GSAP Entrance & Exit Animations
+  // GSAP Entrance & Exit Animations with Reduced-Motion Support
   useEffect(() => {
     if (typeof window === 'undefined' || !overlayRef.current) return;
 
@@ -72,25 +88,25 @@ export function FullscreenMenu({ isOpen, onClose }: FullscreenMenuProps) {
         return;
       }
 
-      // Slide-up panel with staggered nav link reveals
+      // Slide-up panel with staggered nav link reveals (<400ms total)
       const tl = gsap.timeline();
       tl.set(overlayRef.current, { display: 'flex', yPercent: -100, opacity: 1 })
         .to(overlayRef.current, {
           yPercent: 0,
-          duration: 0.55,
-          ease: 'expo.out',
+          duration: 0.45,
+          ease: 'power3.out',
         })
         .fromTo(
           '.fs-menu-item',
-          { y: 35, opacity: 0 },
+          { y: 25, opacity: 0 },
           {
             y: 0,
             opacity: 1,
-            duration: 0.4,
-            stagger: 0.04,
-            ease: 'expo.out',
+            duration: 0.35,
+            stagger: 0.035,
+            ease: 'power2.out',
           },
-          '-=0.25'
+          '-=0.2'
         );
     } else {
       if (disableHeavyMotion) {
@@ -106,8 +122,8 @@ export function FullscreenMenu({ isOpen, onClose }: FullscreenMenuProps) {
 
       gsap.to(overlayRef.current, {
         yPercent: -100,
-        duration: 0.35,
-        ease: 'expo.in',
+        duration: 0.3,
+        ease: 'power3.in',
         onComplete: () => {
           if (overlayRef.current) overlayRef.current.style.display = 'none';
         },
@@ -144,37 +160,37 @@ export function FullscreenMenu({ isOpen, onClose }: FullscreenMenuProps) {
       aria-label="Navigation Menu"
       style={{ display: 'none' }}
       data-lenis-prevent
-      className="fixed inset-0 z-[9990] bg-ink text-white flex flex-col justify-between overflow-y-auto px-6 sm:px-12 lg:px-20 py-8 lg:py-10 select-none"
+      className="fixed inset-0 z-[9990] h-[100dvh] max-h-[100dvh] bg-[var(--bg)] text-[var(--text-primary)] flex flex-col justify-between overflow-y-auto px-6 sm:px-12 lg:px-20 pt-[calc(1.5rem+env(safe-area-inset-top,0px))] pb-[calc(1.5rem+env(safe-area-inset-bottom,0px))] pl-[calc(1.5rem+env(safe-area-inset-left,0px))] pr-[calc(1.5rem+env(safe-area-inset-right,0px))] select-none transition-colors"
     >
       {/* Top Header Row inside overlay */}
-      <div className="flex items-center justify-between border-b border-white/10 pb-6 gap-4">
+      <div className="flex items-center justify-between border-b border-[var(--border)] pb-6 gap-4">
         <div className="flex items-center gap-3">
           <Logo size="md" showWordmark={true} />
-          <span className="text-[11px] font-mono text-lime bg-lime/10 px-2 py-0.5 rounded-full hidden sm:inline-block">
+          <span className="text-[11px] font-mono text-[#2d5208] dark:text-lime bg-lime/20 px-2 py-0.5 rounded-full border border-lime/30 hidden sm:inline-block">
             ESC to close
           </span>
         </div>
 
         {/* Live Search Bar in Menu */}
         <form onSubmit={handleSearchSubmit} className="relative w-full max-w-xs sm:max-w-md hidden md:block">
-          <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+          <Search className="w-4 h-4 text-[var(--text-secondary)] absolute left-3.5 top-1/2 -translate-y-1/2" />
           <Input
             ref={searchInputRef}
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search catalog: themes, plugins, guides..."
-            className="w-full h-10 pl-9 pr-4 rounded-xl bg-white/5 border-white/10 text-white placeholder:text-slate-400 text-xs focus:ring-1 focus:ring-lime"
+            className="w-full h-10 pl-9 pr-4 rounded-xl bg-[var(--surface-2)] border-[var(--border)] text-[var(--text-primary)] placeholder:text-[var(--text-secondary)] text-xs focus:ring-1 focus:ring-lime"
           />
         </form>
 
         {/* Controls: Theme Toggle + Close Button */}
         <div className="flex items-center gap-3">
-          <ThemeToggle className="text-white border-white/20 bg-white/5 hover:bg-white/10" />
+          <ThemeToggle className="text-[var(--text-primary)] border-[var(--border)] bg-[var(--surface-2)] hover:bg-[var(--border)]" />
           <button
             onClick={onClose}
             aria-label="Close navigation menu"
-            className="w-10 h-10 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 flex items-center justify-center text-white transition-colors"
+            className="w-10 h-10 rounded-xl bg-[var(--surface-2)] hover:bg-[var(--border)] border border-[var(--border)] flex items-center justify-center text-[var(--text-primary)] transition-colors cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
@@ -187,50 +203,50 @@ export function FullscreenMenu({ isOpen, onClose }: FullscreenMenuProps) {
           {filteredItems.map((item) => (
             <div
               key={item.index}
-              className="fs-menu-item group flex items-baseline gap-4 cursor-pointer py-1.5 transition-transform duration-200 hover:translate-x-2"
+              className="fs-menu-item group flex items-baseline gap-4 cursor-pointer py-1.5 transition-transform duration-200 hover:translate-x-2 active:scale-[0.97]"
               onMouseEnter={() => setHoveredIndex(item.index)}
               onMouseLeave={() => setHoveredIndex(null)}
               onClick={() => handleLinkClick(item.href)}
             >
-              <span className="font-mono text-xs text-lime font-bold tracking-wider shrink-0">
+              <span className="font-mono text-xs text-[#2d5208] dark:text-lime font-bold tracking-wider shrink-0">
                 {item.index} —
               </span>
               <div className="flex-1">
-                <span className="text-2xl sm:text-4xl lg:text-5xl font-display font-bold text-white group-hover:text-lime transition-colors tracking-tight link-sweep">
+                <span className="text-2xl sm:text-4xl lg:text-5xl font-display font-bold text-[var(--text-primary)] group-hover:text-deep-green dark:group-hover:text-lime transition-colors tracking-tight link-sweep">
                   {item.title}
                 </span>
-                <span className="block text-xs text-slate-400 mt-0.5 group-hover:text-slate-200 transition-colors">
+                <span className="block text-xs text-[var(--text-secondary)] mt-0.5 group-hover:text-[var(--text-primary)] transition-colors">
                   {item.hint}
                 </span>
               </div>
-              <ArrowUpRight className="w-5 h-5 text-slate-500 opacity-0 group-hover:opacity-100 group-hover:text-lime transition-all shrink-0" />
+              <ArrowUpRight className="w-5 h-5 text-[var(--text-secondary)] opacity-0 group-hover:opacity-100 group-hover:text-deep-green dark:group-hover:text-lime transition-all shrink-0" />
             </div>
           ))}
         </div>
 
         {/* Right Info / Live Preview Box on Desktop */}
-        <div className="hidden lg:flex lg:col-span-4 flex-col justify-center p-8 rounded-3xl bg-white/5 border border-white/10 space-y-6">
+        <div className="hidden lg:flex lg:col-span-4 flex-col justify-center p-8 rounded-3xl bg-[var(--surface)] border border-[var(--border)] space-y-6">
           <div className="space-y-2">
-            <span className="eyebrow text-lime">
+            <span className="eyebrow text-[#2d5208] dark:text-lime">
               Why Wefik World?
             </span>
-            <h4 className="heading-3 text-white">Zero Bloat. Native FSE Blocks.</h4>
-            <p className="body-small text-slate-300">
+            <h4 className="heading-3 text-[var(--text-primary)]">Zero Bloat. Native FSE Blocks.</h4>
+            <p className="body-small text-[var(--text-secondary)]">
               Clean WordPress themes and templates achieving 100/100 Core Web Vitals right out of the box with zero heavy page builders.
             </p>
           </div>
 
-          <div className="p-5 rounded-2xl bg-[#141714] border border-lime/30 space-y-3">
-            <div className="flex items-center gap-2 text-lime text-xs font-bold">
-              <Sparkles className="w-4 h-4" />
+          <div className="p-5 rounded-2xl bg-[var(--surface-2)] border border-lime/30 space-y-3">
+            <div className="flex items-center gap-2 text-deep-green dark:text-lime text-xs font-bold">
+              <Sparkles className="w-4 h-4 text-lime" />
               <span className="font-display">All-Access Pass Deal</span>
             </div>
-            <p className="body-small text-slate-300">
+            <p className="body-small text-[var(--text-secondary)]">
               Get every theme, plugin, and future release with unlimited commercial licenses from ₹999/month.
             </p>
             <button
               onClick={() => handleLinkClick('/pricing')}
-              className="text-xs font-bold text-lime hover:underline flex items-center gap-1.5 pt-1"
+              className="text-xs font-bold text-deep-green dark:text-lime hover:underline flex items-center gap-1.5 pt-1 cursor-pointer"
             >
               <span>View Membership Plans</span>
               <ArrowUpRight className="w-3.5 h-3.5" />
@@ -240,16 +256,16 @@ export function FullscreenMenu({ isOpen, onClose }: FullscreenMenuProps) {
       </div>
 
       {/* Footer Row */}
-      <div className="border-t border-white/10 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-400 font-medium">
+      <div className="border-t border-[var(--border)] pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[var(--text-secondary)] font-medium">
         <div className="flex items-center gap-4">
           <a
             href="mailto:hello@wefik.world"
-            className="hover:text-white transition-colors flex items-center gap-1.5"
+            className="hover:text-[var(--text-primary)] transition-colors flex items-center gap-1.5"
           >
             <Mail className="w-3.5 h-3.5 text-lime" />
             <span>hello@wefik.world</span>
           </a>
-          <span className="text-white/20">•</span>
+          <span className="text-[var(--border)]">•</span>
           <span>Kolkata, India</span>
         </div>
 
@@ -258,7 +274,7 @@ export function FullscreenMenu({ isOpen, onClose }: FullscreenMenuProps) {
             href="https://twitter.com/wefik"
             target="_blank"
             rel="noopener noreferrer"
-            className="hover:text-lime transition-colors"
+            className="hover:text-deep-green dark:hover:text-lime transition-colors"
           >
             X / Twitter
           </a>
@@ -266,7 +282,7 @@ export function FullscreenMenu({ isOpen, onClose }: FullscreenMenuProps) {
             href="https://github.com/WEFIK-INTERNATIONAL"
             target="_blank"
             rel="noopener noreferrer"
-            className="hover:text-lime transition-colors"
+            className="hover:text-deep-green dark:hover:text-lime transition-colors"
           >
             GitHub
           </a>
@@ -274,7 +290,7 @@ export function FullscreenMenu({ isOpen, onClose }: FullscreenMenuProps) {
             href="https://wefik.in"
             target="_blank"
             rel="noopener noreferrer"
-            className="hover:text-lime transition-colors"
+            className="hover:text-deep-green dark:hover:text-lime transition-colors"
           >
             Wefik Agency
           </a>

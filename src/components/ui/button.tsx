@@ -4,26 +4,30 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-[12px] text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lime focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 cursor-pointer select-none",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-[12px] text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lime focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg)] disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 cursor-pointer select-none",
   {
     variants: {
       variant: {
         default:
-          "bg-ink text-white shadow hover:bg-black active:scale-[0.99]",
+          "bg-[var(--surface-inverted)] text-[var(--text-inverted)] shadow hover:opacity-90 active:scale-[0.98]",
+        primary:
+          "bg-[var(--surface-inverted)] text-[var(--text-inverted)] shadow hover:opacity-90 active:scale-[0.98]",
         lime:
-          "bg-lime text-ink font-semibold shadow hover:bg-[#8fd32b] active:scale-[0.99]",
+          "bg-lime text-[#0a0f0a] font-semibold shadow hover:bg-[#8fd32b] hover:text-[#0a0f0a] active:scale-[0.98]",
+        accent:
+          "bg-lime text-[#0a0f0a] font-semibold shadow hover:bg-[#8fd32b] hover:text-[#0a0f0a] active:scale-[0.98]",
         green:
-          "bg-deep-green text-white shadow hover:bg-[#3d5a15] active:scale-[0.99]",
+          "bg-deep-green text-white shadow hover:bg-[#3d5a15] active:scale-[0.98]",
         destructive:
-          "bg-error text-white shadow-sm hover:bg-red-600",
+          "bg-error text-white shadow-sm hover:bg-red-600 active:scale-[0.98]",
         outline:
-          "border border-border bg-[var(--surface)] text-ink hover:bg-surface-2 hover:text-ink",
+          "border border-[var(--border)] bg-transparent text-[var(--text-primary)] hover:bg-[var(--surface-2)] hover:text-[var(--text-primary)] active:scale-[0.98]",
         secondary:
-          "bg-surface text-ink hover:bg-surface-2",
+          "bg-[var(--surface-2)] text-[var(--text-primary)] border border-[var(--border)] hover:bg-[var(--border)] hover:text-[var(--text-primary)] active:scale-[0.98]",
         ghost:
-          "hover:bg-surface hover:text-ink",
+          "text-[var(--text-primary)] hover:bg-[var(--surface-2)] hover:text-[var(--text-primary)] active:scale-[0.98]",
         link:
-          "text-deep-green underline-offset-4 hover:underline",
+          "text-deep-green dark:text-brand underline-offset-4 hover:underline",
       },
       size: {
         default: "h-10 px-4 py-2",

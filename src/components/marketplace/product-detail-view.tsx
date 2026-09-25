@@ -23,6 +23,7 @@ import {
   GitBranch,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { ProductMarkdownDocs } from './product-markdown-docs';
 import { Badge } from '@/components/ui/badge';
 import { useCart, CartLicenseType } from '@/lib/cart-context';
 import { useWishlist } from '@/lib/wishlist-context';
@@ -462,16 +463,16 @@ export function ProductDetailView({ product, initialReviews = [] }: ProductDetai
                 {/* Option 3: All-Access Membership Banner */}
                 <Link
                   href="/pricing"
-                  className="block p-3 rounded-2xl border border-lime/40 bg-lime/10 hover:bg-lime/20 transition-all text-xs text-ink"
+                  className="block p-3 rounded-2xl border border-lime/40 bg-lime/10 hover:bg-lime/20 transition-all text-xs"
                 >
                   <div className="flex items-center justify-between font-bold">
-                    <span className="flex items-center gap-1.5 text-deep-green">
+                    <span className="flex items-center gap-1.5 text-deep-green dark:text-lime">
                       <Sparkles className="w-4 h-4 text-lime" />
                       All-Access Membership
                     </span>
-                    <span className="text-xs font-extrabold text-ink">From ₹999/mo</span>
+                    <span className="text-xs font-extrabold text-[var(--text-primary)]">From ₹999/mo</span>
                   </div>
-                  <p className="text-[11px] text-slate mt-1">
+                  <p className="text-[11px] text-[var(--text-secondary)] mt-1">
                     Get this product PLUS every theme, plugin & template with lifetime updates.
                   </p>
                 </Link>
@@ -507,7 +508,7 @@ export function ProductDetailView({ product, initialReviews = [] }: ProductDetai
               ) : (
                 <Button
                   onClick={handleAddToCart}
-                  className="w-full h-12 bg-ink hover:bg-black text-white font-bold rounded-xl text-sm shadow-md flex items-center justify-center gap-2"
+                  className="w-full h-12 bg-[var(--surface-inverted)] text-[var(--text-inverted)] hover:opacity-90 font-bold rounded-xl text-sm shadow-md flex items-center justify-center gap-2 transition-all"
                 >
                   <ShoppingBag className="w-4 h-4" />
                   <span>Add to Cart ({selectedLicense === 'unlimited' ? 'Unlimited' : 'Single'})</span>
@@ -577,9 +578,7 @@ export function ProductDetailView({ product, initialReviews = [] }: ProductDetai
           <h2 className="text-xl font-extrabold text-ink tracking-tight pb-3 border-b border-border">
             Product Documentation & Highlights
           </h2>
-          <div className="prose prose-sm max-w-none text-slate leading-relaxed space-y-4 whitespace-pre-wrap font-sans">
-            {product.description}
-          </div>
+          <ProductMarkdownDocs content={product.description} />
         </div>
 
         {/* Changelog & Version Timeline (4 cols) */}

@@ -106,8 +106,9 @@ export function Footer() {
               />
               <Button
                 type="submit"
+                variant="primary"
                 disabled={loading}
-                className="h-10 px-4 bg-ink dark:bg-white text-white dark:text-ink hover:bg-black dark:hover:bg-slate-100 rounded-xl flex-shrink-0 text-xs font-semibold"
+                className="h-10 px-4 rounded-xl flex-shrink-0 text-xs font-semibold shadow-xs"
                 aria-label="Subscribe to newsletter"
               >
                 {loading ? (

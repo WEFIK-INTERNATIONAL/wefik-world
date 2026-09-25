@@ -141,7 +141,7 @@ export function ProductCard({
               </Badge>
             )}
             {is_bundle && (
-              <Badge className="bg-lime text-ink font-bold text-[10px] px-2 py-0.5 shadow-xs">
+              <Badge className="bg-lime text-[#0a0f0a] font-black text-[10px] px-2 py-0.5 shadow-xs">
                 Bundle Deal
               </Badge>
             )}
@@ -225,9 +225,9 @@ export function ProductCard({
             )}
           </div>
 
-          {/* Title */}
+          {/* Title with word-aware 2-line clamp */}
           <Link href={`/products/${slug}`} className="group-hover:text-[var(--accent)] transition-colors">
-            <h3 className="heading-3 line-clamp-1">
+            <h3 className="heading-3 line-clamp-2 break-words [overflow-wrap:break-word] [hyphens:none] min-h-[2.5rem]" title={title}>
               {title}
             </h3>
           </Link>

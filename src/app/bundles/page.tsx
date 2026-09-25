@@ -45,12 +45,12 @@ export default async function BundlesPage() {
 
       {/* Featured Bundle Spotlight Banner */}
       {bundles.length > 0 && (
-        <div className="bg-ink text-white rounded-3xl p-8 sm:p-12 relative overflow-hidden shadow-2xl border border-border">
+        <div className="bg-[#141714] text-white rounded-3xl p-8 sm:p-12 relative overflow-hidden shadow-2xl border border-white/10 dark:border-[var(--border)]">
           <div className="absolute right-0 top-0 w-96 h-96 bg-lime/10 rounded-full blur-3xl pointer-events-none" />
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center relative z-10">
             <div className="space-y-6">
-              <span className="px-3 py-1 rounded-full bg-lime text-ink text-xs font-extrabold uppercase">
+              <span className="px-3 py-1 rounded-full bg-lime text-[#0a0f0a] text-xs font-extrabold uppercase">
                 Featured Agency Suite
               </span>
               <h2 className="text-2xl sm:text-4xl font-extrabold text-white tracking-tight">
@@ -81,7 +81,7 @@ export default async function BundlesPage() {
                 </div>
                 <Button
                   asChild
-                  className="bg-lime hover:bg-lime/90 text-ink font-bold h-11 px-6 rounded-xl shadow-md text-xs"
+                  className="bg-lime hover:bg-[#8fd32b] text-[#0a0f0a] font-bold h-11 px-6 rounded-xl shadow-md text-xs transition-all"
                 >
                   <Link href={`/products/${bundles[0].slug}`}>
                     View Bundle Details

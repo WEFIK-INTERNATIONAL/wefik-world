@@ -8,17 +8,19 @@ const badgeVariants = cva(
     variants: {
       variant: {
         default:
-          "border-transparent bg-ink text-white",
+          "border-transparent bg-[var(--surface-inverted)] text-[var(--text-inverted)]",
         secondary:
-          "border-transparent bg-surface text-ink",
+          "border-transparent bg-[var(--surface-2)] text-[var(--text-primary)]",
         destructive:
           "border-transparent bg-error/15 text-error border-error/30",
         outline:
-          "text-ink border-border",
+          "text-[var(--text-primary)] border-[var(--border)]",
         lime:
-          "border-lime/40 bg-lime/20 text-lime-dark font-bold",
+          "border-lime/40 bg-lime/20 text-deep-green-dark dark:text-lime font-bold",
+        solidLime:
+          "border-transparent bg-lime text-[#0a0f0a] font-bold",
         green:
-          "border-deep-green/30 bg-deep-green/15 text-deep-green font-semibold",
+          "border-deep-green/30 bg-deep-green/15 text-deep-green dark:text-brand font-semibold",
       },
     },
     defaultVariants: {

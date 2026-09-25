@@ -14,12 +14,30 @@ export default function MarketplaceError({
 }) {
   useEffect(() => {
     try {
-      Sentry.captureException(error);
+      Sentry.captureException(error, {
+        extra: {
+          digest: error.digest,
+          message: error.message,
+          stack: error.stack,
+        },
+      });
     } catch {
       // safe fallback
     }
-    console.error('Marketplace runtime error captured:', error);
+    console.error('[Marketplace Error Boundary]', {
+      digest: error.digest,
+      message: error.message,
+      stack: error.stack,
+    });
   }, [error]);
+
+  const handleReload = () => {
+    if (typeof window !== 'undefined') {
+      window.location.reload();
+    } else {
+      reset();
+    }
+  };
 
   const errorId = error.digest || 'mkt_' + Math.random().toString(36).substring(2, 8);
 
@@ -53,8 +71,8 @@ export default function MarketplaceError({
 
         <div className="flex flex-col sm:flex-row gap-3 pt-2">
           <button
-            onClick={() => reset()}
-            className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-[var(--text)] text-[var(--surface)] hover:opacity-90 text-xs font-bold transition-all"
+            onClick={handleReload}
+            className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-[var(--surface-inverted)] text-[var(--text-inverted)] hover:opacity-90 text-xs font-bold transition-all cursor-pointer"
           >
             <RefreshCw className="w-3.5 h-3.5" />
             <span>Reload Marketplace</span>
@@ -67,6 +85,16 @@ export default function MarketplaceError({
             <span>Back to Home</span>
           </Link>
         </div>
+
+        <p className="text-[11px] text-[var(--muted)] pt-1">
+          Need immediate assistance?{' '}
+          <a
+            href="mailto:hello@wefik.world"
+            className="underline hover:text-[var(--text)] font-medium"
+          >
+            Contact support (hello@wefik.world)
+          </a>
+        </p>
       </div>
     </div>
   );
