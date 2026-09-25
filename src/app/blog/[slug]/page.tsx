@@ -1,7 +1,7 @@
 import React from 'react';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import Image from 'next/image';
+import { SafeImage } from '@/components/ui/safe-image';
 import { Metadata } from 'next';
 import { SEED_POSTS } from '@/lib/sanity/seed-posts';
 import { ArrowLeft, Clock, Calendar, User, Share2 } from 'lucide-react';
@@ -152,7 +152,7 @@ export default async function BlogPostDetailPage({ params }: BlogPostPageProps) 
           {/* Author Byline */}
           <div className="pt-4 border-t border-border flex items-center gap-3">
             <div className="relative w-10 h-10 rounded-full overflow-hidden bg-soft border border-border flex-shrink-0">
-              <Image src={post.author.avatar} alt={post.author.name} fill className="object-cover" />
+              <SafeImage src={post.author.avatar} alt={post.author.name} fill className="object-cover" />
             </div>
             <div>
               <span className="font-bold text-ink text-xs block">{post.author.name}</span>
@@ -163,7 +163,7 @@ export default async function BlogPostDetailPage({ params }: BlogPostPageProps) 
 
         {/* Featured Cover Image */}
         <div className="relative aspect-[16/9] w-full rounded-3xl overflow-hidden bg-surface border border-border shadow-sm">
-          <Image
+          <SafeImage
             src={post.coverImage}
             alt={post.title}
             fill
@@ -213,7 +213,7 @@ export default async function BlogPostDetailPage({ params }: BlogPostPageProps) 
                 <Link
                   key={rel.id}
                   href={`/blog/${rel.slug}`}
-                  className="p-5 rounded-2xl bg-white border border-border hover:border-slate-300 hover:shadow-md transition-all space-y-2 block"
+                  className="p-5 rounded-2xl bg-[var(--surface)] border border-border hover:border-slate-300 hover:shadow-md transition-all space-y-2 block"
                 >
                   <span className="text-[10px] font-bold uppercase text-deep-green block">
                     {rel.category}

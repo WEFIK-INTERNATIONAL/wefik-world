@@ -62,7 +62,7 @@ export default async function GlossaryTermPage({ params }: Props) {
         </nav>
 
         {/* Hero Card */}
-        <article className="bg-white rounded-3xl p-8 sm:p-12 border border-border shadow-xs mb-10">
+        <article className="bg-[var(--surface)] rounded-3xl p-8 sm:p-12 border border-border shadow-xs mb-10">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-lime/20 text-deep-green text-xs font-bold uppercase tracking-wider mb-4">
             <BookOpen className="w-3.5 h-3.5" />
             <span>Developer Glossary & Guide</span>
@@ -132,7 +132,7 @@ export default async function GlossaryTermPage({ params }: Props) {
 
         {/* FAQs */}
         {term.faqs && term.faqs.length > 0 && (
-          <div className="bg-white rounded-3xl p-6 sm:p-8 border border-border shadow-xs mb-10">
+          <div className="bg-[var(--surface)] rounded-3xl p-6 sm:p-8 border border-border shadow-xs mb-10">
             <h2 className="text-xl font-bold text-ink mb-6 flex items-center gap-2">
               <HelpCircle className="w-5 h-5 text-deep-green" />
               <span>Questions About {term.term}</span>
@@ -171,7 +171,7 @@ export default async function GlossaryTermPage({ params }: Props) {
         )}
 
         {/* Sibling Glossary Terms */}
-        <div className="bg-white rounded-3xl p-6 sm:p-8 border border-border shadow-xs">
+        <div className="bg-[var(--surface)] rounded-3xl p-6 sm:p-8 border border-border shadow-xs">
           <h3 className="text-xs font-bold uppercase tracking-wider text-ink mb-4">
             Related Glossary Terms
           </h3>

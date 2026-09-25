@@ -11,11 +11,14 @@ import { TransitionLink } from '@/components/transitions/transition-link';
 import { getProducts } from '@/lib/data/products';
 import { DEFAULT_BLUR_DATA_URL } from '@/lib/image-placeholder';
 
+export const revalidate = 300;
+
 export default async function HomePage() {
-  const featuredProducts = await getProducts({ featuredOnly: true, limit: 3 });
-  const allProducts = await getProducts({ limit: 6 });
+  // P0-4: Single fetch for listing data, deriving featured and freebies without duplicate roundtrips
+  const allProducts = await getProducts({ limit: 12 });
+  const featuredProducts = allProducts.filter((p) => p.is_featured).slice(0, 3);
   const freebies = allProducts.filter((p) => p.is_free);
-  const bundleProduct = allProducts.find((p) => p.is_bundle);
+  const bundleProduct = allProducts.find((p) => p.is_bundle) || allProducts[0];
 
   return (
     <div className="flex flex-col w-full min-h-screen">
@@ -87,8 +90,8 @@ export default async function HomePage() {
                 <Code2 className="w-4 h-4" />
               </div>
               <div>
-                <p className="text-sm font-bold text-ink"><StatCounter end={150} suffix="+" duration={1.4} /> Agency Deployments</p>
-                <p className="text-xs text-slate">Battle-tested in the wild</p>
+                <p className="text-sm font-bold text-ink">Single-Vendor Model</p>
+                <p className="text-xs text-slate">100% built by Wefik engineers</p>
               </div>
             </div>
 
@@ -109,7 +112,7 @@ export default async function HomePage() {
       <InfiniteMarquee />
 
       {/* 2. CATEGORY BROWSER */}
-      <section className="py-16 bg-white border-b border-border">
+      <section className="py-16 bg-[var(--surface)] border-b border-[var(--border)]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row md:items-end justify-between mb-10">
             <div>
@@ -132,9 +135,9 @@ export default async function HomePage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
             <Link
               href="/marketplace?category=wordpress-themes"
-              className="group p-6 rounded-2xl bg-soft border border-border hover:border-slate-300 hover:shadow-lg transition-all"
+              className="group p-6 rounded-2xl bg-[var(--surface-2)] border border-[var(--border)] hover:border-slate-300 dark:hover:border-slate-600 hover:shadow-lg transition-all"
             >
-              <div className="w-10 h-10 rounded-xl bg-white border border-border flex items-center justify-center text-ink group-hover:bg-ink group-hover:text-lime transition-colors mb-4">
+              <div className="w-10 h-10 rounded-xl bg-[var(--surface)] border border-[var(--border)] flex items-center justify-center text-ink group-hover:bg-ink group-hover:text-lime transition-colors mb-4">
                 <Layers className="w-5 h-5" />
               </div>
               <h3 className="font-bold text-base text-ink group-hover:text-deep-green transition-colors">
@@ -147,9 +150,9 @@ export default async function HomePage() {
 
             <Link
               href="/marketplace?category=wordpress-plugins"
-              className="group p-6 rounded-2xl bg-soft border border-border hover:border-slate-300 hover:shadow-lg transition-all"
+              className="group p-6 rounded-2xl bg-[var(--surface-2)] border border-[var(--border)] hover:border-slate-300 dark:hover:border-slate-600 hover:shadow-lg transition-all"
             >
-              <div className="w-10 h-10 rounded-xl bg-white border border-border flex items-center justify-center text-ink group-hover:bg-ink group-hover:text-lime transition-colors mb-4">
+              <div className="w-10 h-10 rounded-xl bg-[var(--surface)] border border-[var(--border)] flex items-center justify-center text-ink group-hover:bg-ink group-hover:text-lime transition-colors mb-4">
                 <Zap className="w-5 h-5" />
               </div>
               <h3 className="font-bold text-base text-ink group-hover:text-deep-green transition-colors">
@@ -162,9 +165,9 @@ export default async function HomePage() {
 
             <Link
               href="/marketplace?category=templates-starters"
-              className="group p-6 rounded-2xl bg-soft border border-border hover:border-slate-300 hover:shadow-lg transition-all"
+              className="group p-6 rounded-2xl bg-[var(--surface-2)] border border-[var(--border)] hover:border-slate-300 dark:hover:border-slate-600 hover:shadow-lg transition-all"
             >
-              <div className="w-10 h-10 rounded-xl bg-white border border-border flex items-center justify-center text-ink group-hover:bg-ink group-hover:text-lime transition-colors mb-4">
+              <div className="w-10 h-10 rounded-xl bg-[var(--surface)] border border-[var(--border)] flex items-center justify-center text-ink group-hover:bg-ink group-hover:text-lime transition-colors mb-4">
                 <Code2 className="w-5 h-5" />
               </div>
               <h3 className="font-bold text-base text-ink group-hover:text-deep-green transition-colors">
@@ -197,7 +200,7 @@ export default async function HomePage() {
       </section>
 
       {/* 3. FEATURED PRODUCTS */}
-      <section className="py-20 bg-white">
+      <section className="py-20 bg-[var(--bg)]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row md:items-end justify-between mb-12">
             <div>
@@ -322,7 +325,7 @@ export default async function HomePage() {
 
       {/* 5. FREEBIES / LEAD MAGNET SECTION */}
       {freebies.length > 0 && (
-        <section className="py-20 bg-white">
+        <section className="py-20 bg-[var(--surface)]">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex flex-col md:flex-row md:items-end justify-between mb-10">
               <div>
@@ -380,7 +383,7 @@ export default async function HomePage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto text-left">
             {/* Monthly Plan */}
-            <div className="p-8 rounded-3xl bg-white border border-border hover:border-slate-300 shadow-sm transition-all flex flex-col justify-between">
+            <div className="p-8 rounded-3xl bg-[var(--surface)] border border-[var(--border)] hover:border-slate-300 dark:hover:border-slate-600 shadow-sm transition-all flex flex-col justify-between">
               <div>
                 <span className="text-xs font-bold uppercase text-slate tracking-wider">
                   Flexible Monthly
@@ -417,7 +420,7 @@ export default async function HomePage() {
 
               <Button
                 asChild
-                className="w-full mt-8 bg-ink hover:bg-black text-white h-11 rounded-xl font-semibold text-xs"
+                className="w-full mt-8 bg-[var(--text)] text-[var(--surface)] hover:opacity-90 h-11 rounded-xl font-semibold text-xs"
               >
                 <Link href="/pricing">Subscribe Monthly (₹999/mo)</Link>
               </Button>
@@ -475,7 +478,7 @@ export default async function HomePage() {
       </section>
 
       {/* 7. TRUST & ENGINEERING STANDARDS (Real agency facts, zero fake testimonials) */}
-      <section className="py-20 bg-white border-t border-border">
+      <section className="py-20 bg-[var(--bg)] border-t border-[var(--border)]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto mb-14">
             <span className="text-xs font-bold uppercase tracking-wider text-deep-green">
@@ -491,7 +494,7 @@ export default async function HomePage() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="p-6 rounded-2xl bg-soft border border-border">
-              <div className="w-10 h-10 rounded-xl bg-white border border-border flex items-center justify-center text-deep-green mb-4">
+              <div className="w-10 h-10 rounded-xl bg-[var(--surface)] border border-[var(--border)] flex items-center justify-center text-deep-green mb-4">
                 <Code2 className="w-5 h-5" />
               </div>
               <h3 className="font-bold text-base text-ink mb-2">100% Hand-Crafted Code</h3>
@@ -501,7 +504,7 @@ export default async function HomePage() {
             </div>
 
             <div className="p-6 rounded-2xl bg-soft border border-border">
-              <div className="w-10 h-10 rounded-xl bg-white border border-border flex items-center justify-center text-deep-green mb-4">
+              <div className="w-10 h-10 rounded-xl bg-[var(--surface)] border border-[var(--border)] flex items-center justify-center text-deep-green mb-4">
                 <Shield className="w-5 h-5" />
               </div>
               <h3 className="font-bold text-base text-ink mb-2">Clear Commercial Licenses</h3>
@@ -511,7 +514,7 @@ export default async function HomePage() {
             </div>
 
             <div className="p-6 rounded-2xl bg-soft border border-border">
-              <div className="w-10 h-10 rounded-xl bg-white border border-border flex items-center justify-center text-deep-green mb-4">
+              <div className="w-10 h-10 rounded-xl bg-[var(--surface)] border border-[var(--border)] flex items-center justify-center text-deep-green mb-4">
                 <Zap className="w-5 h-5" />
               </div>
               <h3 className="font-bold text-base text-ink mb-2">Single-Vendor Accountability</h3>
@@ -539,7 +542,7 @@ export default async function HomePage() {
           </div>
 
           <div className="space-y-4">
-            <details className="group p-5 rounded-2xl bg-white border border-border transition-all">
+            <details className="group p-5 rounded-2xl bg-[var(--surface)] border border-[var(--border)] transition-all">
               <summary className="font-bold text-sm text-ink cursor-pointer list-none flex items-center justify-between">
                 <span>What makes Wefik World different from ThemeForest or CodeCanyon?</span>
                 <span className="text-deep-green font-bold text-lg transition-transform group-open:rotate-45">+</span>
@@ -549,7 +552,7 @@ export default async function HomePage() {
               </p>
             </details>
 
-            <details className="group p-5 rounded-2xl bg-white border border-border transition-all">
+            <details className="group p-5 rounded-2xl bg-[var(--surface)] border border-[var(--border)] transition-all">
               <summary className="font-bold text-sm text-ink cursor-pointer list-none flex items-center justify-between">
                 <span>Can I use these themes and templates for client commercial work?</span>
                 <span className="text-deep-green font-bold text-lg transition-transform group-open:rotate-45">+</span>
@@ -559,7 +562,7 @@ export default async function HomePage() {
               </p>
             </details>
 
-            <details className="group p-5 rounded-2xl bg-white border border-border transition-all">
+            <details className="group p-5 rounded-2xl bg-[var(--surface)] border border-[var(--border)] transition-all">
               <summary className="font-bold text-sm text-ink cursor-pointer list-none flex items-center justify-between">
                 <span>How does the All-Access Membership work?</span>
                 <span className="text-deep-green font-bold text-lg transition-transform group-open:rotate-45">+</span>
@@ -569,7 +572,7 @@ export default async function HomePage() {
               </p>
             </details>
 
-            <details className="group p-5 rounded-2xl bg-white border border-border transition-all">
+            <details className="group p-5 rounded-2xl bg-[var(--surface)] border border-[var(--border)] transition-all">
               <summary className="font-bold text-sm text-ink cursor-pointer list-none flex items-center justify-between">
                 <span>Do you support Indian payment methods like UPI and NetBanking?</span>
                 <span className="text-deep-green font-bold text-lg transition-transform group-open:rotate-45">+</span>
@@ -579,7 +582,7 @@ export default async function HomePage() {
               </p>
             </details>
 
-            <details className="group p-5 rounded-2xl bg-white border border-border transition-all">
+            <details className="group p-5 rounded-2xl bg-[var(--surface)] border border-[var(--border)] transition-all">
               <summary className="font-bold text-sm text-ink cursor-pointer list-none flex items-center justify-between">
                 <span>Are the free products really 100% free with no catch?</span>
                 <span className="text-deep-green font-bold text-lg transition-transform group-open:rotate-45">+</span>
@@ -589,7 +592,7 @@ export default async function HomePage() {
               </p>
             </details>
 
-            <details className="group p-5 rounded-2xl bg-white border border-border transition-all">
+            <details className="group p-5 rounded-2xl bg-[var(--surface)] border border-[var(--border)] transition-all">
               <summary className="font-bold text-sm text-ink cursor-pointer list-none flex items-center justify-between">
                 <span>How do I receive product updates and download new versions?</span>
                 <span className="text-deep-green font-bold text-lg transition-transform group-open:rotate-45">+</span>

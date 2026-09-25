@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
+import { SafeImage } from '@/components/ui/safe-image';
 import { SEED_POSTS } from '@/lib/sanity/seed-posts';
 import { BookOpen, ArrowRight, Clock, User, Calendar } from 'lucide-react';
 
@@ -35,11 +35,11 @@ export default function BlogIndexPage() {
 
       {/* Featured Post Hero Card */}
       {featuredPost && (
-        <div className="bg-white rounded-3xl border border-border shadow-md overflow-hidden hover:border-slate-300 transition-all">
+        <div className="bg-[var(--surface)] rounded-3xl border border-border shadow-md overflow-hidden hover:border-slate-300 transition-all">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
             <div className="lg:col-span-7 relative aspect-[16/10] w-full bg-surface">
               <Link href={`/blog/${featuredPost.slug}`}>
-                <Image
+                <SafeImage
                   src={featuredPost.coverImage}
                   alt={featuredPost.title}
                   fill
@@ -73,7 +73,7 @@ export default function BlogIndexPage() {
               <div className="pt-4 flex items-center justify-between border-t border-border text-xs">
                 <div className="flex items-center gap-2.5">
                   <div className="relative w-8 h-8 rounded-full overflow-hidden bg-soft border border-border flex-shrink-0">
-                    <Image src={featuredPost.author.avatar} alt={featuredPost.author.name} fill className="object-cover" />
+                    <SafeImage src={featuredPost.author.avatar} alt={featuredPost.author.name} fill className="object-cover" />
                   </div>
                   <div>
                     <span className="font-bold text-ink block">{featuredPost.author.name}</span>
@@ -102,12 +102,12 @@ export default function BlogIndexPage() {
           {remainingPosts.map((post) => (
             <article
               key={post.id}
-              className="bg-white rounded-2xl border border-border overflow-hidden hover:border-slate-300 hover:shadow-lg transition-all flex flex-col justify-between"
+              className="bg-[var(--surface)] rounded-2xl border border-border overflow-hidden hover:border-slate-300 hover:shadow-lg transition-all flex flex-col justify-between"
             >
               <div>
                 <div className="relative aspect-[16/9] w-full bg-surface">
                   <Link href={`/blog/${post.slug}`}>
-                    <Image
+                    <SafeImage
                       src={post.coverImage}
                       alt={post.title}
                       fill

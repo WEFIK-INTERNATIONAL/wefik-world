@@ -91,57 +91,60 @@ export function HeroLightweight() {
       </div>
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center flex flex-col items-center">
-        {/* Eyebrow Label */}
-        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[var(--surface)] border border-[var(--border)] shadow-xs mb-6 animate-in fade-in slide-in-from-bottom-2 duration-500">
-          <span className="flex h-2 w-2 rounded-full bg-lime animate-pulse" />
-          <span className="eyebrow text-[var(--accent)]">
-            Curated by Wefik Agency Engineers
-          </span>
-          <span className="text-[var(--muted)]">•</span>
-          <span className="eyebrow text-[var(--muted)]">100% Bloat-Free Code</span>
-        </div>
+        {/* Headline & CTAs with guaranteed z-index isolation */}
+        <div className="relative z-20 w-full flex flex-col items-center">
+          {/* Eyebrow Label */}
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[var(--surface)] border border-[var(--border)] shadow-xs mb-6 animate-in fade-in slide-in-from-bottom-2 duration-500">
+            <span className="flex h-2 w-2 rounded-full bg-lime animate-pulse" />
+            <span className="eyebrow text-[var(--accent)]">
+              Official Marketplace of Wefik Agency
+            </span>
+            <span className="text-[var(--muted)]">•</span>
+            <span className="eyebrow text-[var(--muted)]">Single-Vendor Engineering</span>
+          </div>
 
-        {/* Display-XL Headline per Section 2 */}
-        <h1 className="display-xl max-w-5xl mx-auto mb-6 text-[var(--text)]">
-          WordPress Themes, Plugins & Templates for People Who Build the Web
-        </h1>
+          {/* Display-XL Headline per Phase 2 Spec */}
+          <h1 className="display-xl max-w-5xl mx-auto mb-6 text-[var(--text)]">
+            Production-ready WordPress themes, plugins &amp; code — built and supported by the Wefik team
+          </h1>
 
-        {/* Subtitle */}
-        <p className="body-lg max-w-3xl mx-auto mb-8 text-[var(--muted)] font-normal">
-          The digital product marketplace built specifically for freelancers, digital agencies, and independent founders who refuse to compromise on website speed, code semantics, or licensing freedom. Zero page builder bloat. Pure Gutenberg & Tailwind CSS.
-        </p>
+          {/* Subtitle */}
+          <p className="body-lg max-w-3xl mx-auto mb-8 text-[var(--muted)] font-normal">
+            Single-vendor digital tools engineered for freelance developers and digital agencies. Zero visual page builder bloat, native Gutenberg block patterns, and modern CSS—backed directly by the team that authored every line.
+          </p>
 
-        {/* Hero CTAs */}
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 mb-14">
-          <MagneticButton strength={0.25} className="w-full sm:w-auto">
-            <Button
-              asChild
-              size="lg"
-              className="w-full sm:w-auto h-12 px-8 rounded-xl bg-ink dark:bg-white text-white dark:text-ink hover:bg-black dark:hover:bg-slate-100 font-semibold text-sm shadow-md transition-shadow hover:shadow-lime/20 hover:shadow-lg"
-            >
-              <TransitionLink href="/marketplace" className="flex items-center gap-2">
-                <span>Browse Marketplace</span>
-                <ArrowRight className="w-4 h-4" />
-              </TransitionLink>
-            </Button>
-          </MagneticButton>
-          <MagneticButton strength={0.15} className="w-full sm:w-auto">
-            <Button
-              asChild
-              variant="outline"
-              size="lg"
-              className="w-full sm:w-auto h-12 px-8 rounded-xl border-[var(--border)] bg-[var(--surface)] text-[var(--text)] hover:bg-[var(--surface-2)] font-semibold text-sm"
-            >
-              <TransitionLink href="/pricing">
-                <span>Get All-Access Membership</span>
-              </TransitionLink>
-            </Button>
-          </MagneticButton>
+          {/* Hero CTAs: Destination Named */}
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 mb-10 sm:mb-14">
+            <MagneticButton strength={0.25} className="w-full sm:w-auto">
+              <Button
+                asChild
+                size="lg"
+                className="w-full sm:w-auto h-12 px-8 rounded-xl bg-ink dark:bg-white text-white dark:text-ink hover:bg-black dark:hover:bg-slate-100 font-semibold text-sm shadow-md transition-shadow hover:shadow-lime/20 hover:shadow-lg"
+              >
+                <TransitionLink href="/wordpress-themes" className="flex items-center gap-2">
+                  <span>Browse WordPress Themes</span>
+                  <ArrowRight className="w-4 h-4" />
+                </TransitionLink>
+              </Button>
+            </MagneticButton>
+            <MagneticButton strength={0.15} className="w-full sm:w-auto">
+              <Button
+                asChild
+                variant="outline"
+                size="lg"
+                className="w-full sm:w-auto h-12 px-8 rounded-xl border-[var(--border)] bg-[var(--surface)] text-[var(--text)] hover:bg-[var(--surface-2)] font-semibold text-sm"
+              >
+                <TransitionLink href="/pricing">
+                  <span>View All-Access Membership</span>
+                </TransitionLink>
+              </Button>
+            </MagneticButton>
+          </div>
         </div>
 
         {/* 2. Interactive CSS 3D Tilting Product Cards (Section 6) */}
         <div
-          className="relative w-full max-w-4xl mx-auto h-[380px] sm:h-[440px] flex items-center justify-center"
+          className="relative z-10 isolate w-full max-w-4xl mx-auto h-[380px] sm:h-[440px] mt-2 sm:mt-4 flex items-center justify-center pointer-events-auto"
           style={{ perspective: '1200px' }}
         >
           <div

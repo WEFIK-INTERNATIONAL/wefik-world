@@ -7,10 +7,12 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "test": "node tests/edge-functions.test.mjs && node tests/auth-middleware.test.mjs && node tests/authz-matrix.test.mjs && node tests/checkout-e2e.test.mjs",
+    "test": "node tests/edge-functions.test.mjs && node tests/auth-middleware.test.mjs && node tests/authz-matrix.test.mjs && node tests/checkout-e2e.test.mjs && node tests/auth-rls.test.mjs",
     "bundle-audit": "node scripts/bundle-audit.mjs",
     "devibe-audit": "node scripts/devibe-audit.mjs",
-    "lighthouse-audit": "node scripts/lighthouse-audit.mjs"
+    "lighthouse-audit": "node scripts/lighthouse-audit.mjs",
+    "assert:images": "node scripts/assert-image-hostnames.mjs",
+    "lint:theme": "node scripts/lint-theme-colors.mjs"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",

@@ -153,7 +153,7 @@ export function LicenseList({ initialLicenses }: { initialLicenses: LicenseItem[
 
             <button
               onClick={() => handleCopy(lic.license_key)}
-              className="p-2 rounded-xl bg-white border border-border text-slate hover:text-ink hover:border-slate shadow-xs transition-colors flex-shrink-0"
+              className="p-2 rounded-xl bg-[var(--surface)] border border-border text-slate hover:text-ink hover:border-slate shadow-xs transition-colors flex-shrink-0"
               aria-label="Copy license key"
             >
               {copiedKey === lic.license_key ? (
@@ -165,7 +165,7 @@ export function LicenseList({ initialLicenses }: { initialLicenses: LicenseItem[
           </div>
 
           {/* Domain Whitelist Section */}
-          <div className="p-4 rounded-2xl bg-white border border-border space-y-3 text-xs">
+          <div className="p-4 rounded-2xl bg-[var(--surface)] border border-border space-y-3 text-xs">
             <div className="flex items-center justify-between">
               <span className="font-bold text-ink flex items-center gap-1.5">
                 <Globe className="w-3.5 h-3.5 text-deep-green" />

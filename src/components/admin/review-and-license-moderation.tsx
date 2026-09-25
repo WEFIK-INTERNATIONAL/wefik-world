@@ -82,7 +82,7 @@ export function ReviewAndLicenseModeration({ initialReviews }: { initialReviews:
             value={revokeKey}
             onChange={(e) => setRevokeKey(e.target.value)}
             required
-            className="h-10 text-xs uppercase font-mono rounded-xl bg-white"
+            className="h-10 text-xs uppercase font-mono rounded-xl bg-[var(--surface)]"
           />
           <Button
             type="submit"

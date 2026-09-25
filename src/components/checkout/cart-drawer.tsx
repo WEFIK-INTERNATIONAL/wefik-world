@@ -1,8 +1,8 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
+import { SafeImage } from '@/components/ui/safe-image';
 import {
   Sheet,
   SheetContent,
@@ -44,7 +44,7 @@ export function CartDrawer() {
 
   return (
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
-      <SheetContent data-lenis-prevent className="flex flex-col h-full w-full sm:max-w-md p-6 bg-white">
+      <SheetContent data-lenis-prevent className="flex flex-col h-full w-full sm:max-w-md p-6 bg-[var(--surface)] text-[var(--text)] border-l border-[var(--border)]">
         <SheetHeader className="pb-4 border-b border-border">
           <SheetTitle className="flex items-center gap-2 text-xl font-bold tracking-tight text-ink">
             <ShoppingBag className="w-5 h-5 text-deep-green" />
@@ -81,7 +81,7 @@ export function CartDrawer() {
               return (
                 <div key={item.productId} className="pt-4 first:pt-0 flex gap-4 items-start">
                   <div className="relative w-16 h-16 rounded-lg overflow-hidden bg-surface border border-border flex-shrink-0">
-                    <Image
+                    <SafeImage
                       src={item.thumbnailUrl || 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=800'}
                       alt={item.title}
                       fill

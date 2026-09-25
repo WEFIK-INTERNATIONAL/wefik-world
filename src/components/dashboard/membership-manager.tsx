@@ -50,7 +50,7 @@ export function MembershipManager({ membership }: MembershipProps) {
   if (!membership || currentStatus === 'expired') {
     return (
       <div className="p-8 sm:p-12 text-center rounded-3xl bg-soft border border-border space-y-4">
-        <div className="w-14 h-14 rounded-full bg-white border border-border flex items-center justify-center text-slate mx-auto">
+        <div className="w-14 h-14 rounded-full bg-[var(--surface-2)] border border-border flex items-center justify-center text-slate mx-auto">
           <Sparkles className="w-7 h-7 text-deep-green" />
         </div>
         <div>
@@ -116,7 +116,7 @@ export function MembershipManager({ membership }: MembershipProps) {
       </div>
 
       {/* Benefits List */}
-      <div className="p-6 sm:p-8 rounded-3xl bg-white border border-border shadow-xs space-y-4">
+      <div className="p-6 sm:p-8 rounded-3xl bg-[var(--surface)] border border-border shadow-xs space-y-4">
         <h3 className="text-sm font-bold text-ink">Included Membership Privileges</h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs text-slate">
           <div className="flex items-center gap-2">

@@ -133,7 +133,7 @@ export function SettingsForm({ user }: SettingsFormProps) {
           </div>
 
           <div>
-            <label className="cursor-pointer inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-soft border border-border text-xs font-semibold text-ink hover:bg-white transition-colors">
+            <label className="cursor-pointer inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-soft border border-border text-xs font-semibold text-ink hover:bg-[var(--surface-2)] transition-colors">
               {uploadingAvatar ? (
                 <Loader2 className="w-3.5 h-3.5 animate-spin" />
               ) : (

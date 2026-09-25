@@ -126,7 +126,7 @@ export function OrderSuccessView({ order }: OrderSuccessViewProps) {
       </div>
 
       {/* Purchased Items & License Keys */}
-      <div className="bg-white p-6 sm:p-8 rounded-3xl border border-border shadow-xs space-y-6">
+      <div className="bg-[var(--surface)] p-6 sm:p-8 rounded-3xl border border-border shadow-xs space-y-6">
         <h2 className="text-base font-bold text-ink pb-3 border-b border-border flex items-center gap-2">
           <KeyRound className="w-4 h-4 text-deep-green" />
           <span>Your Products & License Keys</span>
@@ -172,7 +172,7 @@ export function OrderSuccessView({ order }: OrderSuccessViewProps) {
 
                   <button
                     onClick={() => handleCopy(item.license_key!)}
-                    className="p-1.5 rounded-lg bg-white border border-border text-slate hover:text-ink hover:border-slate transition-colors flex-shrink-0"
+                    className="p-1.5 rounded-lg bg-[var(--surface)] border border-border text-slate hover:text-ink hover:border-slate transition-colors flex-shrink-0"
                     aria-label="Copy license key"
                   >
                     {copiedKey === item.license_key ? (

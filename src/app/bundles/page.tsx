@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
+import { SafeImage } from '@/components/ui/safe-image';
 import { getProducts } from '@/lib/data/products';
 import { ProductCard } from '@/components/marketplace/product-card';
 import { Sparkles, CheckCircle2, ShieldCheck, ArrowRight } from 'lucide-react';
@@ -11,6 +11,9 @@ export const metadata = {
   title: 'Agency Product Bundles — Save up to 60%',
   description:
     'Complete collections of WordPress themes, performance plugins, and Next.js templates bundled at high discounts for freelance developers and digital agencies.',
+  alternates: {
+    canonical: 'https://wefik.world/bundles',
+  },
 };
 
 export default async function BundlesPage() {
@@ -19,7 +22,7 @@ export default async function BundlesPage() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-[calc(var(--header-height)+2.5rem)] pb-16 space-y-16">
-      {/* Bundles Hero */}
+      {/* Bundles Hero with Substantive Copy */}
       <div className="text-center max-w-3xl mx-auto space-y-4">
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-deep-green/10 text-deep-green text-xs font-bold border border-deep-green/20">
           <Sparkles className="w-3.5 h-3.5" />
@@ -27,13 +30,17 @@ export default async function BundlesPage() {
         </div>
 
         <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-ink">
-          Production Bundles for Agencies
+          Curated Production Bundles for Agencies
         </h1>
 
-        <p className="text-sm sm:text-base text-slate max-w-2xl mx-auto leading-relaxed">
-          Why purchase single items when you can equip your entire agency studio?
-          Get our flagship WordPress themes, speed plugins, and Next.js starters in one unified package.
-        </p>
+        <div className="text-xs sm:text-sm text-slate max-w-2xl mx-auto leading-relaxed space-y-3 text-left sm:text-center">
+          <p>
+            Equip your entire web studio or freelance practice with unified collections of our flagship WordPress themes, caching plugins, and Next.js boilerplates. Purchasing a Wefik World bundle saves between 40% and 60% compared to purchasing individual items separately, providing your development pipeline with coordinated tools designed to work together without conflicts.
+          </p>
+          <p>
+            Every tool in each bundle is authored and maintained in-house by the engineers at <a href="https://wefik.in" target="_blank" rel="noreferrer" className="text-deep-green font-semibold underline">Wefik Agency</a>. You receive individual license keys for every product in the bundle, continuous software updates, and direct engineering support. All bundles include commercial rights to deploy client websites under our <Link href="/license" className="underline font-semibold text-deep-green">Commercial License Agreement</Link>, backed by our <Link href="/refunds" className="underline font-semibold text-deep-green">7-Day Refund Policy</Link>.
+          </p>
+        </div>
       </div>
 
       {/* Featured Bundle Spotlight Banner */}
@@ -84,7 +91,7 @@ export default async function BundlesPage() {
             </div>
 
             <div className="relative aspect-video rounded-2xl overflow-hidden border border-white/10 shadow-lg bg-zinc-900">
-              <Image
+              <SafeImage
                 src={bundles[0].thumbnail_url}
                 alt={bundles[0].title}
                 fill

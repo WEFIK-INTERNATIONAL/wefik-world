@@ -14,7 +14,10 @@ export interface Database {
           id: string;
           email: string;
           full_name: string | null;
+          display_name: string | null;
           avatar_url: string | null;
+          recovery_email: string | null;
+          recovery_email_verified_at: string | null;
           role: 'customer' | 'admin';
           created_at: string;
           updated_at: string;
@@ -23,7 +26,10 @@ export interface Database {
           id: string;
           email: string;
           full_name?: string | null;
+          display_name?: string | null;
           avatar_url?: string | null;
+          recovery_email?: string | null;
+          recovery_email_verified_at?: string | null;
           role?: 'customer' | 'admin';
           created_at?: string;
           updated_at?: string;
@@ -32,7 +38,10 @@ export interface Database {
           id?: string;
           email?: string;
           full_name?: string | null;
+          display_name?: string | null;
           avatar_url?: string | null;
+          recovery_email?: string | null;
+          recovery_email_verified_at?: string | null;
           role?: 'customer' | 'admin';
           created_at?: string;
           updated_at?: string;
@@ -154,9 +163,14 @@ export interface Database {
         Row: {
           id: string;
           user_id: string;
+          order_number: string | null;
           razorpay_order_id: string | null;
           razorpay_payment_id: string | null;
-          status: 'pending' | 'paid' | 'failed' | 'refunded';
+          status: string;
+          subtotal_inr: number;
+          discount_inr: number;
+          tax_inr: number;
+          total_amount_inr: number;
           subtotal: number;
           discount_amount: number;
           total_amount: number;
@@ -167,12 +181,17 @@ export interface Database {
         Insert: {
           id?: string;
           user_id: string;
+          order_number?: string | null;
           razorpay_order_id?: string | null;
           razorpay_payment_id?: string | null;
-          status?: 'pending' | 'paid' | 'failed' | 'refunded';
-          subtotal: number;
+          status?: string;
+          subtotal_inr?: number;
+          discount_inr?: number;
+          tax_inr?: number;
+          total_amount_inr?: number;
+          subtotal?: number;
           discount_amount?: number;
-          total_amount: number;
+          total_amount?: number;
           currency?: 'INR' | 'USD';
           coupon_code?: string | null;
           created_at?: string;
@@ -180,9 +199,14 @@ export interface Database {
         Update: {
           id?: string;
           user_id?: string;
+          order_number?: string | null;
           razorpay_order_id?: string | null;
           razorpay_payment_id?: string | null;
-          status?: 'pending' | 'paid' | 'failed' | 'refunded';
+          status?: string;
+          subtotal_inr?: number;
+          discount_inr?: number;
+          tax_inr?: number;
+          total_amount_inr?: number;
           subtotal?: number;
           discount_amount?: number;
           total_amount?: number;
@@ -198,6 +222,7 @@ export interface Database {
           product_id: string | null;
           item_type: 'product' | 'membership_monthly' | 'membership_lifetime';
           price: number;
+          price_inr: number;
           license_type: 'single' | 'unlimited';
           created_at: string;
         };
@@ -206,7 +231,8 @@ export interface Database {
           order_id: string;
           product_id?: string | null;
           item_type?: 'product' | 'membership_monthly' | 'membership_lifetime';
-          price: number;
+          price?: number;
+          price_inr?: number;
           license_type?: 'single' | 'unlimited';
           created_at?: string;
         };
@@ -216,6 +242,7 @@ export interface Database {
           product_id?: string | null;
           item_type?: 'product' | 'membership_monthly' | 'membership_lifetime';
           price?: number;
+          price_inr?: number;
           license_type?: 'single' | 'unlimited';
           created_at?: string;
         };
@@ -226,10 +253,13 @@ export interface Database {
           license_key: string;
           user_id: string;
           product_id: string;
-          order_id: string;
+          order_id: string | null;
           license_type: 'single' | 'unlimited';
-          status: 'active' | 'revoked';
+          status: string;
+          is_active: boolean;
+          allowed_domains: string[];
           activated_domains: string[];
+          activations_count: number;
           max_activations: number;
           created_at: string;
         };
@@ -238,10 +268,13 @@ export interface Database {
           license_key: string;
           user_id: string;
           product_id: string;
-          order_id: string;
+          order_id?: string | null;
           license_type?: 'single' | 'unlimited';
-          status?: 'active' | 'revoked';
+          status?: string;
+          is_active?: boolean;
+          allowed_domains?: string[];
           activated_domains?: string[];
+          activations_count?: number;
           max_activations?: number;
           created_at?: string;
         };
@@ -250,12 +283,61 @@ export interface Database {
           license_key?: string;
           user_id?: string;
           product_id?: string;
-          order_id?: string;
+          order_id?: string | null;
           license_type?: 'single' | 'unlimited';
-          status?: 'active' | 'revoked';
+          status?: string;
+          is_active?: boolean;
+          allowed_domains?: string[];
           activated_domains?: string[];
+          activations_count?: number;
           max_activations?: number;
           created_at?: string;
+        };
+      };
+      product_versions: {
+        Row: {
+          id: string;
+          product_id: string;
+          version: string;
+          changelog: string | null;
+          file_path: string;
+          is_latest: boolean;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          product_id: string;
+          version: string;
+          changelog?: string | null;
+          file_path: string;
+          is_latest?: boolean;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          product_id?: string;
+          version?: string;
+          changelog?: string | null;
+          file_path?: string;
+          is_latest?: boolean;
+          created_at?: string;
+        };
+      };
+      blocked_email_domains: {
+        Row: {
+          domain: string;
+          source: string;
+          added_at: string;
+        };
+        Insert: {
+          domain: string;
+          source?: string;
+          added_at?: string;
+        };
+        Update: {
+          domain?: string;
+          source?: string;
+          added_at?: string;
         };
       };
       memberships: {
@@ -432,6 +514,15 @@ export interface Database {
       increment_coupon_use: {
         Args: { coupon_id: string };
         Returns: void;
+      };
+      check_email_registered: {
+        Args: { p_email: string };
+        Returns: {
+          registered: boolean;
+          confirmed: boolean;
+          has_password: boolean;
+          oauth_providers: string[];
+        }[];
       };
     };
   };

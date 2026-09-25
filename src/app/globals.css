@@ -59,8 +59,8 @@
   --color-deep-green: #4F741B;
   --color-deep-green-light: #6B8F2E;
   --color-deep-green-dark: #3D5A15;
-  --color-ink: #202124;
-  --color-slate: #5F6368;
+  --color-ink: var(--ink);
+  --color-slate: var(--muted);
   --color-soft: var(--surface);
 
   /* Status Colors */

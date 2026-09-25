@@ -53,7 +53,7 @@ export default async function DashboardLayout({
                 <Link
                   key={item.href}
                   href={item.href}
-                  className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold text-slate hover:text-ink hover:bg-white transition-colors"
+                  className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold text-slate hover:text-ink hover:bg-[var(--surface-2)] transition-colors"
                 >
                   <Icon className="w-4 h-4 text-slate flex-shrink-0" />
                   <span>{item.label}</span>

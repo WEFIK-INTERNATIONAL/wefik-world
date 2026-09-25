@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import Image from 'next/image';
+import { SafeImage } from '@/components/ui/safe-image';
 import Link from 'next/link';
 import { Package, Plus, Upload, Loader2, CheckCircle2, FileArchive, ArrowUpRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -9,6 +9,23 @@ import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
 import { createClient } from '@/lib/supabase/client';
+
+/**
+ * P1-10: Admin price input guard.
+ * Rejects non-round-rupee amounts (e.g. ₹6,247.50).
+ */
+export function validateProductPriceRupees(rupees: number): { valid: boolean; error?: string } {
+  if (isNaN(rupees) || rupees < 0) {
+    return { valid: false, error: 'Price must be a non-negative number' };
+  }
+  if (!Number.isInteger(rupees)) {
+    return {
+      valid: false,
+      error: `All prices must be round rupees. Decimal paise like ₹${rupees} are rejected. Use ₹${Math.round(rupees)}.`,
+    };
+  }
+  return { valid: true };
+}
 
 interface AdminProduct {
   id: string;
@@ -181,7 +198,7 @@ export function ProductAdminManager({ initialProducts }: { initialProducts: Admi
                 onChange={(e) => setChangelog(e.target.value)}
                 rows={2}
                 required
-                className="w-full px-3 py-2 text-xs bg-white border border-border rounded-xl text-ink"
+                className="w-full px-3 py-2 text-xs bg-[var(--surface)] border border-border rounded-xl text-ink"
               />
             </div>
 
@@ -249,7 +266,7 @@ export function ProductAdminManager({ initialProducts }: { initialProducts: Admi
               <select
                 value={primaryUseCase}
                 onChange={(e) => setPrimaryUseCase(e.target.value)}
-                className="w-full h-9 px-3 text-xs bg-white border border-border rounded-xl text-ink"
+                className="w-full h-9 px-3 text-xs bg-[var(--surface)] border border-border rounded-xl text-ink"
               >
                 <option value="agencies">Agencies & Studios</option>
                 <option value="restaurants">Restaurants & Cafes</option>
@@ -272,7 +289,7 @@ export function ProductAdminManager({ initialProducts }: { initialProducts: Admi
                 maxLength={155}
                 required
                 placeholder="High-performance WordPress theme for digital agencies. Commercial license from ₹799. Instant download and lifetime updates."
-                className="w-full px-3 py-2 text-xs bg-white border border-border rounded-xl text-ink"
+                className="w-full px-3 py-2 text-xs bg-[var(--surface)] border border-border rounded-xl text-ink"
               />
               <span className="text-[10px] text-slate font-mono block">
                 {seoDescription.length}/155 chars (Include primary keyword + number + CTA)
@@ -333,7 +350,7 @@ export function ProductAdminManager({ initialProducts }: { initialProducts: Admi
                   <td className="py-3.5 px-4">
                     <div className="flex items-center gap-3">
                       <div className="relative w-10 h-8 rounded-lg overflow-hidden bg-surface border border-border flex-shrink-0">
-                        <Image src={p.thumbnail_url} alt={p.title} fill className="object-cover" sizes="40px" />
+                        <SafeImage src={p.thumbnail_url} alt={p.title} fill className="object-cover" sizes="40px" />
                       </div>
                       <div>
                         <span className="font-bold text-ink block">{p.title}</span>
@@ -362,7 +379,7 @@ export function ProductAdminManager({ initialProducts }: { initialProducts: Admi
                         onClick={() => openSeoEditor(p)}
                         size="sm"
                         variant="secondary"
-                        className="h-8 text-xs rounded-lg border border-border bg-white hover:bg-soft text-ink font-semibold"
+                        className="h-8 text-xs rounded-lg border border-border bg-[var(--surface)] hover:bg-soft text-ink font-semibold"
                       >
                         Edit SEO & Alt
                       </Button>

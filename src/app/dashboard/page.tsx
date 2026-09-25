@@ -62,7 +62,7 @@ export default async function DashboardOverviewPage() {
   return (
     <div className="space-y-8">
       {/* Welcome Banner */}
-      <div className="bg-white p-6 sm:p-8 rounded-3xl border border-border shadow-xs flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+      <div className="bg-[var(--surface)] p-6 sm:p-8 rounded-3xl border border-border shadow-xs flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
           <span className="text-[11px] font-bold uppercase tracking-wider text-deep-green">
             Customer Dashboard
@@ -82,7 +82,7 @@ export default async function DashboardOverviewPage() {
 
       {/* Metrics Row */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-        <div className="p-5 rounded-2xl bg-white border border-border space-y-2">
+        <div className="p-5 rounded-2xl bg-[var(--surface)] border border-border space-y-2">
           <div className="flex items-center justify-between text-slate">
             <span className="text-xs font-semibold">Active Licenses</span>
             <KeyRound className="w-4 h-4 text-deep-green" />
@@ -93,7 +93,7 @@ export default async function DashboardOverviewPage() {
           </Link>
         </div>
 
-        <div className="p-5 rounded-2xl bg-white border border-border space-y-2">
+        <div className="p-5 rounded-2xl bg-[var(--surface)] border border-border space-y-2">
           <div className="flex items-center justify-between text-slate">
             <span className="text-xs font-semibold">Total Downloads</span>
             <Download className="w-4 h-4 text-deep-green" />
@@ -104,7 +104,7 @@ export default async function DashboardOverviewPage() {
           </Link>
         </div>
 
-        <div className="p-5 rounded-2xl bg-white border border-border space-y-2">
+        <div className="p-5 rounded-2xl bg-[var(--surface)] border border-border space-y-2">
           <div className="flex items-center justify-between text-slate">
             <span className="text-xs font-semibold">Membership</span>
             <Sparkles className="w-4 h-4 text-deep-green" />
@@ -121,7 +121,7 @@ export default async function DashboardOverviewPage() {
           </Link>
         </div>
 
-        <div className="p-5 rounded-2xl bg-white border border-border space-y-2">
+        <div className="p-5 rounded-2xl bg-[var(--surface)] border border-border space-y-2">
           <div className="flex items-center justify-between text-slate">
             <span className="text-xs font-semibold">Commercial Rights</span>
             <ShieldCheck className="w-4 h-4 text-deep-green" />
@@ -132,7 +132,7 @@ export default async function DashboardOverviewPage() {
       </div>
 
       {/* Recent Orders Section */}
-      <div className="bg-white p-6 sm:p-8 rounded-3xl border border-border shadow-xs space-y-4">
+      <div className="bg-[var(--surface)] p-6 sm:p-8 rounded-3xl border border-border shadow-xs space-y-4">
         <div className="flex items-center justify-between pb-3 border-b border-border">
           <h2 className="text-base font-bold text-ink flex items-center gap-2">
             <ShoppingBag className="w-4 h-4 text-deep-green" />

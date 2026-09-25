@@ -4,6 +4,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
 import { useCart } from '@/lib/cart-context';
+import { useWishlist } from '@/lib/wishlist-context';
+import { useLenis } from '@/components/providers/smooth-scroll-provider';
 import { Button } from '@/components/ui/button';
 import { TransitionLink } from '@/components/transitions/transition-link';
 import { FullscreenMenu } from './fullscreen-menu';
@@ -28,6 +30,7 @@ import {
   Download,
   LogOut,
   Sparkles,
+  Heart,
 } from 'lucide-react';
 import type { User } from '@supabase/supabase-js';
 
@@ -35,6 +38,8 @@ export function Header() {
   const pathname = usePathname();
   const router = useRouter();
   const { totalCount, setIsOpen } = useCart();
+  const { count: wishlistCount } = useWishlist();
+  const { lenis } = useLenis();
   const [fullscreenOpen, setFullscreenOpen] = useState(false);
   const [showHeader, setShowHeader] = useState(true);
   const [scrolled, setScrolled] = useState(false);
@@ -65,11 +70,11 @@ export function Header() {
   const supabase = createClient();
 
   // Hide on scroll down, show on scroll up with backdrop blur after 24px per Section 6.3
+  // Driven by Lenis scroll events with native window scroll fallback
   useEffect(() => {
     if (typeof window === 'undefined') return;
 
-    const handleScroll = () => {
-      const currentScrollY = window.scrollY;
+    const updateScrollState = (currentScrollY: number) => {
       setScrolled(currentScrollY > 24);
 
       if (currentScrollY > 100) {
@@ -84,9 +89,22 @@ export function Header() {
       lastScrollY.current = currentScrollY;
     };
 
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [fullscreenOpen]);
+    if (lenis) {
+      const onLenisScroll = (e: { scroll: number }) => {
+        updateScrollState(e.scroll);
+      };
+      lenis.on('scroll', onLenisScroll);
+      return () => {
+        lenis.off('scroll', onLenisScroll);
+      };
+    } else {
+      const handleWindowScroll = () => {
+        updateScrollState(window.scrollY);
+      };
+      window.addEventListener('scroll', handleWindowScroll, { passive: true });
+      return () => window.removeEventListener('scroll', handleWindowScroll);
+    }
+  }, [lenis, fullscreenOpen]);
 
   useEffect(() => {
     async function checkUser() {
@@ -151,9 +169,20 @@ export function Header() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
           {/* Logo */}
           <div className="flex items-center gap-6">
-            <TransitionLink href="/" className="flex items-center group">
-              <Logo size="md" showWordmark={true} />
-            </TransitionLink>
+            <div className="flex items-center gap-2.5">
+              <TransitionLink href="/" className="flex items-center group">
+                <Logo size="md" showWordmark={true} />
+              </TransitionLink>
+              <a
+                href="https://wefik.in"
+                target="_blank"
+                rel="noreferrer"
+                className="hidden sm:inline-flex items-center text-[10px] font-mono tracking-wider text-[var(--muted)] hover:text-deep-green dark:hover:text-lime transition-colors px-2 py-0.5 rounded-full border border-[var(--border)] bg-[var(--surface-2)]"
+                title="Wefik Digital Agency (wefik.in)"
+              >
+                by Wefik
+              </a>
+            </div>
 
             {/* Desktop Navigation */}
             <nav className="hidden md:flex items-center gap-1">
@@ -191,7 +220,7 @@ export function Header() {
                 <Search className="w-3.5 h-3.5 text-slate/70 group-hover:text-ink" />
                 <span className="text-slate/70 group-hover:text-ink">Search marketplace...</span>
               </div>
-              <kbd className="px-1.5 py-0.5 text-[10px] font-mono bg-white rounded border border-border text-slate shadow-2xs">
+              <kbd className="px-1.5 py-0.5 text-[10px] font-mono bg-[var(--surface-2)] rounded border border-border text-slate shadow-2xs">
                 ⌘K
               </kbd>
             </button>
@@ -208,6 +237,20 @@ export function Header() {
               <Search className="w-5 h-5" />
             </button>
 
+            {/* Wishlist Trigger */}
+            <TransitionLink
+              href="/dashboard/wishlist"
+              aria-label="View Saved Wishlist"
+              className="relative p-2 rounded-xl text-ink hover:bg-soft border border-transparent hover:border-border transition-all hidden sm:inline-flex"
+            >
+              <Heart className="w-5 h-5" />
+              {wishlistCount > 0 && (
+                <span className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center ring-2 ring-[var(--bg)]">
+                  {wishlistCount}
+                </span>
+              )}
+            </TransitionLink>
+
             {/* Cart Icon Trigger */}
             <button
               onClick={() => setIsOpen(true)}
@@ -216,7 +259,7 @@ export function Header() {
             >
               <ShoppingBag className="w-5 h-5" />
               {totalCount > 0 && (
-                <span className="absolute -top-1 -right-1 w-5 h-5 bg-deep-green text-white text-[10px] font-bold rounded-full flex items-center justify-center ring-2 ring-white">
+                <span className="absolute -top-1 -right-1 w-5 h-5 bg-deep-green text-white text-[10px] font-bold rounded-full flex items-center justify-center ring-2 ring-[var(--bg)]">
                   {totalCount}
                 </span>
               )}
@@ -237,7 +280,7 @@ export function Header() {
                     </Avatar>
                   </button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-56 p-1 bg-white border-border shadow-xl">
+                <DropdownMenuContent align="end" className="w-56 p-1 bg-[var(--surface)] border-border shadow-xl">
                   <DropdownMenuLabel className="font-normal p-2">
                     <div className="flex flex-col space-y-0.5">
                       <p className="text-xs font-bold text-ink truncate">
@@ -248,27 +291,33 @@ export function Header() {
                   </DropdownMenuLabel>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem asChild className="text-xs font-medium cursor-pointer">
-                    <TransitionLink href="/dashboard" className="flex items-center gap-2">
+                    <TransitionLink href="/account" className="flex items-center gap-2">
                       <UserIcon className="w-3.5 h-3.5 text-slate" />
-                      <span>Dashboard Overview</span>
+                      <span>Account Overview</span>
                     </TransitionLink>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild className="text-xs font-medium cursor-pointer">
-                    <TransitionLink href="/dashboard/licenses" className="flex items-center gap-2">
-                      <KeyRound className="w-3.5 h-3.5 text-slate" />
-                      <span>My License Keys</span>
-                    </TransitionLink>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem asChild className="text-xs font-medium cursor-pointer">
-                    <TransitionLink href="/dashboard/downloads" className="flex items-center gap-2">
+                    <TransitionLink href="/account/library" className="flex items-center gap-2">
                       <Download className="w-3.5 h-3.5 text-slate" />
-                      <span>Downloads & Updates</span>
+                      <span>My Library &amp; Licenses</span>
                     </TransitionLink>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild className="text-xs font-medium cursor-pointer">
-                    <TransitionLink href="/dashboard/membership" className="flex items-center gap-2">
+                    <TransitionLink href="/account/orders" className="flex items-center gap-2">
+                      <KeyRound className="w-3.5 h-3.5 text-slate" />
+                      <span>Orders &amp; Receipts</span>
+                    </TransitionLink>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild className="text-xs font-medium cursor-pointer">
+                    <TransitionLink href="/account/membership" className="flex items-center gap-2">
                       <Sparkles className="w-3.5 h-3.5 text-deep-green" />
                       <span>Membership Plan</span>
+                    </TransitionLink>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild className="text-xs font-medium cursor-pointer">
+                    <TransitionLink href="/account/settings" className="flex items-center gap-2">
+                      <UserIcon className="w-3.5 h-3.5 text-slate" />
+                      <span>Profile &amp; Security</span>
                     </TransitionLink>
                   </DropdownMenuItem>
 
@@ -324,12 +373,12 @@ export function Header() {
             >
               <span
                 className={`w-4 h-0.5 bg-[var(--text)] rounded-full transition-all duration-300 ease-out ${
-                  fullscreenOpen ? 'rotate-45 translate-y-2 !bg-white' : ''
+                  fullscreenOpen ? 'rotate-45 translate-y-2 !bg-[var(--text)]' : ''
                 }`}
               />
               <span
                 className={`w-4 h-0.5 bg-[var(--text)] rounded-full transition-all duration-300 ease-out ${
-                  fullscreenOpen ? '-rotate-45 -translate-y-0 !bg-white' : ''
+                  fullscreenOpen ? '-rotate-45 -translate-y-0 !bg-[var(--text)]' : ''
                 }`}
               />
             </button>

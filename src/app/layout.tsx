@@ -4,10 +4,16 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import { PostHogProvider } from "@/components/providers/posthog-provider";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import { CartProvider } from "@/lib/cart-context";
+import { WishlistProvider } from "@/lib/wishlist-context";
+import { CompareProvider } from "@/lib/compare-context";
 import { Header } from "@/components/layout/header";
 import { BackToTop } from "@/components/ui/back-to-top";
 import { Footer } from "@/components/layout/footer";
 import { CartDrawer } from "@/components/checkout/cart-drawer";
+import { CompareDock } from "@/components/marketplace/compare-dock";
+import { CompareModal } from "@/components/marketplace/compare-modal";
+import { CookieConsent } from "@/components/trust/cookie-consent";
+import { TawkToChat } from "@/components/trust/tawkto-chat";
 import { SmoothScrollProvider } from "@/components/providers/smooth-scroll-provider";
 import { TransitionProvider } from "@/components/transitions/transition-provider";
 import { UnboxingPreloader } from "@/components/preloader/unboxing-preloader";
@@ -49,6 +55,9 @@ export const metadata: Metadata = {
     apple: "/logo.svg",
   },
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://wefik.world"),
+  alternates: {
+    canonical: "/",
+  },
   title: {
     default: "wefik.world — Premium Digital Products for Agencies & Developers",
     template: "%s | wefik.world",
@@ -100,36 +109,53 @@ export const metadata: Metadata = {
     : {}),
 };
 
-const websiteJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "WebSite",
-  name: "Wefik World",
-  url: "https://wefik.world",
-  potentialAction: {
-    "@type": "SearchAction",
-    target: "https://wefik.world/marketplace?q={search_term_string}",
-    "query-input": "required name=search_term_string",
-  },
+const organizationJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  '@id': 'https://www.wefik.in/#organization',
+  name: 'Wefik',
+  url: 'https://www.wefik.in/',
+  logo: 'https://wefik.world/icon.svg',
+  description:
+    'Wefik is a digital agency specializing in web design, digital products, and full-stack engineering. Creator and single-vendor publisher of the Wefik.world marketplace.',
+  telephone: '+91 96096 53522',
+  contactPoint: [
+    {
+      '@type': 'ContactPoint',
+      telephone: '+91 96096 53522',
+      contactType: 'customer service',
+      availableLanguage: ['English', 'Hindi'],
+      hoursAvailable: {
+        '@type': 'OpeningHoursSpecification',
+        dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+        opens: '09:00',
+        closes: '18:00',
+      },
+    },
+  ],
+  sameAs: [
+    'https://wefik.world',
+    'https://twitter.com/wefik',
+    'https://github.com/WEFIK-INTERNATIONAL',
+    'https://linkedin.com/company/wefik',
+  ],
 };
 
-const organizationJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "Organization",
-  name: "Wefik World",
-  url: "https://wefik.world",
-  logo: "https://wefik.world/logo.png",
+const websiteJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  '@id': 'https://wefik.world/#website',
+  name: 'Wefik World',
+  url: 'https://wefik.world',
   description:
-    "Single-vendor digital product marketplace offering production-grade WordPress themes, plugins, and web templates.",
-  sameAs: [
-    "https://wefik.in",
-    "https://twitter.com/wefik",
-    "https://github.com/WEFIK-INTERNATIONAL",
-    "https://linkedin.com/company/wefik",
-  ],
-  founder: {
-    "@type": "Organization",
-    name: "Wefik Agency",
-    url: "https://wefik.in",
+    'The official digital marketplace of Wefik. Production-ready WordPress themes, plugins, and web templates built and supported by the Wefik team.',
+  publisher: {
+    '@id': 'https://www.wefik.in/#organization',
+  },
+  potentialAction: {
+    '@type': 'SearchAction',
+    target: 'https://wefik.world/marketplace?q={search_term_string}',
+    'query-input': 'required name=search_term_string',
   },
 };
 
@@ -186,30 +212,38 @@ export default function RootLayout({
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
           <PostHogProvider>
             <CartProvider>
-              <SmoothScrollProvider>
-                <TransitionProvider>
-                  <UnboxingPreloader />
-                  <CommandPalette />
-                  <Header />
-                  <CartDrawer />
-                  <main className="flex-1">{children}</main>
-                  <Footer />
-                  <BackToTop />
-                  <Toaster
-                    position="top-right"
-                    toastOptions={{
-                      style: {
-                        background: "var(--surface)",
-                        color: "var(--text)",
-                        border: "1px solid var(--border)",
-                        boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.5)",
-                      },
-                      className: "font-sans",
-                    }}
-                  />
-                  <SpeedInsights />
-                </TransitionProvider>
-              </SmoothScrollProvider>
+              <WishlistProvider>
+                <CompareProvider>
+                  <SmoothScrollProvider>
+                    <TransitionProvider>
+                      <UnboxingPreloader />
+                      <CommandPalette />
+                      <Header />
+                      <CartDrawer />
+                      <main className="flex-1">{children}</main>
+                      <CompareDock />
+                      <CompareModal />
+                      <CookieConsent />
+                      <TawkToChat />
+                      <Footer />
+                      <BackToTop />
+                      <Toaster
+                        position="top-right"
+                        toastOptions={{
+                          style: {
+                            background: "var(--surface)",
+                            color: "var(--text)",
+                            border: "1px solid var(--border)",
+                            boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.5)",
+                          },
+                          className: "font-sans",
+                        }}
+                      />
+                      <SpeedInsights />
+                    </TransitionProvider>
+                  </SmoothScrollProvider>
+                </CompareProvider>
+              </WishlistProvider>
             </CartProvider>
           </PostHogProvider>
         </ThemeProvider>

@@ -33,6 +33,9 @@ jobs:
       - name: Run test suite
         run: npm test
 
+      - name: Lint Theme Tokens
+        run: npm run lint:theme
+
       - name: Bundle & Motion Architecture Audit
         run: npm run bundle-audit
 

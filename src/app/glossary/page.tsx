@@ -41,7 +41,7 @@ export default function GlossaryIndexPage() {
             <Link
               key={t.slug}
               href={`/glossary/${t.slug}`}
-              className="p-6 rounded-2xl bg-white border border-border hover:border-deep-green shadow-2xs hover:shadow-xs transition-all group flex flex-col justify-between"
+              className="p-6 rounded-2xl bg-[var(--surface)] border border-border hover:border-deep-green shadow-2xs hover:shadow-xs transition-all group flex flex-col justify-between"
             >
               <div>
                 <h2 className="text-base font-bold text-ink group-hover:text-deep-green transition-colors mb-2">

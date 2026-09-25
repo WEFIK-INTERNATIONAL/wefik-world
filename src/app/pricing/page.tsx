@@ -101,21 +101,38 @@ export default async function PricingPage() {
       />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-[calc(var(--header-height)+2.5rem)] pb-20 space-y-20">
-        {/* Header */}
+        {/* Header with Substantive Copy */}
         <div className="text-center max-w-3xl mx-auto space-y-4">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-lime/20 text-deep-green text-xs font-bold border border-lime/40">
             <Zap className="w-3.5 h-3.5" />
-            <span>Launch Pricing • Guaranteed Value</span>
+            <span>Single-Vendor All-Access Pass • Zero Renewal Traps</span>
           </div>
 
           <h1 className="text-3xl sm:text-5xl font-black tracking-tight text-ink">
-            Simple, Transparent Membership Plans
+            One Membership. Every Current &amp; Future Asset.
           </h1>
 
-          <p className="text-sm sm:text-base text-slate max-w-2xl mx-auto leading-relaxed">
-            Gain immediate access to our entire catalog of WordPress themes, Gutenberg patterns,
-            performance plugins, and Next.js templates with one license pass.
-          </p>
+          <div className="text-xs sm:text-sm text-slate max-w-2xl mx-auto leading-relaxed space-y-3 text-left sm:text-center">
+            <p>
+              The Wefik World All-Access Membership is built specifically for freelance web developers, creative agencies, and indie founders who need high-performance digital tools without subscription bloat. Instead of paying thousands of dollars across fragmented marketplaces for single themes and plugins that get abandoned after six months, you get an all-inclusive passport to everything our engineering studio builds.
+            </p>
+            <p>
+              Every WordPress block theme, utility plugin, and Next.js starter in our catalog is authored, battle-tested on commercial client installations, and supported directly by the core engineering team at <a href="https://wefik.in" target="_blank" rel="noreferrer" className="text-deep-green font-semibold underline">Wefik Agency</a>. You receive unrestricted commercial usage rights to build and deploy paying client sites, backed by transparent policies: one-click monthly cancellation at the end of your billing period, and perpetual legal rights for every client site launched while your membership was active.
+            </p>
+            <div className="flex flex-wrap items-center justify-center gap-3 pt-2 text-xs font-semibold text-deep-green">
+              <Link href="/membership-terms" className="underline hover:text-ink">
+                Review Membership Terms &rarr;
+              </Link>
+              <span>•</span>
+              <Link href="/license" className="underline hover:text-ink">
+                Commercial License EULA &rarr;
+              </Link>
+              <span>•</span>
+              <Link href="/refunds" className="underline hover:text-ink">
+                7-Day Refund Policy &rarr;
+              </Link>
+            </div>
+          </div>
         </div>
 
         {/* Pricing Cards */}

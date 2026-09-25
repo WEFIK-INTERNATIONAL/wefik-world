@@ -57,7 +57,8 @@ export function Footer() {
               <Logo size="md" showWordmark={true} />
             </Link>
             <p className="body-small text-[var(--muted)] max-w-md">
-              The digital product marketplace engineered by{' '}
+              <strong className="text-[var(--text)]">Wefik.world — the official marketplace of Wefik.</strong>{' '}
+              Built and supported in-house by the engineers at{' '}
               <a
                 href="https://wefik.in"
                 target="_blank"
@@ -68,14 +69,23 @@ export function Footer() {
               </a>
               . Fast, semantic WordPress themes, plugins, and web templates crafted with zero page builder bloat.
             </p>
-            <div className="flex items-center gap-3 pt-1">
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 pt-1 text-xs text-[var(--muted)]">
               <a
                 href="mailto:hello@wefik.world"
-                className="body-small text-[var(--muted)] hover:text-[var(--text)] transition-colors inline-flex items-center gap-1.5"
+                className="hover:text-[var(--text)] transition-colors inline-flex items-center gap-1.5"
               >
                 <Mail className="w-4 h-4 text-lime" />
                 <span>hello@wefik.world</span>
               </a>
+              <span className="text-[var(--border)]">•</span>
+              <a
+                href="tel:+919609653522"
+                className="hover:text-[var(--text)] transition-colors font-mono"
+              >
+                +91 96096 53522
+              </a>
+              <span className="text-[var(--border)]">•</span>
+              <span>Mon–Fri, 09:00–18:00 IST</span>
             </div>
           </div>
 
@@ -167,7 +177,7 @@ export function Footer() {
               </li>
               <li>
                 <Link href="/about" className="hover:text-[var(--text)] transition-colors">
-                  About Us
+                  About Wefik
                 </Link>
               </li>
               <li>
@@ -181,9 +191,15 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <a href="mailto:hello@wefik.world" className="hover:text-[var(--text)] transition-colors">
-                  Contact Support
-                </a>
+                <Link href="/contact" className="hover:text-[var(--text)] transition-colors">
+                  Contact & Support
+                </Link>
+              </li>
+              <li>
+                <Link href="/status" className="hover:text-[var(--text)] transition-colors flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-lime animate-pulse" />
+                  <span>System Status</span>
+                </Link>
               </li>
             </ul>
           </div>
@@ -203,7 +219,7 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/licensing" className="hover:text-[var(--text)] transition-colors">
+                <Link href="/license" className="hover:text-[var(--text)] transition-colors">
                   Commercial Licensing
                 </Link>
               </li>
@@ -220,28 +236,43 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* Col 4: Legal */}
+          {/* Col 4: Legal (All 7 Pages) */}
           <div className="space-y-3">
-            <h4 className="eyebrow text-[var(--text)]">Legal</h4>
+            <h4 className="eyebrow text-[var(--text)]">Legal & Policies</h4>
             <ul className="space-y-2 text-[var(--muted)]">
+              <li>
+                <Link href="/terms" className="hover:text-[var(--text)] transition-colors">
+                  Terms & Conditions
+                </Link>
+              </li>
               <li>
                 <Link href="/privacy" className="hover:text-[var(--text)] transition-colors">
                   Privacy Policy
                 </Link>
               </li>
               <li>
-                <Link href="/terms" className="hover:text-[var(--text)] transition-colors">
-                  Terms of Service
-                </Link>
-              </li>
-              <li>
-                <Link href="/refund" className="hover:text-[var(--text)] transition-colors">
+                <Link href="/refunds" className="hover:text-[var(--text)] transition-colors">
                   Refund Policy
                 </Link>
               </li>
               <li>
-                <Link href="/licensing" className="hover:text-[var(--text)] transition-colors">
-                  License Agreement
+                <Link href="/license" className="hover:text-[var(--text)] transition-colors">
+                  License Agreement (EULA)
+                </Link>
+              </li>
+              <li>
+                <Link href="/cookies" className="hover:text-[var(--text)] transition-colors">
+                  Cookie Policy
+                </Link>
+              </li>
+              <li>
+                <Link href="/membership-terms" className="hover:text-[var(--text)] transition-colors">
+                  Membership Terms
+                </Link>
+              </li>
+              <li>
+                <Link href="/delivery" className="hover:text-[var(--text)] transition-colors">
+                  Digital Delivery Policy
                 </Link>
               </li>
             </ul>

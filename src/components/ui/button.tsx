@@ -17,9 +17,9 @@ const buttonVariants = cva(
         destructive:
           "bg-error text-white shadow-sm hover:bg-red-600",
         outline:
-          "border border-border bg-white text-ink hover:bg-surface hover:text-ink",
+          "border border-border bg-[var(--surface)] text-ink hover:bg-surface-2 hover:text-ink",
         secondary:
-          "bg-surface text-ink hover:bg-[#eaecee]",
+          "bg-surface text-ink hover:bg-surface-2",
         ghost:
           "hover:bg-surface hover:text-ink",
         link:

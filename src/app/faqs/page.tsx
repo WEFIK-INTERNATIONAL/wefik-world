@@ -156,7 +156,7 @@ export default function FAQsPage() {
                   .map((faq, idx) => (
                     <details
                       key={idx}
-                      className="group p-5 rounded-2xl bg-white border border-border shadow-2xs transition-all"
+                      className="group p-5 rounded-2xl bg-[var(--surface)] border border-border shadow-2xs transition-all"
                     >
                       <summary className="font-bold text-sm text-ink cursor-pointer list-none flex items-center justify-between">
                         <span>{faq.q}</span>
@@ -175,7 +175,7 @@ export default function FAQsPage() {
         </div>
 
         {/* Bottom CTA */}
-        <div className="mt-16 p-8 rounded-3xl bg-white border border-border text-center">
+        <div className="mt-16 p-8 rounded-3xl bg-[var(--surface)] border border-border text-center">
           <h3 className="text-lg font-bold text-ink mb-1">Still have questions?</h3>
           <p className="text-xs text-slate mb-6">
             Our engineering team is ready to answer any custom licensing or technical questions.

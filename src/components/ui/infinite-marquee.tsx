@@ -24,7 +24,7 @@ export function InfiniteMarquee() {
           <TransitionLink
             key={`m1-${idx}`}
             href={item.href}
-            className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-white border border-border/60 hover:border-deep-green/40 hover:shadow-xs transition-all text-xs font-semibold text-ink group"
+            className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-[var(--surface)] border border-border/60 hover:border-deep-green/40 hover:shadow-xs transition-all text-xs font-semibold text-ink group"
           >
             <span className="w-1.5 h-1.5 rounded-full bg-lime" />
             <span className="group-hover:text-deep-green transition-colors">{item.label}</span>
@@ -39,7 +39,7 @@ export function InfiniteMarquee() {
           <TransitionLink
             key={`m2-${idx}`}
             href={item.href}
-            className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-white border border-border/60 hover:border-deep-green/40 hover:shadow-xs transition-all text-xs font-semibold text-ink group"
+            className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-[var(--surface)] border border-border/60 hover:border-deep-green/40 hover:shadow-xs transition-all text-xs font-semibold text-ink group"
           >
             <span className="w-1.5 h-1.5 rounded-full bg-lime" />
             <span className="group-hover:text-deep-green transition-colors">{item.label}</span>

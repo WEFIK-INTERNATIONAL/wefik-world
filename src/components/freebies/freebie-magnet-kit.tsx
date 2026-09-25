@@ -69,7 +69,7 @@ export function FreebieMagnetKit({ productTitle, productSlug }: FreebieMagnetKit
             size="sm"
             variant="outline"
             onClick={shareTwitter}
-            className="h-8 px-3 rounded-xl text-xs gap-1.5 border-border bg-white hover:bg-soft"
+            className="h-8 px-3 rounded-xl text-xs gap-1.5 border-border bg-[var(--surface)] hover:bg-soft"
           >
             <svg className="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24">
               <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
@@ -81,7 +81,7 @@ export function FreebieMagnetKit({ productTitle, productSlug }: FreebieMagnetKit
             size="sm"
             variant="outline"
             onClick={shareLinkedIn}
-            className="h-8 px-3 rounded-xl text-xs gap-1.5 border-border bg-white hover:bg-soft"
+            className="h-8 px-3 rounded-xl text-xs gap-1.5 border-border bg-[var(--surface)] hover:bg-soft"
           >
             <svg className="w-3.5 h-3.5 fill-[#0A66C2]" viewBox="0 0 24 24">
               <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 8.76a1.68 1.68 0 1 0-.02-3.36 1.68 1.68 0 0 0 .02 3.36M5.07 18.5h2.78v-8.37H5.07v8.37Z" />
@@ -93,7 +93,7 @@ export function FreebieMagnetKit({ productTitle, productSlug }: FreebieMagnetKit
             size="sm"
             variant="outline"
             onClick={shareWhatsApp}
-            className="h-8 px-3 rounded-xl text-xs gap-1.5 border-border bg-white hover:bg-soft"
+            className="h-8 px-3 rounded-xl text-xs gap-1.5 border-border bg-[var(--surface)] hover:bg-soft"
           >
             <MessageCircle className="w-3.5 h-3.5 text-emerald-600" />
             <span>WhatsApp</span>
@@ -103,7 +103,7 @@ export function FreebieMagnetKit({ productTitle, productSlug }: FreebieMagnetKit
             size="sm"
             variant="outline"
             onClick={copyUrl}
-            className="h-8 px-3 rounded-xl text-xs gap-1.5 border-border bg-white hover:bg-soft font-semibold text-ink"
+            className="h-8 px-3 rounded-xl text-xs gap-1.5 border-border bg-[var(--surface)] hover:bg-soft font-semibold text-ink"
           >
             {copiedLink ? <Check className="w-3.5 h-3.5 text-deep-green" /> : <Copy className="w-3.5 h-3.5" />}
             <span>{copiedLink ? 'Copied' : 'Copy Link'}</span>
@@ -128,7 +128,7 @@ export function FreebieMagnetKit({ productTitle, productSlug }: FreebieMagnetKit
           </Button>
         </div>
 
-        <div className="flex flex-col sm:flex-row items-center gap-4 bg-white p-3.5 rounded-2xl border border-border">
+        <div className="flex flex-col sm:flex-row items-center gap-4 bg-[var(--surface)] p-3.5 rounded-2xl border border-[var(--border)]">
           {/* Badge Preview */}
           <div className="flex-shrink-0">
             <Image

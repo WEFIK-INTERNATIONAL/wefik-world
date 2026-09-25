@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useCallback, useMemo } from 'react';
 import { Command } from 'cmdk';
 import { useRouter } from 'next/navigation';
 import {
@@ -23,23 +23,56 @@ import { useCart } from '@/lib/cart-context';
 import { usePageTransition } from '@/components/transitions/transition-provider';
 import { useLenis } from '@/components/providers/smooth-scroll-provider';
 
+/**
+ * P0-3 FIX — Root cause: cmdk v1's Command root `value` prop controls the
+ * *selected item*, not search text. Passing `search` as the root `value`
+ * caused a render cascade: every keystroke set a new "selected" value →
+ * cmdk fired onValueChange → state update → re-render → loop.
+ *
+ * Fix: removed value/onValueChange from Command root entirely.
+ * cmdk manages its own selection state internally.
+ * Search text is controlled only via Command.Input value/onValueChange.
+ *
+ * Secondary fixes:
+ * - 200ms debounce on product filtering to reduce churn
+ * - Scroll-lock effect guarded to only fire on open→closed transitions
+ * - Lazy-mount: the heavy list is only rendered when `open` is true (already
+ *   handled by early-return on `!open`, but we now also reset search on close)
+ */
+
 export function CommandPalette() {
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState('');
+  const [debouncedSearch, setDebouncedSearch] = useState('');
   const router = useRouter();
   const { setIsOpen: setCartOpen } = useCart();
   const { navigate } = usePageTransition();
   const { stopScroll, startScroll } = useLenis();
+  const wasOpenRef = useRef(false);
 
-  // Scroll lock when palette is open
+  // 200ms debounce on search text for product filtering
   useEffect(() => {
-    if (open) {
+    const timer = setTimeout(() => setDebouncedSearch(search), 200);
+    return () => clearTimeout(timer);
+  }, [search]);
+
+  // Scroll lock: only call stop/start on actual open-state transitions
+  useEffect(() => {
+    if (open && !wasOpenRef.current) {
       stopScroll('command-palette');
-    }
-    return () => {
+    } else if (!open && wasOpenRef.current) {
       startScroll('command-palette');
-    };
+    }
+    wasOpenRef.current = open;
   }, [open, stopScroll, startScroll]);
+
+  // Reset search when closing
+  useEffect(() => {
+    if (!open) {
+      setSearch('');
+      setDebouncedSearch('');
+    }
+  }, [open]);
 
   // Toggle on Cmd+K or Ctrl+K
   useEffect(() => {
@@ -61,11 +94,22 @@ export function CommandPalette() {
     };
   }, []);
 
-  const handleSelect = (callback: () => void) => {
+  const handleSelect = useCallback((callback: () => void) => {
     setOpen(false);
     callback();
-  };
+  }, []);
 
+  // Debounced product filtering
+  const filteredProducts = useMemo(() => {
+    const q = debouncedSearch.toLowerCase();
+    if (!q) return FALLBACK_PRODUCTS.slice(0, 5);
+    return FALLBACK_PRODUCTS.filter((p) =>
+      p.title.toLowerCase().includes(q) ||
+      (p.tagline && p.tagline.toLowerCase().includes(q))
+    ).slice(0, 5);
+  }, [debouncedSearch]);
+
+  // Lazy-mount: don't render the heavy dialog at all when closed
   if (!open) return null;
 
   return (
@@ -80,9 +124,8 @@ export function CommandPalette() {
         className="w-full max-w-xl bg-[var(--surface)] text-[var(--text)] rounded-2xl shadow-2xl border border-[var(--border)] overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
+        {/* P0-3 FIX: No value/onValueChange on Command root — let cmdk manage selection */}
         <Command
-          value={search}
-          onValueChange={setSearch}
           className="w-full font-sans"
         >
           {/* Input Header */}
@@ -106,12 +149,9 @@ export function CommandPalette() {
               No results found for &ldquo;{search}&rdquo;.
             </Command.Empty>
 
-            {/* Group 1: Products */}
+            {/* Group 1: Products (uses debounced filter) */}
             <Command.Group heading="Digital Products" className="py-2 text-[10px] font-mono font-bold uppercase tracking-wider text-[var(--muted)] px-2">
-              {FALLBACK_PRODUCTS.filter((p) =>
-                p.title.toLowerCase().includes(search.toLowerCase()) ||
-                p.tagline.toLowerCase().includes(search.toLowerCase())
-              ).slice(0, 5).map((p) => (
+              {filteredProducts.map((p) => (
                 <Command.Item
                   key={p.id}
                   onSelect={() => handleSelect(() => navigate(`/products/${p.slug}`))}
@@ -121,7 +161,7 @@ export function CommandPalette() {
                     <Package className="w-4 h-4 text-deep-green" />
                     <div>
                       <span className="block font-bold">{p.title}</span>
-                      <span className="text-[10px] text-slate font-normal line-clamp-1">{p.tagline}</span>
+                      <span className="text-[10px] text-[var(--muted)] font-normal line-clamp-1">{p.tagline}</span>
                     </div>
                   </div>
                   <span className="text-[11px] font-mono font-bold text-deep-green">

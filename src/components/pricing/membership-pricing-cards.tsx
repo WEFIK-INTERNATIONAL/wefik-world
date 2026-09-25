@@ -117,7 +117,7 @@ export function MembershipPricingCards({ plans }: MembershipPricingCardsProps) {
           description: 'Lifetime Deal All-Access Membership',
           order_id: data.razorpay_order_id,
           handler: function (response: any) {
-            toast.success('Welcome to Wefik World Lifetime!');
+            toast.success('Lifetime membership payment successful!');
             router.push(`/order-success?order_id=${data.order_id}`);
           },
           prefill: {
@@ -176,7 +176,7 @@ export function MembershipPricingCards({ plans }: MembershipPricingCardsProps) {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto items-stretch">
         {/* Monthly Plan Card */}
-        <div className="bg-white p-8 sm:p-10 rounded-3xl border border-border hover:border-slate-300 shadow-sm transition-all flex flex-col justify-between">
+        <div className="bg-[var(--surface)] p-8 sm:p-10 rounded-3xl border border-border hover:border-slate-300 shadow-sm transition-all flex flex-col justify-between">
           <div>
             <div className="flex items-center justify-between mb-2">
               <span className="text-xs font-bold uppercase text-slate tracking-wider">

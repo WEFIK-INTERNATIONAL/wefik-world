@@ -37,12 +37,29 @@ export async function updateSession(request: NextRequest) {
     }
   );
 
-  // Refresh session if expired — required for Server Components
+  const { pathname } = request.nextUrl;
+  const isProtected =
+    pathname.startsWith("/account") ||
+    pathname.startsWith("/dashboard") ||
+    pathname.startsWith("/admin");
+
+  // P0-4: Do not make network calls to Supabase auth for public routes
+  if (!isProtected) {
+    return supabaseResponse;
+  }
+
+  // Refresh session if expired — only for protected routes
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
-  const { pathname } = request.nextUrl;
+  // Protect /account/* — redirect to login if not authenticated
+  if (pathname.startsWith("/account") && !user) {
+    const url = request.nextUrl.clone();
+    url.pathname = "/login";
+    url.searchParams.set("next", pathname);
+    return NextResponse.redirect(url);
+  }
 
   // Protect /dashboard/* — redirect to login if not authenticated
   if (pathname.startsWith("/dashboard") && !user) {

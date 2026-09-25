@@ -9,6 +9,9 @@ export const metadata = {
   title: 'Freebies & Lead Magnets — 100% Free Templates',
   description:
     'Claim high-quality free WordPress themes, HTML templates, and code starters by Wefik. Zero payment, instant license keys, full commercial rights.',
+  alternates: {
+    canonical: 'https://wefik.world/freebies',
+  },
 };
 
 export default async function FreebiesPage() {
@@ -25,13 +28,17 @@ export default async function FreebiesPage() {
         </div>
 
         <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-ink">
-          100% Free Developer Starters & Templates
+          100% Free Developer Starters &amp; Templates
         </h1>
 
-        <p className="text-sm sm:text-base text-slate max-w-2xl mx-auto leading-relaxed">
-          Experience Wefik quality without spending a rupee. Claim verified open-source and
-          commercial-ready templates with instant automated license key generation.
-        </p>
+        <div className="text-xs sm:text-sm text-slate max-w-2xl mx-auto leading-relaxed space-y-3 text-left sm:text-center">
+          <p>
+            Experience the engineering quality and speed of Wefik digital assets without spending a single rupee. Our Freebies catalog offers curated WordPress block patterns, semantic HTML5 boilerplates, and developer utilities that you can claim instantly without submitting credit card details or payment information.
+          </p>
+          <p>
+            Unlike typical freemium bait products filled with nagging upsells or disabled core features, our free tools are built to the exact same rigorous coding standards as our premium items. Authored and supported in-house by the team at <a href="https://wefik.in" target="_blank" rel="noreferrer" className="text-deep-green font-semibold underline">Wefik Agency</a>, each freebie generates an authentic cryptographic license key (`WFK-XXXX`) upon claim and includes commercial usage rights under our <Link href="/license" className="underline font-semibold text-deep-green">Commercial License Agreement</Link>. Use them on client projects, learn from the clean architecture, and deploy with confidence.
+          </p>
+        </div>
       </div>
 
       {/* Freebies Grid */}
@@ -64,7 +71,7 @@ export default async function FreebiesPage() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="bg-white p-6 rounded-2xl border border-border space-y-2">
+          <div className="bg-[var(--surface)] p-6 rounded-2xl border border-border space-y-2">
             <div className="w-8 h-8 rounded-full bg-lime/20 text-deep-green flex items-center justify-center font-bold text-xs">
               1
             </div>
@@ -74,7 +81,7 @@ export default async function FreebiesPage() {
             </p>
           </div>
 
-          <div className="bg-white p-6 rounded-2xl border border-border space-y-2">
+          <div className="bg-[var(--surface)] p-6 rounded-2xl border border-border space-y-2">
             <div className="w-8 h-8 rounded-full bg-lime/20 text-deep-green flex items-center justify-center font-bold text-xs">
               2
             </div>
@@ -84,7 +91,7 @@ export default async function FreebiesPage() {
             </p>
           </div>
 
-          <div className="bg-white p-6 rounded-2xl border border-border space-y-2">
+          <div className="bg-[var(--surface)] p-6 rounded-2xl border border-border space-y-2">
             <div className="w-8 h-8 rounded-full bg-lime/20 text-deep-green flex items-center justify-center font-bold text-xs">
               3
             </div>

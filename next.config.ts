@@ -26,10 +26,61 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
+        hostname: "plus.unsplash.com",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "unsplash.com",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
         hostname: "cdn.sanity.io",
         pathname: "/**",
       },
     ],
+  },
+
+  // Permanent redirects (P1-9: /faq -> /faqs, Phase 3: /signup -> /login, Legal & Category Aliases)
+  async redirects() {
+    return [
+      {
+        source: "/faq",
+        destination: "/faqs",
+        permanent: true,
+      },
+      {
+        source: "/signup",
+        destination: "/login",
+        permanent: true,
+      },
+      {
+        source: "/refund",
+        destination: "/refunds",
+        permanent: true,
+      },
+      {
+        source: "/licensing",
+        destination: "/license",
+        permanent: true,
+      },
+      {
+        source: "/plugins",
+        destination: "/wordpress-plugins",
+        permanent: true,
+      },
+      {
+        source: "/terms-of-service",
+        destination: "/terms",
+        permanent: true,
+      },
+      {
+        source: "/privacy-policy",
+        destination: "/privacy",
+        permanent: true,
+      },
+    ];
   },
 
   // Security headers

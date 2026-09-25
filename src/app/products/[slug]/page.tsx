@@ -103,11 +103,15 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
       price: (product.price_inr / 100).toFixed(2),
       availability: 'https://schema.org/InStock',
     },
-    aggregateRating: {
-      '@type': 'AggregateRating',
-      ratingValue: product.rating_avg > 0 ? product.rating_avg.toFixed(1) : '5.0',
-      reviewCount: product.rating_count > 0 ? product.rating_count : 1,
-    },
+    ...(product.rating_count > 0
+      ? {
+          aggregateRating: {
+            '@type': 'AggregateRating',
+            ratingValue: product.rating_avg.toFixed(1),
+            reviewCount: product.rating_count,
+          },
+        }
+      : {}),
   };
 
   const breadcrumbJsonLd = {

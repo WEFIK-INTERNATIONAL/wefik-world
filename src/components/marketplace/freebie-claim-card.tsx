@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
+import { SafeImage } from '@/components/ui/safe-image';
 import { useRouter } from 'next/navigation';
 import { Download, Loader2, ArrowUpRight, Star, ShieldCheck } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -60,10 +60,10 @@ export function FreebieClaimCard({ product }: { product: ProductData }) {
   };
 
   return (
-    <div className="flex flex-col bg-white rounded-2xl border border-border overflow-hidden hover:border-slate-300 hover:shadow-xl transition-all duration-300">
-      <div className="relative aspect-[16/10] w-full overflow-hidden bg-surface">
+    <div className="flex flex-col bg-[var(--surface)] rounded-2xl border border-[var(--border)] overflow-hidden hover:border-slate-300 dark:hover:border-slate-600 hover:shadow-xl transition-all duration-300">
+      <div className="relative aspect-[16/10] w-full overflow-hidden bg-[var(--surface-2)]">
         <Link href={`/products/${product.slug}`} className="block w-full h-full">
-          <Image
+          <SafeImage
             src={product.thumbnail_url}
             alt={product.title}
             fill
@@ -78,7 +78,7 @@ export function FreebieClaimCard({ product }: { product: ProductData }) {
             100% FREE
           </Badge>
           {product.category && (
-            <Badge variant="secondary" className="bg-white/90 text-ink text-[10px]">
+            <Badge variant="secondary" className="bg-[var(--surface)]/90 backdrop-blur-sm text-[var(--text)] text-[10px] border border-[var(--border)]">
               {product.category.name}
             </Badge>
           )}
@@ -87,10 +87,18 @@ export function FreebieClaimCard({ product }: { product: ProductData }) {
 
       <div className="p-5 flex-1 flex flex-col justify-between space-y-4">
         <div>
-          <div className="flex items-center gap-1.5 text-xs text-slate mb-1.5">
-            <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
-            <span className="font-bold text-ink">{product.rating_avg.toFixed(1)}</span>
-            <span className="text-slate/60">({product.download_count} claims)</span>
+          <div className="flex items-center gap-1.5 text-xs text-[var(--muted)] mb-1.5">
+            {product.rating_count > 0 ? (
+              <>
+                <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
+                <span className="font-bold text-[var(--text)]">{product.rating_avg.toFixed(1)}</span>
+                <span className="text-[var(--muted)] opacity-60">({product.rating_count} ratings)</span>
+              </>
+            ) : (
+              <span className="text-[11px] italic">No reviews yet</span>
+            )}
+            <span className="text-[var(--muted)] opacity-40">•</span>
+            <span className="text-deep-green font-semibold">{product.download_count} claims</span>
           </div>
 
           <Link href={`/products/${product.slug}`}>

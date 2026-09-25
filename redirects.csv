@@ -9,3 +9,9 @@ from,to,statusCode,reason
 /elementor-alternatives,/alternatives/elementor,301,Programmatic taxonomy alignment
 /astra-alternatives,/alternatives/astra,301,Programmatic taxonomy alignment
 /yoast-alternatives,/alternatives/yoast,301,Programmatic taxonomy alignment
+/faq,/faqs,301,FAQ route canonicalization
+/signup,/login,301,Canonical auth entrypoint
+/refund,/refunds,301,Legal route canonicalization
+/licensing,/license,301,Legal route canonicalization
+/terms-of-service,/terms,301,Legal route canonicalization
+/privacy-policy,/privacy,301,Legal route canonicalization

@@ -24,7 +24,7 @@ export default function ThemeForestAlternativePage() {
         </nav>
 
         {/* Hero */}
-        <div className="bg-white rounded-3xl p-8 sm:p-12 border border-border shadow-xs mb-10">
+        <div className="bg-[var(--surface)] rounded-3xl p-8 sm:p-12 border border-border shadow-xs mb-10">
           <span className="text-xs font-bold uppercase tracking-wider text-deep-green">
             Marketplace Comparison
           </span>
@@ -40,7 +40,7 @@ export default function ThemeForestAlternativePage() {
         </div>
 
         {/* Head-to-Head Comparison Table */}
-        <div className="bg-white rounded-3xl p-6 sm:p-8 border border-border shadow-xs mb-10 overflow-x-auto">
+        <div className="bg-[var(--surface)] rounded-3xl p-6 sm:p-8 border border-border shadow-xs mb-10 overflow-x-auto">
           <h2 className="text-xl font-bold text-ink mb-6">ThemeForest vs. Wefik.world</h2>
 
           <table className="w-full text-left text-xs border-collapse">
@@ -90,21 +90,21 @@ export default function ThemeForestAlternativePage() {
 
         {/* 4 Reasons Why Agencies Switch */}
         <div className="space-y-4 mb-12">
-          <div className="p-6 rounded-2xl bg-white border border-border">
+          <div className="p-6 rounded-2xl bg-[var(--surface)] border border-border">
             <h3 className="text-base font-bold text-ink mb-1">1. Zero Visual Page Builder Lock-In</h3>
             <p className="text-xs text-slate leading-relaxed">
               ThemeForest themes almost universally require Elementor or WPBakery to function, generating thousands of nested `&lt;div&gt;` tags that slow down Google indexing. Wefik themes utilize native WordPress block patterns and clean semantic HTML for lightning-fast mobile rendering.
             </p>
           </div>
 
-          <div className="p-6 rounded-2xl bg-white border border-border">
+          <div className="p-6 rounded-2xl bg-[var(--surface)] border border-border">
             <h3 className="text-base font-bold text-ink mb-1">2. No Foreign Transaction Surcharges for India</h3>
             <p className="text-xs text-slate leading-relaxed">
               Indian freelancers and agencies buying from ThemeForest typically pay in USD and suffer an additional 3.5% foreign transaction bank surcharge plus GST discrepancies. Wefik charges in exact Indian Rupees (INR) with native UPI QR code scan checkout.
             </p>
           </div>
 
-          <div className="p-6 rounded-2xl bg-white border border-border">
+          <div className="p-6 rounded-2xl bg-[var(--surface)] border border-border">
             <h3 className="text-base font-bold text-ink mb-1">3. Guaranteed Single-Vendor Accountability</h3>
             <p className="text-xs text-slate leading-relaxed">
               When a theme author on ThemeForest stops maintaining their product, Envato does not issue refunds after 3 months. At Wefik, our core agency team uses these exact themes on client projects every week, guaranteeing proactive maintenance and immediate updates.

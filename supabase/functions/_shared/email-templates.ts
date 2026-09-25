@@ -214,3 +214,209 @@ export function newVersionNotificationTemplate(params: {
 </html>
   `.trim();
 }
+
+/**
+ * 4. Recovery Email Reset Link Template
+ */
+export function recoveryResetEmailTemplate(params: {
+  accountEmail: string;
+  resetUrl: string;
+}): string {
+  return `
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"><title>Reset password for ${params.accountEmail}</title></head>
+<body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f8f9fa; margin: 0; padding: 40px 20px;">
+  <div style="max-width: 580px; margin: 0 auto; background: #ffffff; border-radius: 14px; border: 1px solid #e8eaed; overflow: hidden; padding: 32px;">
+    <div style="border-bottom: 2px solid #a3e635; padding-bottom: 16px; margin-bottom: 24px;">
+      <h2 style="margin: 0; color: #202124; font-size: 22px; font-weight: 700;">wefik<span style="color: #4f741b;">.world</span></h2>
+    </div>
+    <h1 style="font-size: 20px; font-weight: 700; color: #202124; margin-bottom: 16px;">Password Reset via Recovery Email</h1>
+    <p style="color: #5f6368; line-height: 1.6; font-size: 14px; margin-bottom: 16px;">
+      A password reset request was initiated for your wefik.world account (<strong>${params.accountEmail}</strong>) directed to this verified recovery address.
+    </p>
+    <div style="text-align: center; margin: 28px 0;">
+      <a href="${params.resetUrl}" style="display: inline-block; background: #202124; color: #ffffff; text-decoration: none; padding: 12px 28px; border-radius: 10px; font-weight: 600; font-size: 14px;">
+        Reset Account Password
+      </a>
+    </div>
+    <p style="color: #5f6368; font-size: 13px; line-height: 1.5;">
+      If you did not request this reset, your primary account remains secure and no changes were made.
+    </p>
+    <div style="margin-top: 32px; padding-top: 20px; border-top: 1px solid #e8eaed; color: #9aa0a6; font-size: 12px; text-align: center;">
+      &copy; ${new Date().getFullYear()} wefik.world by Wefik.
+    </div>
+  </div>
+</body>
+</html>
+  `.trim();
+}
+
+/**
+ * 5. MFA / 2FA Reset OTP Template (Sent to Recovery Email)
+ */
+export function mfaResetOtpTemplate(params: {
+  accountEmail: string;
+  code: string;
+}): string {
+  return `
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"><title>Reset Two-Factor Authentication</title></head>
+<body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f8f9fa; margin: 0; padding: 40px 20px;">
+  <div style="max-width: 580px; margin: 0 auto; background: #ffffff; border-radius: 14px; border: 1px solid #e8eaed; overflow: hidden; padding: 32px;">
+    <div style="border-bottom: 2px solid #a3e635; padding-bottom: 16px; margin-bottom: 24px;">
+      <h2 style="margin: 0; color: #202124; font-size: 22px; font-weight: 700;">wefik<span style="color: #4f741b;">.world</span></h2>
+    </div>
+    <h1 style="font-size: 20px; font-weight: 700; color: #202124; margin-bottom: 16px;">Two-Factor Authentication Reset</h1>
+    <p style="color: #5f6368; line-height: 1.6; font-size: 14px; margin-bottom: 16px;">
+      Use the following 6-digit verification code to reset the two-factor authenticator app for your account (<strong>${params.accountEmail}</strong>):
+    </p>
+    <div style="background: #f8f9fa; border: 1px solid #e8eaed; border-radius: 10px; padding: 20px; text-align: center; margin: 24px 0;">
+      <span style="font-family: monospace; font-size: 32px; font-weight: 700; letter-spacing: 8px; color: #202124;">
+        ${params.code}
+      </span>
+      <p style="margin: 8px 0 0 0; color: #5f6368; font-size: 12px;">This code expires in 10 minutes.</p>
+    </div>
+    <p style="color: #d93025; font-size: 13px; line-height: 1.5;">
+      ⚠️ Confirming this code will unenroll all active authenticator apps on your account. You will need to re-enroll your authenticator after logging in.
+    </p>
+    <div style="margin-top: 32px; padding-top: 20px; border-top: 1px solid #e8eaed; color: #9aa0a6; font-size: 12px; text-align: center;">
+      &copy; ${new Date().getFullYear()} wefik.world by Wefik.
+    </div>
+  </div>
+</body>
+</html>
+  `.trim();
+}
+
+/**
+ * 6. Recovery Email Verification OTP Template
+ */
+export function recoveryEmailOtpTemplate(code: string): string {
+  return `
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"><title>Verify your recovery email</title></head>
+<body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f8f9fa; margin: 0; padding: 40px 20px;">
+  <div style="max-width: 580px; margin: 0 auto; background: #ffffff; border-radius: 14px; border: 1px solid #e8eaed; overflow: hidden; padding: 32px;">
+    <div style="border-bottom: 2px solid #a3e635; padding-bottom: 16px; margin-bottom: 24px;">
+      <h2 style="margin: 0; color: #202124; font-size: 22px; font-weight: 700;">wefik<span style="color: #4f741b;">.world</span></h2>
+    </div>
+    <h1 style="font-size: 20px; font-weight: 700; color: #202124; margin-bottom: 16px;">Verify Recovery Email Address</h1>
+    <p style="color: #5f6368; line-height: 1.6; font-size: 14px; margin-bottom: 16px;">
+      Please enter the following 6-digit code to verify this address as the secondary recovery email for your wefik.world account:
+    </p>
+    <div style="background: #f8f9fa; border: 1px solid #e8eaed; border-radius: 10px; padding: 20px; text-align: center; margin: 24px 0;">
+      <span style="font-family: monospace; font-size: 32px; font-weight: 700; letter-spacing: 8px; color: #202124;">
+        ${code}
+      </span>
+      <p style="margin: 8px 0 0 0; color: #5f6368; font-size: 12px;">This code expires in 10 minutes.</p>
+    </div>
+    <div style="margin-top: 32px; padding-top: 20px; border-top: 1px solid #e8eaed; color: #9aa0a6; font-size: 12px; text-align: center;">
+      &copy; ${new Date().getFullYear()} wefik.world by Wefik.
+    </div>
+  </div>
+</body>
+</html>
+  `.trim();
+}
+
+/**
+ * 7. Security Alert Template (Always On)
+ */
+export function securityAlertEmailTemplate(params: {
+  title: string;
+  description: string;
+  details?: Record<string, string>;
+}): string {
+  const detailRows = params.details
+    ? Object.entries(params.details)
+        .map(
+          ([k, v]) => `<tr><td style="padding: 6px 0; color: #5f6368; font-size: 13px;">${k}:</td><td style="padding: 6px 0; color: #202124; font-weight: 600; font-size: 13px;">${v}</td></tr>`
+        )
+        .join("")
+    : "";
+
+  return `
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"><title>Security Alert: ${params.title}</title></head>
+<body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f8f9fa; margin: 0; padding: 40px 20px;">
+  <div style="max-width: 580px; margin: 0 auto; background: #ffffff; border-radius: 14px; border: 1px solid #e8eaed; overflow: hidden; padding: 32px;">
+    <div style="border-bottom: 2px solid #a3e635; padding-bottom: 16px; margin-bottom: 24px;">
+      <h2 style="margin: 0; color: #202124; font-size: 22px; font-weight: 700;">wefik<span style="color: #4f741b;">.world</span></h2>
+    </div>
+    <div style="display: inline-block; background: #fee2e2; color: #b91c1c; border: 1px solid #fecaca; padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 700; margin-bottom: 12px;">
+      Security Notification
+    </div>
+    <h1 style="font-size: 20px; font-weight: 700; color: #202124; margin-bottom: 12px;">${params.title}</h1>
+    <p style="color: #5f6368; line-height: 1.6; font-size: 14px; margin-bottom: 20px;">
+      ${params.description}
+    </p>
+    ${
+      params.details
+        ? `<table style="width: 100%; border-collapse: collapse; margin-bottom: 24px; background: #f8f9fa; border-radius: 8px; padding: 12px;">${detailRows}</table>`
+        : ""
+    }
+    <p style="color: #5f6368; font-size: 13px; line-height: 1.5;">
+      If you performed this action, no further steps are needed. If this wasn't you, please immediately <a href="https://wefik.world/forgot-password" style="color: #4f741b; font-weight: 600;">reset your password</a> and reach out to our team at support@wefik.world.
+    </p>
+    <div style="margin-top: 32px; padding-top: 20px; border-top: 1px solid #e8eaed; color: #9aa0a6; font-size: 12px; text-align: center;">
+      &copy; ${new Date().getFullYear()} wefik.world by Wefik.
+    </div>
+  </div>
+</body>
+</html>
+  `.trim();
+}
+
+/**
+ * 8. 7-Day Verified Purchase Review Request Template
+ */
+export function reviewReminderEmailTemplate(params: {
+  customerName: string;
+  productTitle: string;
+  productSlug: string;
+}): string {
+  const greeting = params.customerName ? `Hi ${params.customerName},` : 'Hi there,';
+  const reviewUrl = `https://wefik.world/products/${params.productSlug}#reviews`;
+
+  return `
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"><title>How is ${params.productTitle} working for you?</title></head>
+<body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f8f9fa; margin: 0; padding: 40px 20px;">
+  <div style="max-width: 580px; margin: 0 auto; background: #ffffff; border-radius: 14px; border: 1px solid #e8eaed; overflow: hidden; padding: 32px;">
+    <div style="border-bottom: 2px solid #a3e635; padding-bottom: 16px; margin-bottom: 24px;">
+      <h2 style="margin: 0; color: #202124; font-size: 22px; font-weight: 700;">wefik<span style="color: #4f741b;">.world</span></h2>
+    </div>
+    <div style="display: inline-block; background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 700; margin-bottom: 12px;">
+      Verified Buyer Follow-up
+    </div>
+    <h1 style="font-size: 20px; font-weight: 700; color: #202124; margin-bottom: 12px;">How is ${params.productTitle} performing?</h1>
+    <p style="color: #5f6368; line-height: 1.6; font-size: 15px;">${greeting}</p>
+    <p style="color: #5f6368; line-height: 1.6; font-size: 14px;">
+      It has been 7 days since you downloaded <strong>${params.productTitle}</strong>. We hope it helped you launch your project or client site faster!
+    </p>
+    <p style="color: #5f6368; line-height: 1.6; font-size: 14px;">
+      As a single-vendor marketplace where every theme and plugin is engineered in-house, your real feedback helps us prioritize new block patterns, performance updates, and bugfixes.
+    </p>
+    <div style="text-align: center; margin: 28px 0;">
+      <a href="${reviewUrl}" style="display: inline-block; background: #202124; color: #ffffff; padding: 12px 28px; border-radius: 10px; font-size: 14px; font-weight: 700; text-decoration: none;">
+        Leave a Verified Review &rarr;
+      </a>
+    </div>
+    <p style="color: #9aa0a6; font-size: 12px; line-height: 1.5; text-align: center;">
+      Need technical support or found a bug? Reply directly to this email or reach us at support@wefik.world.
+    </p>
+    <div style="margin-top: 32px; padding-top: 20px; border-top: 1px solid #e8eaed; color: #9aa0a6; font-size: 12px; text-align: center;">
+      &copy; ${new Date().getFullYear()} wefik.world by Wefik (wefik.in).
+    </div>
+  </div>
+</body>
+</html>
+  `.trim();
+}
+
+

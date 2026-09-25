@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
+import { SafeImage } from '@/components/ui/safe-image';
 import Script from 'next/script';
 import { useRouter } from 'next/navigation';
 import { useCart } from '@/lib/cart-context';
@@ -276,7 +276,7 @@ export default function CheckoutPage() {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
             {/* Left: Order Items (7 cols) */}
             <div className="lg:col-span-7 space-y-4">
-              <div className="bg-white p-6 sm:p-8 rounded-3xl border border-border shadow-xs space-y-4">
+              <div className="bg-[var(--surface)] p-6 sm:p-8 rounded-3xl border border-border shadow-xs space-y-4">
                 <h2 className="text-base font-bold text-ink pb-3 border-b border-border">
                   Order Items ({items.length})
                 </h2>
@@ -287,7 +287,7 @@ export default function CheckoutPage() {
                     return (
                       <div key={item.productId} className="py-4 first:pt-0 flex gap-4 items-center">
                         <div className="relative w-16 h-14 rounded-xl overflow-hidden bg-surface border border-border flex-shrink-0">
-                          <Image
+                          <SafeImage
                             src={item.thumbnailUrl}
                             alt={item.title}
                             fill
@@ -334,7 +334,7 @@ export default function CheckoutPage() {
 
             {/* Right: Payment & Summary (5 cols) */}
             <div className="lg:col-span-5 space-y-6">
-              <div className="bg-white p-6 sm:p-8 rounded-3xl border border-border shadow-lg space-y-6">
+              <div className="bg-[var(--surface)] p-6 sm:p-8 rounded-3xl border border-border shadow-lg space-y-6">
                 <h2 className="text-base font-bold text-ink pb-3 border-b border-border">
                   Order Summary
                 </h2>
@@ -408,6 +408,17 @@ export default function CheckoutPage() {
 
                 {/* Payment Action Button */}
                 <div className="space-y-3 pt-2">
+                  <p className="text-[11px] text-[var(--muted)] text-center leading-normal">
+                    By proceeding to pay, you agree to our{' '}
+                    <Link href="/terms" target="_blank" className="underline text-[var(--text)] hover:text-deep-green">
+                      Terms &amp; Conditions
+                    </Link>{' '}
+                    and acknowledge our{' '}
+                    <Link href="/refunds" target="_blank" className="underline text-[var(--text)] hover:text-deep-green">
+                      Refund Policy
+                    </Link>.
+                  </p>
+
                   <Button
                     onClick={handlePayment}
                     disabled={checkoutLoading}
@@ -423,7 +434,7 @@ export default function CheckoutPage() {
 
                   <div className="flex items-center justify-center gap-1 text-[11px] text-slate">
                     <ShieldCheck className="w-3.5 h-3.5 text-deep-green" />
-                    <span>256-Bit SSL Encryption • Razorpay Secure</span>
+                    <span>256-Bit SSL Encryption • Razorpay Secure • Instant Digital Delivery</span>
                   </div>
                 </div>
               </div>

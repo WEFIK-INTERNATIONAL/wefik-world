@@ -58,7 +58,7 @@ export function ProgrammaticPageView({
         </nav>
 
         {/* 1. Header Section */}
-        <div className="bg-white rounded-3xl p-8 sm:p-12 border border-border shadow-xs mb-10">
+        <div className="bg-[var(--surface)] rounded-3xl p-8 sm:p-12 border border-border shadow-xs mb-10">
           <div className="max-w-4xl">
             <span className="inline-block text-xs font-bold uppercase tracking-wider text-deep-green mb-2 px-3 py-1 rounded-full bg-lime/20">
               Verified Marketplace Catalog
@@ -89,7 +89,7 @@ export function ProgrammaticPageView({
 
         {/* 2. Competitor Comparison Table (if applicable) */}
         {data.competitorComparison && (
-          <div className="bg-white rounded-3xl p-6 sm:p-8 border border-border shadow-xs mb-10 overflow-x-auto">
+          <div className="bg-[var(--surface)] rounded-3xl p-6 sm:p-8 border border-border shadow-xs mb-10 overflow-x-auto">
             <div className="mb-6">
               <span className="text-xs font-bold uppercase tracking-wider text-deep-green">
                 Head-to-Head Analysis
@@ -148,7 +148,7 @@ export function ProgrammaticPageView({
         </div>
 
         {/* 4. Sibling & Internal Linking Module (Quotas: ≥5 Out / ≥3 In) */}
-        <div className="bg-white rounded-3xl p-6 sm:p-8 border border-border shadow-xs mb-10">
+        <div className="bg-[var(--surface)] rounded-3xl p-6 sm:p-8 border border-border shadow-xs mb-10">
           <h3 className="text-sm font-bold uppercase tracking-wider text-ink mb-4">
             Related Collections & Hubs
           </h3>
@@ -203,7 +203,7 @@ export function ProgrammaticPageView({
 
         {/* 5. Frequently Asked Questions Section + FAQPage Schema */}
         {data.faqs && data.faqs.length > 0 && (
-          <div className="bg-white rounded-3xl p-6 sm:p-10 border border-border shadow-xs mb-10">
+          <div className="bg-[var(--surface)] rounded-3xl p-6 sm:p-10 border border-border shadow-xs mb-10">
             <div className="mb-8">
               <span className="text-xs font-bold uppercase tracking-wider text-deep-green">
                 Got Questions?

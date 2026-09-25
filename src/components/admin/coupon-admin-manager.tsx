@@ -92,7 +92,7 @@ export function CouponAdminManager({ initialCoupons }: { initialCoupons: CouponI
               value={code}
               onChange={(e) => setCode(e.target.value)}
               required
-              className="h-10 text-xs uppercase font-mono rounded-xl bg-white"
+              className="h-10 text-xs uppercase font-mono rounded-xl bg-[var(--surface)]"
             />
           </div>
 
@@ -105,7 +105,7 @@ export function CouponAdminManager({ initialCoupons }: { initialCoupons: CouponI
               value={discountPercent}
               onChange={(e) => setDiscountPercent(e.target.value)}
               required
-              className="h-10 text-xs rounded-xl bg-white"
+              className="h-10 text-xs rounded-xl bg-[var(--surface)]"
             />
           </div>
 
@@ -116,7 +116,7 @@ export function CouponAdminManager({ initialCoupons }: { initialCoupons: CouponI
               min="1"
               value={maxUses}
               onChange={(e) => setMaxUses(e.target.value)}
-              className="h-10 text-xs rounded-xl bg-white"
+              className="h-10 text-xs rounded-xl bg-[var(--surface)]"
             />
           </div>
 
