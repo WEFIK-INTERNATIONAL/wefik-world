@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useSyncExternalStore } from 'react';
 import Link from 'next/link';
-import { ShieldCheck, Cookie, Check, SlidersHorizontal, X } from 'lucide-react';
+import { ShieldCheck, Cookie, Check, SlidersHorizontal } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 
@@ -15,46 +15,72 @@ export interface CookiePreferences {
   marketing: boolean;
 }
 
+declare global {
+  interface Window {
+    gtag?: (command: string, action: string, params: Record<string, unknown>) => void;
+  }
+}
+
+function applyConsentMode(prefs: CookiePreferences) {
+  if (typeof window !== 'undefined' && window.gtag) {
+    window.gtag('consent', 'update', {
+      analytics_storage: prefs.analytics ? 'granted' : 'denied',
+      ad_storage: prefs.marketing ? 'granted' : 'denied',
+      personalization_storage: prefs.functional ? 'granted' : 'denied',
+      functionality_storage: prefs.functional ? 'granted' : 'denied',
+    });
+  }
+
+  if (typeof window !== 'undefined') {
+    window.dispatchEvent(
+      new CustomEvent('wefik_cookie_consent_updated', { detail: prefs })
+    );
+  }
+}
+
+const subscribe = () => () => {};
+
 export function CookieConsent() {
-  const [hasConsented, setHasConsented] = useState(true); // default true to avoid SSR flash
+  const isMounted = useSyncExternalStore(
+    subscribe,
+    () => true,
+    () => false
+  );
+
+  const [hasConsented, setHasConsented] = useState<boolean>(() => {
+    if (typeof window === 'undefined') return true;
+    try {
+      return Boolean(localStorage.getItem(CONSENT_STORAGE_KEY));
+    } catch {
+      return false;
+    }
+  });
+
   const [isPreferencesOpen, setIsPreferencesOpen] = useState(false);
-  const [preferences, setPreferences] = useState<CookiePreferences>({
-    necessary: true,
-    analytics: false,
-    functional: false,
-    marketing: false,
+  const [preferences, setPreferences] = useState<CookiePreferences>(() => {
+    if (typeof window === 'undefined') {
+      return { necessary: true, analytics: false, functional: false, marketing: false };
+    }
+    try {
+      const stored = localStorage.getItem(CONSENT_STORAGE_KEY);
+      return stored
+        ? (JSON.parse(stored) as CookiePreferences)
+        : { necessary: true, analytics: false, functional: false, marketing: false };
+    } catch {
+      return { necessary: true, analytics: false, functional: false, marketing: false };
+    }
   });
 
   useEffect(() => {
     try {
       const stored = localStorage.getItem(CONSENT_STORAGE_KEY);
-      if (!stored) {
-        setHasConsented(false);
-      } else {
-        const parsed = JSON.parse(stored);
-        setPreferences(parsed);
-        applyConsentMode(parsed);
+      if (stored) {
+        applyConsentMode(JSON.parse(stored) as CookiePreferences);
       }
     } catch {
-      setHasConsented(false);
+      // ignore
     }
   }, []);
-
-  const applyConsentMode = (prefs: CookiePreferences) => {
-    if (typeof window !== 'undefined' && (window as any).gtag) {
-      (window as any).gtag('consent', 'update', {
-        analytics_storage: prefs.analytics ? 'granted' : 'denied',
-        ad_storage: prefs.marketing ? 'granted' : 'denied',
-        personalization_storage: prefs.functional ? 'granted' : 'denied',
-        functionality_storage: prefs.functional ? 'granted' : 'denied',
-      });
-    }
-
-    // Dispatch event so other components (PostHog, Tawk.to, Clarity) can react
-    window.dispatchEvent(
-      new CustomEvent('wefik_cookie_consent_updated', { detail: prefs })
-    );
-  };
 
   const savePreferences = (prefs: CookiePreferences) => {
     setPreferences(prefs);
@@ -88,7 +114,7 @@ export function CookieConsent() {
     savePreferences(essentialOnly);
   };
 
-  if (hasConsented) return null;
+  if (!isMounted || hasConsented) return null;
 
   return (
     <>

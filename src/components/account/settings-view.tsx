@@ -22,11 +22,8 @@ import {
   Upload,
   Trash2,
   CheckCircle2,
-  AlertCircle,
   KeyRound,
-  QrCode,
   Smartphone,
-  LogOut,
   AlertTriangle,
   Loader2,
   Mail,
@@ -91,7 +88,7 @@ export function SettingsView({ initialProfile }: SettingsViewProps) {
   const [recoveryLoading, setRecoveryLoading] = useState(false);
 
   // Security: Active Sessions
-  const [userAgent, setUserAgent] = useState('');
+  const [userAgent] = useState(() => (typeof window !== 'undefined' ? navigator.userAgent : ''));
   const [sessionLoading, setSessionLoading] = useState(false);
 
   // Security: Delete Account State
@@ -103,10 +100,6 @@ export function SettingsView({ initialProfile }: SettingsViewProps) {
   const [copiedSecret, setCopiedSecret] = useState(false);
 
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      setUserAgent(navigator.userAgent);
-    }
-
     // Check existing MFA factor
     supabase.auth.mfa.listFactors().then(({ data: factors }) => {
       const totp = factors?.totp?.find((f) => f.status === 'verified');
@@ -163,14 +156,14 @@ export function SettingsView({ initialProfile }: SettingsViewProps) {
       setAvatarUrl(newUrl);
 
       // Save directly to profile
-      await (supabase as any)
+      await supabase
         .from('profiles')
         .update({ avatar_url: newUrl, updated_at: new Date().toISOString() })
         .eq('id', userId);
 
       toast.success('Avatar updated successfully!');
-    } catch (err: any) {
-      toast.error(err.message || 'Failed to upload avatar.');
+    } catch (err: unknown) {
+      toast.error(err instanceof Error ? err.message : 'Failed to upload avatar.');
     } finally {
       setAvatarUploading(false);
     }
@@ -185,7 +178,7 @@ export function SettingsView({ initialProfile }: SettingsViewProps) {
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) throw new Error('Not authenticated');
 
-      const { error } = await (supabase as any)
+      const { error } = await supabase
         .from('profiles')
         .update({
           full_name: fullName.trim(),
@@ -196,8 +189,8 @@ export function SettingsView({ initialProfile }: SettingsViewProps) {
 
       if (error) throw error;
       toast.success('Profile details saved.');
-    } catch (err: any) {
-      toast.error(err.message || 'Failed to update profile.');
+    } catch (err: unknown) {
+      toast.error(err instanceof Error ? err.message : 'Failed to update profile.');
     } finally {
       setProfileSaving(false);
     }
@@ -261,8 +254,8 @@ export function SettingsView({ initialProfile }: SettingsViewProps) {
       setCurrentPassword('');
       setNewPassword('');
       setConfirmNewPassword('');
-    } catch (err: any) {
-      toast.error(err.message || 'Failed to update password.');
+    } catch (err: unknown) {
+      toast.error(err instanceof Error ? err.message : 'Failed to update password.');
     } finally {
       setPasswordSaving(false);
     }
@@ -282,8 +275,8 @@ export function SettingsView({ initialProfile }: SettingsViewProps) {
       setMfaFactorId(data.id);
       setQrCodeSvg(data.totp.qr_code);
       setSecretKey(data.totp.secret);
-    } catch (err: any) {
-      toast.error(err.message || 'Could not initiate 2FA enrollment.');
+    } catch (err: unknown) {
+      toast.error(err instanceof Error ? err.message : 'Could not initiate 2FA enrollment.');
       setEnrolling2FA(false);
     }
   }
@@ -299,7 +292,7 @@ export function SettingsView({ initialProfile }: SettingsViewProps) {
 
       if (challengeErr || !challenge) throw challengeErr || new Error('Challenge failed');
 
-      const { data: verifyData, error: verifyErr } = await supabase.auth.mfa.verify({
+      const { error: verifyErr } = await supabase.auth.mfa.verify({
         factorId: mfaFactorId,
         challengeId: challenge.id,
         code: enrollTotpCode.trim(),
@@ -316,8 +309,8 @@ export function SettingsView({ initialProfile }: SettingsViewProps) {
       setSecretKey(null);
       setEnrollTotpCode('');
       toast.success('Two-Factor Authentication is now enabled!');
-    } catch (err: any) {
-      toast.error(err.message || 'Verification failed.');
+    } catch (err: unknown) {
+      toast.error(err instanceof Error ? err.message : 'Verification failed.');
     }
   }
 
@@ -371,8 +364,8 @@ export function SettingsView({ initialProfile }: SettingsViewProps) {
       setDisablePassword('');
       setDisableTotpCode('');
       toast.success('Two-factor authentication has been disabled.');
-    } catch (err: any) {
-      toast.error(err.message || 'Failed to disable 2FA.');
+    } catch (err: unknown) {
+      toast.error(err instanceof Error ? err.message : 'Failed to disable 2FA.');
     }
   }
 
@@ -393,8 +386,8 @@ export function SettingsView({ initialProfile }: SettingsViewProps) {
         toast.info(res.message);
         setRecoveryOtpStep(true);
       }
-    } catch (err: any) {
-      toast.error(err.message);
+    } catch (err: unknown) {
+      toast.error(err instanceof Error ? err.message : 'Failed to request recovery OTP.');
     } finally {
       setRecoveryLoading(false);
     }
@@ -420,8 +413,8 @@ export function SettingsView({ initialProfile }: SettingsViewProps) {
         setNewRecoveryEmail('');
         setRecoveryOtpCode('');
       }
-    } catch (err: any) {
-      toast.error(err.message);
+    } catch (err: unknown) {
+      toast.error(err instanceof Error ? err.message : 'Failed to verify recovery OTP.');
     } finally {
       setRecoveryLoading(false);
     }
@@ -444,8 +437,8 @@ export function SettingsView({ initialProfile }: SettingsViewProps) {
       } else {
         toast.error(res.error || 'Failed to remove recovery email.');
       }
-    } catch (err: any) {
-      toast.error(err.message);
+    } catch (err: unknown) {
+      toast.error(err instanceof Error ? err.message : 'Failed to remove recovery email.');
     }
   }
 
@@ -456,8 +449,8 @@ export function SettingsView({ initialProfile }: SettingsViewProps) {
       const { error } = await supabase.auth.signOut({ scope: 'others' });
       if (error) throw error;
       toast.success('Signed out of all other active sessions.');
-    } catch (err: any) {
-      toast.error(err.message || 'Failed to sign out other sessions.');
+    } catch (err: unknown) {
+      toast.error(err instanceof Error ? err.message : 'Failed to sign out other sessions.');
     } finally {
       setSessionLoading(false);
     }
@@ -482,8 +475,8 @@ export function SettingsView({ initialProfile }: SettingsViewProps) {
         await supabase.auth.signOut();
         router.push('/');
       }
-    } catch (err: any) {
-      toast.error(err.message || 'An error occurred during account deletion.');
+    } catch (err: unknown) {
+      toast.error(err instanceof Error ? err.message : 'An error occurred during account deletion.');
       setDeleteLoading(false);
     }
   }

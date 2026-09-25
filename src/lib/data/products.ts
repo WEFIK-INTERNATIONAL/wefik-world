@@ -65,6 +65,11 @@ function normalizeProduct(raw: Record<string, unknown>): ProductData {
     rating_count: typeof raw.rating_count === 'number' ? raw.rating_count : 0,
     download_count: typeof raw.download_count === 'number' ? raw.download_count : 0,
     category: normalizedCategory,
+    created_at: raw.created_at ? String(raw.created_at) : undefined,
+    updated_at: raw.updated_at ? String(raw.updated_at) : undefined,
+    primary_use_case: raw.primary_use_case ? String(raw.primary_use_case) : undefined,
+    seo_title: raw.seo_title ? String(raw.seo_title) : undefined,
+    seo_description: raw.seo_description ? String(raw.seo_description) : undefined,
   };
 }
 

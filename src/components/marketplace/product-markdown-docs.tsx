@@ -110,7 +110,12 @@ export function ProductMarkdownDocs({ content }: ProductMarkdownDocsProps) {
               {children}
             </blockquote>
           ),
-          code: ({ inline, className, children, ...props }: any) => {
+          code: ({
+            inline,
+            className,
+            children,
+            ...props
+          }: React.ComponentPropsWithoutRef<'code'> & { inline?: boolean }) => {
             if (inline) {
               return (
                 <code

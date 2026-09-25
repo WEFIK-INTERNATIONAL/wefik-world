@@ -41,12 +41,10 @@ export function Header() {
   const { count: wishlistCount } = useWishlist();
   const { lenis } = useLenis();
   const [fullscreenOpen, setFullscreenOpen] = useState(false);
-  const [showHeader, setShowHeader] = useState(true);
   const [scrolled, setScrolled] = useState(false);
   const [user, setUser] = useState<User | null>(null);
   const [isAdmin, setIsAdmin] = useState(false);
   const [loading, setLoading] = useState(true);
-  const lastScrollY = useRef(0);
   const headerRef = useRef<HTMLElement | null>(null);
 
   // Measure real header height into CSS variable --header-height (FIX B)

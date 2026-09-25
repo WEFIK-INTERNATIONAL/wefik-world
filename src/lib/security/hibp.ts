@@ -51,9 +51,10 @@ export async function isPasswordBreached(password: string): Promise<{ breached: 
     }
 
     return { breached: false };
-  } catch (err: any) {
+  } catch (err: unknown) {
     // Fail-open: Never block users on DNS failure or network timeout
-    console.warn('HIBP check error (failing open):', err?.message || err);
+    const message = err instanceof Error ? err.message : String(err);
+    console.warn('HIBP check error (failing open):', message);
     return { breached: false };
   }
 }

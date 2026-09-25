@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import * as Sentry from '@sentry/nextjs';
 import { AlertTriangle, RefreshCw, Mail, Home } from 'lucide-react';
 import Link from 'next/link';
@@ -21,7 +21,9 @@ export default function ErrorBoundary({
     console.error('App runtime error captured by Sentry:', error);
   }, [error]);
 
-  const errorId = error.digest || 'wfk_err_' + Math.random().toString(36).substring(2, 9);
+  const [errorId] = useState(
+    () => error.digest || 'wfk_err_' + Math.random().toString(36).substring(2, 9)
+  );
 
   return (
     <main className="min-h-[75vh] flex items-center justify-center px-4 py-16">

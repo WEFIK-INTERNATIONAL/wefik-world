@@ -30,7 +30,7 @@ export default async function AccountLayout({ children }: AccountLayoutProps) {
     redirect('/login?next=/account');
   }
 
-  const { data: profile } = await (supabase as any)
+  const { data: profile } = await supabase
     .from('profiles')
     .select('full_name, display_name, avatar_url, role')
     .eq('id', user.id)

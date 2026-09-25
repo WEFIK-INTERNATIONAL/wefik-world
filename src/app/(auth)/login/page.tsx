@@ -21,13 +21,10 @@ import { Logo } from '@/components/brand/logo';
 import {
   Loader2,
   Mail,
-  CheckCircle2,
   AlertCircle,
   ArrowRight,
   Shield,
   KeyRound,
-  Lock,
-  ExternalLink,
   RefreshCw,
 } from 'lucide-react';
 import { toast } from 'sonner';
@@ -107,7 +104,7 @@ function LoginFormContent() {
     setLoading(true);
     setErrorMessage(null);
 
-    const { data, error } = await supabase.auth.signInWithPassword({
+    const { error } = await supabase.auth.signInWithPassword({
       email: email.trim().toLowerCase(),
       password,
     });
@@ -163,7 +160,7 @@ function LoginFormContent() {
         return;
       }
 
-      const { data: verifyData, error: verifyErr } = await supabase.auth.mfa.verify({
+      const { error: verifyErr } = await supabase.auth.mfa.verify({
         factorId: mfaFactorId,
         challengeId: challenge.id,
         code: totpCode.trim(),
@@ -178,9 +175,9 @@ function LoginFormContent() {
 
       toast.success('Authenticated successfully');
       router.replace(redirectUrl);
-    } catch (err: any) {
+    } catch (err: unknown) {
       setLoading(false);
-      setErrorMessage(err.message || 'MFA verification failed.');
+      setErrorMessage(err instanceof Error ? err.message : 'MFA verification failed.');
     }
   }
 

@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Download, Loader2, FileCode, CheckCircle2, ShieldAlert } from 'lucide-react';
+import { Download, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import { createClient } from '@/lib/supabase/client';
@@ -50,7 +50,7 @@ export function DownloadList({ products }: { products: DownloadProduct[] }) {
       }
 
       toast.success(`Download ready for ${product.title}`);
-      window.location.href = data.download_url;
+      window.location.assign(data.download_url);
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : 'Failed to download';
       toast.error(msg);

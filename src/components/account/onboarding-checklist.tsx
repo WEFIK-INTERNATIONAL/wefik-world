@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { CheckCircle2, Circle, ArrowRight, ShieldCheck, UserCheck, Sparkles, ShoppingBag } from 'lucide-react';
+import { CheckCircle2, Circle, ArrowRight, Sparkles } from 'lucide-react';
 
 interface OnboardingChecklistProps {
   emailConfirmed: boolean;

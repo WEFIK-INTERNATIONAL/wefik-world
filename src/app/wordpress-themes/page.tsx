@@ -1,5 +1,4 @@
 import { Metadata } from 'next';
-import { notFound } from 'next/navigation';
 import { getProducts } from '@/lib/data/products';
 import { CATEGORY_HUBS } from '@/lib/seo/programmatic-data';
 import { ProgrammaticPageView } from '@/components/seo/programmatic-page-view';

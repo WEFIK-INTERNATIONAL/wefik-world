@@ -5,8 +5,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
-    "lint": "eslint",
+    "lint": "eslint --max-warnings=0",
+    "typecheck": "tsc --noEmit",
     "test": "node tests/edge-functions.test.mjs && node tests/auth-middleware.test.mjs && node tests/authz-matrix.test.mjs && node tests/checkout-e2e.test.mjs && node tests/auth-rls.test.mjs",
     "bundle-audit": "node scripts/bundle-audit.mjs",
     "devibe-audit": "node scripts/devibe-audit.mjs",

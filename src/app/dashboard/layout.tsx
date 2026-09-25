@@ -1,6 +1,5 @@
 import React from 'react';
 import Link from 'next/link';
-import { redirect } from 'next/navigation';
 import { requireAuth } from '@/lib/auth';
 import {
   LayoutDashboard,
@@ -11,7 +10,6 @@ import {
   Heart,
   Settings,
   Shield,
-  LogOut,
 } from 'lucide-react';
 
 export default async function DashboardLayout({

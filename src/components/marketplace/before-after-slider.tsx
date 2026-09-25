@@ -80,19 +80,17 @@ export function BeforeAfterSlider({
         {/* Before Image (Clipped overlay) */}
         <div
           className="absolute inset-0 overflow-hidden pointer-events-none"
-          style={{ width: `${sliderPosition}%` }}
+          style={{ clipPath: `inset(0 ${100 - sliderPosition}% 0 0)` }}
         >
-          <div className="relative w-full h-full" style={{ width: containerRef.current?.offsetWidth || '100%' }}>
-            <SafeImage
-              src={beforeImage}
-              alt={beforeLabel}
-              fill
-              placeholder="blur"
-              blurDataURL={DEFAULT_BLUR_DATA_URL}
-              sizes="(max-width: 1024px) 100vw, 800px"
-              className="object-cover"
-            />
-          </div>
+          <SafeImage
+            src={beforeImage}
+            alt={beforeLabel}
+            fill
+            placeholder="blur"
+            blurDataURL={DEFAULT_BLUR_DATA_URL}
+            sizes="(max-width: 1024px) 100vw, 800px"
+            className="object-cover"
+          />
         </div>
 
         {/* Before Label Badge */}

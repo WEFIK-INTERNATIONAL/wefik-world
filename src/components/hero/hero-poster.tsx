@@ -1,6 +1,5 @@
 import React from 'react';
-import Image from 'next/image';
-import { Sparkles, ArrowUpRight, Zap, ShieldCheck } from 'lucide-react';
+import { Sparkles, ArrowUpRight, Zap } from 'lucide-react';
 
 export function HeroPoster() {
   return (

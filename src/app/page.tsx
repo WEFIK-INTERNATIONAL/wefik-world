@@ -1,13 +1,11 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import { ArrowRight, CheckCircle, Sparkles, Shield, Zap, Code2, Download, Layers } from 'lucide-react';
+import { ArrowRight, CheckCircle, Sparkles, Shield, Zap, Code2, Download } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ProductCard } from '@/components/marketplace/product-card';
 import { HeroLightweight } from '@/components/hero/hero-lightweight';
-import { MagneticButton } from '@/components/ui/magnetic-button';
 import { StatCounter } from '@/components/ui/stat-counter';
 import { InfiniteMarquee } from '@/components/ui/infinite-marquee';
-import { TransitionLink } from '@/components/transitions/transition-link';
 import { Icon3DWordPress, Icon3DPlugin, Icon3DTemplate, Icon3DBundle } from '@/components/ui/three-d-icons';
 import { getProducts } from '@/lib/data/products';
 import { DEFAULT_BLUR_DATA_URL } from '@/lib/image-placeholder';

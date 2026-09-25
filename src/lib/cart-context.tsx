@@ -33,34 +33,27 @@ const CartContext = createContext<CartContextType | undefined>(undefined);
 const CART_STORAGE_KEY = 'wefik_cart_v1';
 
 export function CartProvider({ children }: { children: React.ReactNode }) {
-  const [items, setItems] = useState<CartItem[]>([]);
-  const [isOpen, setIsOpen] = useState(false);
-  const [isLoaded, setIsLoaded] = useState(false);
-
-  // Load from local storage
-  useEffect(() => {
+  const [items, setItems] = useState<CartItem[]>(() => {
+    if (typeof window === 'undefined') return [];
     try {
-      const stored = localStorage.getItem(CART_STORAGE_KEY);
-      if (stored) {
-        setItems(JSON.parse(stored));
-      }
-    } catch (e) {
-      console.error('Failed to load cart from storage', e);
-    } finally {
-      setIsLoaded(true);
+      const stored = window.localStorage.getItem(CART_STORAGE_KEY);
+      return stored ? (JSON.parse(stored) as CartItem[]) : [];
+    } catch {
+      return [];
     }
-  }, []);
+  });
+  const [isOpen, setIsOpen] = useState(false);
 
   // Save to local storage
   useEffect(() => {
-    if (isLoaded) {
+    if (typeof window !== 'undefined') {
       try {
-        localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(items));
+        window.localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(items));
       } catch (e) {
         console.error('Failed to save cart to storage', e);
       }
     }
-  }, [items, isLoaded]);
+  }, [items]);
 
   const addItem = (item: Omit<CartItem, 'pricePaise'> & { pricePaise?: number }) => {
     setItems((prev) => {

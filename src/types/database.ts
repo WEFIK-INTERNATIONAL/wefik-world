@@ -9,6 +9,72 @@ export type Json =
 export interface Database {
   public: {
     Tables: {
+      membership_plans: {
+        Row: {
+          id: string;
+          plan: "monthly" | "lifetime";
+          name: string;
+          price_inr: number;
+          interval: string;
+          description: string | null;
+          features: string[];
+          is_active: boolean;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          plan: "monthly" | "lifetime";
+          name: string;
+          price_inr: number;
+          interval: string;
+          description?: string | null;
+          features?: string[];
+          is_active?: boolean;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          plan?: "monthly" | "lifetime";
+          name?: string;
+          price_inr?: number;
+          interval?: string;
+          description?: string | null;
+          features?: string[];
+          is_active?: boolean;
+          created_at?: string;
+        };
+        Relationships: [];
+      };
+      downloads: {
+        Row: {
+          id: string;
+          user_id: string;
+          product_id: string;
+          version_id: string | null;
+          ip_address: string | null;
+          user_agent: string | null;
+          downloaded_at: string;
+        };
+        Insert: {
+          id?: string;
+          user_id: string;
+          product_id: string;
+          version_id?: string | null;
+          ip_address?: string | null;
+          user_agent?: string | null;
+          downloaded_at?: string;
+        };
+        Update: {
+          id?: string;
+          user_id?: string;
+          product_id?: string;
+          version_id?: string | null;
+          ip_address?: string | null;
+          user_agent?: string | null;
+          downloaded_at?: string;
+        };
+        Relationships: [];
+      };
       profiles: {
         Row: {
           id: string;
@@ -46,6 +112,7 @@ export interface Database {
           created_at?: string;
           updated_at?: string;
         };
+        Relationships: [];
       };
       categories: {
         Row: {
@@ -69,6 +136,7 @@ export interface Database {
           description?: string | null;
           created_at?: string;
         };
+        Relationships: [];
       };
       products: {
         Row: {
@@ -97,6 +165,10 @@ export interface Database {
           rating_count: number;
           download_count: number;
           status: 'draft' | 'published' | 'archived';
+          seo_title?: string | null;
+          seo_description?: string | null;
+          primary_use_case?: string | null;
+          image_alt?: string | null;
           created_at: string;
           updated_at: string;
         };
@@ -126,6 +198,10 @@ export interface Database {
           rating_count?: number;
           download_count?: number;
           status?: 'draft' | 'published' | 'archived';
+          seo_title?: string | null;
+          seo_description?: string | null;
+          primary_use_case?: string | null;
+          image_alt?: string | null;
           created_at?: string;
           updated_at?: string;
         };
@@ -155,9 +231,14 @@ export interface Database {
           rating_count?: number;
           download_count?: number;
           status?: 'draft' | 'published' | 'archived';
+          seo_title?: string | null;
+          seo_description?: string | null;
+          primary_use_case?: string | null;
+          image_alt?: string | null;
           created_at?: string;
           updated_at?: string;
         };
+        Relationships: [];
       };
       orders: {
         Row: {
@@ -214,6 +295,7 @@ export interface Database {
           coupon_code?: string | null;
           created_at?: string;
         };
+        Relationships: [];
       };
       order_items: {
         Row: {
@@ -246,6 +328,7 @@ export interface Database {
           license_type?: 'single' | 'unlimited';
           created_at?: string;
         };
+        Relationships: [];
       };
       licenses: {
         Row: {
@@ -293,6 +376,7 @@ export interface Database {
           max_activations?: number;
           created_at?: string;
         };
+        Relationships: [];
       };
       product_versions: {
         Row: {
@@ -322,6 +406,7 @@ export interface Database {
           is_latest?: boolean;
           created_at?: string;
         };
+        Relationships: [];
       };
       blocked_email_domains: {
         Row: {
@@ -339,6 +424,7 @@ export interface Database {
           source?: string;
           added_at?: string;
         };
+        Relationships: [];
       };
       memberships: {
         Row: {
@@ -374,6 +460,7 @@ export interface Database {
           created_at?: string;
           updated_at?: string;
         };
+        Relationships: [];
       };
       reviews: {
         Row: {
@@ -382,6 +469,8 @@ export interface Database {
           product_id: string;
           rating: number;
           review_text: string | null;
+          title?: string | null;
+          comment?: string | null;
           is_approved: boolean;
           created_at: string;
         };
@@ -391,6 +480,8 @@ export interface Database {
           product_id: string;
           rating: number;
           review_text?: string | null;
+          title?: string | null;
+          comment?: string | null;
           is_approved?: boolean;
           created_at?: string;
         };
@@ -400,9 +491,12 @@ export interface Database {
           product_id?: string;
           rating?: number;
           review_text?: string | null;
+          title?: string | null;
+          comment?: string | null;
           is_approved?: boolean;
           created_at?: string;
         };
+        Relationships: [];
       };
       coupons: {
         Row: {
@@ -414,6 +508,8 @@ export interface Database {
           valid_until: string;
           max_uses: number | null;
           uses_count: number;
+          used_count: number;
+          is_active: boolean;
           created_at: string;
         };
         Insert: {
@@ -425,6 +521,8 @@ export interface Database {
           valid_until: string;
           max_uses?: number | null;
           uses_count?: number;
+          used_count?: number;
+          is_active?: boolean;
           created_at?: string;
         };
         Update: {
@@ -436,8 +534,11 @@ export interface Database {
           valid_until?: string;
           max_uses?: number | null;
           uses_count?: number;
+          used_count?: number;
+          is_active?: boolean;
           created_at?: string;
         };
+        Relationships: [];
       };
       newsletter_subscribers: {
         Row: {
@@ -455,6 +556,7 @@ export interface Database {
           email?: string;
           subscribed_at?: string;
         };
+        Relationships: [];
       };
       wishlists: {
         Row: {
@@ -475,6 +577,7 @@ export interface Database {
           product_id?: string;
           created_at?: string;
         };
+        Relationships: [];
       };
     };
     Views: {
@@ -504,6 +607,7 @@ export interface Database {
           created_at: string;
           updated_at: string;
         };
+        Relationships: [];
       };
     };
     Functions: {

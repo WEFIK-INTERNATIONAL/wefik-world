@@ -12,6 +12,17 @@ export default async function LicensesPage() {
   const user = await requireAuth('/dashboard/licenses');
   const supabase = await createClient();
 
+  interface LicenseQueryResult {
+    id: string;
+    license_key: string;
+    license_type: string;
+    status: string;
+    activations_count: number;
+    allowed_domains: string[] | null;
+    created_at: string;
+    product: { title: string; slug: string } | null;
+  }
+
   const { data: licenses } = await supabase
     .from('licenses')
     .select(`
@@ -25,9 +36,10 @@ export default async function LicensesPage() {
       product:products(title, slug)
     `)
     .eq('user_id', user.id)
-    .order('created_at', { ascending: false });
+    .order('created_at', { ascending: false })
+    .returns<LicenseQueryResult[]>();
 
-  const formattedLicenses = (licenses || []).map((l: any) => ({
+  const formattedLicenses = (licenses || []).map((l) => ({
     id: l.id,
     license_key: l.license_key,
     license_type: l.license_type,

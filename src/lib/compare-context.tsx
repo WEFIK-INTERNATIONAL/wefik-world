@@ -1,6 +1,6 @@
 'use client';
 
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState } from 'react';
 import { ProductData } from '@/lib/data/products';
 import { toast } from 'sonner';
 
@@ -21,19 +21,16 @@ const COMPARE_STORAGE_KEY = 'wefik_compare_items_v1';
 const MAX_COMPARE_ITEMS = 3;
 
 export function CompareProvider({ children }: { children: React.ReactNode }) {
-  const [compareItems, setCompareItems] = useState<ProductData[]>([]);
-  const [isCompareModalOpen, setIsCompareModalOpen] = useState(false);
-
-  useEffect(() => {
+  const [compareItems, setCompareItems] = useState<ProductData[]>(() => {
+    if (typeof window === 'undefined') return [];
     try {
-      const stored = localStorage.getItem(COMPARE_STORAGE_KEY);
-      if (stored) {
-        setCompareItems(JSON.parse(stored));
-      }
+      const stored = window.localStorage.getItem(COMPARE_STORAGE_KEY);
+      return stored ? (JSON.parse(stored) as ProductData[]) : [];
     } catch {
-      // ignore
+      return [];
     }
-  }, []);
+  });
+  const [isCompareModalOpen, setIsCompareModalOpen] = useState(false);
 
   const saveItems = (items: ProductData[]) => {
     setCompareItems(items);

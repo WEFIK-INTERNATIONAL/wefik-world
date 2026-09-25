@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { SafeImage } from '@/components/ui/safe-image';
 import { getProducts } from '@/lib/data/products';
 import { ProductCard } from '@/components/marketplace/product-card';
-import { Sparkles, CheckCircle2, ShieldCheck, ArrowRight } from 'lucide-react';
+import { Sparkles, CheckCircle2, ShieldCheck } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { DEFAULT_BLUR_DATA_URL } from '@/lib/image-placeholder';
 

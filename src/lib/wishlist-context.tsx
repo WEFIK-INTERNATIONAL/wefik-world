@@ -16,21 +16,19 @@ const WishlistContext = createContext<WishlistContextType | undefined>(undefined
 const WISHLIST_STORAGE_KEY = 'wefik_wishlist_ids_v1';
 
 export function WishlistProvider({ children }: { children: React.ReactNode }) {
-  const [wishlistIds, setWishlistIds] = useState<string[]>([]);
+  const [wishlistIds, setWishlistIds] = useState<string[]>(() => {
+    if (typeof window === "undefined") return [];
+    try {
+      const stored = window.localStorage.getItem(WISHLIST_STORAGE_KEY);
+      return stored ? (JSON.parse(stored) as string[]) : [];
+    } catch {
+      return [];
+    }
+  });
   const supabase = createClient();
 
   useEffect(() => {
-    // 1. Load local cache
-    try {
-      const stored = localStorage.getItem(WISHLIST_STORAGE_KEY);
-      if (stored) {
-        setWishlistIds(JSON.parse(stored));
-      }
-    } catch {
-      // ignore
-    }
-
-    // 2. If authenticated, fetch DB wishlist and merge
+    // If authenticated, fetch DB wishlist and merge
     const syncWithDb = async () => {
       const {
         data: { session },
@@ -100,7 +98,7 @@ export function WishlistProvider({ children }: { children: React.ReactNode }) {
           await supabase
             .from('wishlists')
             .upsert(
-              [{ user_id: session.user.id, product_id: product.id }] as any,
+              [{ user_id: session.user.id, product_id: product.id }],
               { onConflict: 'user_id,product_id' }
             );
         }

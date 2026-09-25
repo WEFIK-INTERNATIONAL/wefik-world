@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import { BookOpen, Code2, ArrowRight, CheckCircle, HelpCircle } from 'lucide-react';
+import { BookOpen, Code2, HelpCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ProductCard } from '@/components/marketplace/product-card';
 import { getProducts } from '@/lib/data/products';

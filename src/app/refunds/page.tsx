@@ -1,8 +1,7 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
-import { ShieldAlert, HelpCircle, CheckCircle2, XCircle, Clock, Mail } from 'lucide-react';
+import { ShieldAlert, CheckCircle2 } from 'lucide-react';
 import { PrintButton } from '@/components/account/print-button';
-import { Button } from '@/components/ui/button';
 
 export const metadata: Metadata = {
   title: 'Refund Policy — Wefik.world',

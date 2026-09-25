@@ -14,8 +14,6 @@ import {
   EyeOff,
   HelpCircle,
   FileCode,
-  Sparkles,
-  ExternalLink,
   Search,
   Inbox,
   Loader2,
@@ -87,7 +85,7 @@ export function LibraryView({ items }: { items: LibraryItem[] }) {
       } else {
         toast.error('Download link unavailable.');
       }
-    } catch (err: any) {
+    } catch {
       toast.error('Network error requesting download.');
     } finally {
       setDownloadingId(null);

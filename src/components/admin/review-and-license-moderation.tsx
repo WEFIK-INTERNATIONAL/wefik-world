@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Star, Trash2, ShieldAlert, Check, Loader2, KeyRound } from 'lucide-react';
+import { Star, Trash2, ShieldAlert, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { toast } from 'sonner';
@@ -43,9 +43,9 @@ export function ReviewAndLicenseModeration({ initialReviews }: { initialReviews:
 
     setRevoking(true);
     try {
-      const { data, error } = await (supabase as any)
+      const { data, error } = await supabase
         .from('licenses')
-        .update({ status: 'revoked' })
+        .update({ status: 'revoked', is_active: false })
         .eq('license_key', key)
         .select('*');
 

@@ -90,9 +90,34 @@
 - [x] D4. 3D-style SVG iconography: zero WebGL, static SVG depth [VERIFIED 2026-09-25]
 - [x] D5. Preloader & smooth scroll: Lenis verified on all pages, reduced-motion aware [VERIFIED 2026-09-25]
 
-### Part E: Verification Sweep
-- [x] Automated contrast check passing on key routes in both themes [VERIFIED 2026-09-25]
-- [x] Theme token linting: zero rogue unthemed tokens [VERIFIED 2026-09-25]
-- [x] TypeScript check & unit test suite passing 100% [VERIFIED 2026-09-25]
-- [x] Clean Next.js production build (129+ routes) [VERIFIED 2026-09-25]
+
+## Fix Pack 04 — CI/CD Pipeline & Zero Lint Warnings
+
+### Initial State & Root Cause
+- Failing commit hash on main: `c1d64f9f839b96988fe806a30c574966c24f9f11`
+- Captured lint output: `internal/qa/fix04/lint-before.txt` (299 problems: 4 errors, 295 warnings)
+
+### Verbatim 4 ESLint Errors (Root Cause & Fix)
+1. `/home/dayshift/Pictures/wefik-world/wefik-world/src/components/marketplace/before-after-slider.tsx:85:58` — `error Error: Cannot access refs during render react-hooks/refs`
+2. `/home/dayshift/Pictures/wefik-world/wefik-world/src/components/marketplace/before-after-slider.tsx:85:67` — `error Error: Cannot access refs during render react-hooks/refs`
+3. `/home/dayshift/Pictures/wefik-world/wefik-world/src/components/marketplace/before-after-slider.tsx:85:67` — `error Error: Cannot access refs during render react-hooks/refs`
+4. `/home/dayshift/Pictures/wefik-world/wefik-world/src/components/marketplace/before-after-slider.tsx:85:67` — `error Error: Cannot access refs during render react-hooks/refs`
+- Root cause: `containerRef.current?.offsetWidth` was accessed directly within the JSX inline style during render.
+- Resolution: Converted clipped overlay container to use CSS `clipPath: inset(0 ${100 - sliderPosition}% 0 0)` without referencing `containerRef.current` during render. Fixed at root cause without suppression.
+
+### Part A Checklist: Zero Lint Warnings & Strict Typecheck
+- [x] A0. Reproduce and capture full lint log in `internal/qa/fix04/lint-before.txt`
+- [x] A1. 4 errors listed verbatim in PROGRESS.md and fixed at root cause
+- [ ] A2. Fix 295 warnings mechanically file by file (no-unused-vars, no-explicit-any, prefer-const, react-hooks)
+- [ ] A3. Add typecheck script and update lint script to `--max-warnings=0` in package.json
+- [ ] A4. Verification: npm run lint (0/0), npm run typecheck (clean), npm run build (clean), smoke tests pass
+
+### Part B Checklist: CI/CD Pipeline
+- [ ] B1. Pre-commit guard with husky + lint-staged (verified)
+- [ ] B2. GitHub Actions .github/workflows/ci.yml with Node pinned (.nvmrc) & concurrency
+- [ ] B3. Vercel deployment wiring confirmed
+- [ ] B4. Branch protection instructions documented for founder
+- [ ] B5. Dependabot config .github/dependabot.yml committed
+- [ ] B6. End-to-end verification and negative test documented
+
 

@@ -2,9 +2,8 @@ import React from 'react';
 import Link from 'next/link';
 import { ProductCard } from '@/components/marketplace/product-card';
 import { getProducts } from '@/lib/data/products';
-import { Search, PackageX, Sparkles, Filter, Check } from 'lucide-react';
+import { Search, PackageX } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
 import { RecentlyViewedShelf } from '@/components/marketplace/recently-viewed-shelf';
 
 export const revalidate = 300;

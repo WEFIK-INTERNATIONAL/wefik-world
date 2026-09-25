@@ -1,6 +1,6 @@
 'use client';
 
-import React, { createContext, useContext, useEffect, useRef, useState, useCallback } from 'react';
+import React, { createContext, useContext, useEffect, useRef, useSyncExternalStore, useCallback } from 'react';
 import Lenis from 'lenis';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -31,12 +31,31 @@ export function useLenis() {
   return useContext(LenisContext);
 }
 
+const lenisListeners = new Set<() => void>();
+let globalLenisInstance: Lenis | null = null;
+
+function notifyLenisChange(instance: Lenis | null) {
+  globalLenisInstance = instance;
+  lenisListeners.forEach((listener) => listener());
+}
+
+function subscribeLenis(listener: () => void) {
+  lenisListeners.add(listener);
+  return () => {
+    lenisListeners.delete(listener);
+  };
+}
+
 export function SmoothScrollProvider({ children }: { children: React.ReactNode }) {
   const prefersReducedMotion = useReducedMotion();
   const isLowEnd = useLowEndDevice();
   const shouldDisable = prefersReducedMotion || isLowEnd;
 
-  const [lenisInstance, setLenisInstance] = useState<Lenis | null>(null);
+  const lenisInstance = useSyncExternalStore(
+    subscribeLenis,
+    () => globalLenisInstance,
+    () => null
+  );
   const lenisRef = useRef<Lenis | null>(null);
   const lockCountRef = useRef(0);
 
@@ -63,7 +82,7 @@ export function SmoothScrollProvider({ children }: { children: React.ReactNode }
     });
 
     lenisRef.current = lenis;
-    setLenisInstance(lenis);
+    notifyLenisChange(lenis);
 
     // Wire Lenis scroll events to GSAP ScrollTrigger
     lenis.on('scroll', ScrollTrigger.update);
@@ -87,7 +106,7 @@ export function SmoothScrollProvider({ children }: { children: React.ReactNode }
       gsap.ticker.remove(tickerCallback);
       lenis.destroy();
       lenisRef.current = null;
-      setLenisInstance(null);
+      notifyLenisChange(null);
       ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
     };
   }, [shouldDisable]);

@@ -7,7 +7,6 @@ export function TawkToChat() {
 
   useEffect(() => {
     const propertyId = process.env.NEXT_PUBLIC_TAWKTO_PROPERTY_ID;
-    const widgetId = process.env.NEXT_PUBLIC_TAWKTO_WIDGET_ID || 'default';
 
     if (!propertyId) return;
 

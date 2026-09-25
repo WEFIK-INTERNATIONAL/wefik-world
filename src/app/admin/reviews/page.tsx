@@ -8,6 +8,16 @@ export const metadata = {
   title: 'Review Moderation & License Revocation — Admin',
 };
 
+interface DbReviewItem {
+  id: string;
+  rating: number;
+  title: string | null;
+  comment: string;
+  created_at: string;
+  product: { title: string } | null;
+  user: { email: string } | null;
+}
+
 export default async function AdminReviewsPage() {
   await requireAdmin();
   const supabase = await createClient();
@@ -23,9 +33,10 @@ export default async function AdminReviewsPage() {
       product:products(title),
       user:profiles(email)
     `)
-    .order('created_at', { ascending: false });
+    .order('created_at', { ascending: false })
+    .returns<DbReviewItem[]>();
 
-  const formattedReviews = (reviews || []).map((r: any) => ({
+  const formattedReviews = (reviews || []).map((r) => ({
     id: r.id,
     rating: r.rating,
     title: r.title || 'Review',

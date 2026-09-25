@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { Copy, Check, Globe, KeyRound, ShieldCheck, ShieldAlert, Plus, Trash2 } from 'lucide-react';
+import { Copy, Check, Globe, Plus, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { toast } from 'sonner';
@@ -56,7 +56,7 @@ export function LicenseList({ initialLicenses }: { initialLicenses: LicenseItem[
     const updatedDomains = [...license.allowed_domains, cleanDomain];
 
     try {
-      const { error } = await (supabase as any)
+      const { error } = await supabase
         .from('licenses')
         .update({ allowed_domains: updatedDomains })
         .eq('id', licenseId);
@@ -80,7 +80,7 @@ export function LicenseList({ initialLicenses }: { initialLicenses: LicenseItem[
     const updatedDomains = license.allowed_domains.filter((d) => d !== domainToRemove);
 
     try {
-      const { error } = await (supabase as any)
+      const { error } = await supabase
         .from('licenses')
         .update({ allowed_domains: updatedDomains })
         .eq('id', licenseId);

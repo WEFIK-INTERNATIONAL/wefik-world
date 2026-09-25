@@ -7,15 +7,25 @@ import {
   Download,
   ShoppingBag,
   Sparkles,
-  ArrowRight,
   ShieldCheck,
-  CheckCircle2,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 export const metadata = {
   title: 'Customer Dashboard — wefik.world',
 };
+
+interface DashboardRecentOrder {
+  id: string;
+  amount_inr: number;
+  status: string;
+  created_at: string;
+  order_items: Array<{
+    id: string;
+    license_type: string;
+    product: { title: string } | null;
+  }>;
+}
 
 export default async function DashboardOverviewPage() {
   const user = await requireAuth('/dashboard');
@@ -40,7 +50,7 @@ export default async function DashboardOverviewPage() {
     .select('*')
     .eq('user_id', user.id)
     .eq('status', 'active')
-    .maybeSingle<any>();
+    .maybeSingle();
 
   // Fetch recent orders
   const { data: recentOrders } = await supabase
@@ -54,7 +64,8 @@ export default async function DashboardOverviewPage() {
     `)
     .eq('user_id', user.id)
     .order('created_at', { ascending: false })
-    .limit(3);
+    .limit(3)
+    .returns<DashboardRecentOrder[]>();
 
   const activeLicenses = licenseCount ?? 0;
   const totalDownloads = downloadCount ?? 0;
@@ -152,7 +163,7 @@ export default async function DashboardOverviewPage() {
           </div>
         ) : (
           <div className="space-y-3 divide-y divide-border">
-            {recentOrders.map((order: any) => (
+            {recentOrders.map((order) => (
               <div key={order.id} className="pt-3 first:pt-0 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 text-xs">
                 <div>
                   <span className="font-mono text-ink font-bold block">

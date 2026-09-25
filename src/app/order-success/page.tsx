@@ -29,6 +29,28 @@ export default async function OrderSuccessPage({ searchParams }: OrderSuccessPag
     redirect(`/login?redirect=/order-success?order_id=${encodeURIComponent(order_id)}`);
   }
 
+  interface OrderItemWithProductTitle {
+    id: string;
+    product_id: string;
+    license_type: string;
+    price_inr: number;
+    product: { title: string } | null;
+  }
+
+  interface OrderRecord {
+    id: string;
+    user_id: string;
+    amount_inr: number;
+    status: string;
+    created_at: string;
+    order_items: OrderItemWithProductTitle[] | null;
+  }
+
+  interface LicenseRow {
+    product_id: string;
+    license_key: string;
+  }
+
   // Fetch order from Supabase
   const { data: order, error } = await supabase
     .from('orders')
@@ -47,7 +69,7 @@ export default async function OrderSuccessPage({ searchParams }: OrderSuccessPag
       )
     `)
     .eq('id', order_id)
-    .single<any>();
+    .single<OrderRecord>();
 
   // If order not found or owner doesn't match session user -> 403 Forbidden!
   if (error || !order || order.user_id !== user.id) {
@@ -55,15 +77,16 @@ export default async function OrderSuccessPage({ searchParams }: OrderSuccessPag
   }
 
   // Fetch licenses issued for this user and order products
-  const productIds = (order.order_items || []).map((i: any) => i.product_id);
+  const productIds = (order.order_items || []).map((i) => i.product_id);
   const { data: licenses } = await supabase
     .from('licenses')
     .select('product_id, license_key')
     .eq('user_id', user.id)
-    .in('product_id', productIds);
+    .in('product_id', productIds)
+    .returns<LicenseRow[]>();
 
   const licenseMap = new Map<string, string>();
-  (licenses || []).forEach((l: any) => {
+  (licenses || []).forEach((l) => {
     licenseMap.set(l.product_id, l.license_key);
   });
 
@@ -71,7 +94,7 @@ export default async function OrderSuccessPage({ searchParams }: OrderSuccessPag
     id: order.id,
     amount_inr: order.amount_inr,
     created_at: order.created_at,
-    items: (order.order_items || []).map((item: any) => ({
+    items: (order.order_items || []).map((item) => ({
       id: item.id,
       product_id: item.product_id,
       title: item.product?.title || 'Digital Product',

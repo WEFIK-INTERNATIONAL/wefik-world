@@ -3,9 +3,25 @@ import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
 import { Button } from '@/components/ui/button';
-import { Receipt, ExternalLink, Inbox, ArrowRight } from 'lucide-react';
+import { ExternalLink, Inbox, ArrowRight } from 'lucide-react';
 
 export const revalidate = 0;
+
+interface OrderListItem {
+  id: string;
+  order_number: string | null;
+  total_amount_inr: number;
+  subtotal_inr: number;
+  status: string;
+  created_at: string;
+  order_items: Array<{
+    id: string;
+    price_inr: number;
+    product: {
+      title: string;
+    } | null;
+  }>;
+}
 
 export default async function AccountOrdersPage() {
   const supabase = await createClient();
@@ -34,7 +50,8 @@ export default async function AccountOrdersPage() {
       )
     `)
     .eq('user_id', user.id)
-    .order('created_at', { ascending: false });
+    .order('created_at', { ascending: false })
+    .returns<OrderListItem[]>();
 
   return (
     <div className="space-y-6">
@@ -60,10 +77,10 @@ export default async function AccountOrdersPage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-[var(--border)]">
-                {orders.map((order: any) => {
+                {orders.map((order) => {
                   const itemsList = order.order_items
-                    ?.map((i: any) => i.product?.title)
-                    .filter(Boolean)
+                    ?.map((i) => i.product?.title)
+                    .filter((t): t is string => Boolean(t))
                     .join(', ') || 'Digital Products';
 
                   return (

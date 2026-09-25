@@ -13,7 +13,7 @@ export default async function AccountSettingsPage() {
     redirect('/login?next=/account/settings');
   }
 
-  const { data: profile } = await (supabase as any)
+  const { data: profile } = await supabase
     .from('profiles')
     .select('id, email, full_name, display_name, avatar_url, recovery_email, recovery_email_verified_at')
     .eq('id', user.id)

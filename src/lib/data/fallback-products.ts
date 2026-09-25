@@ -27,6 +27,11 @@ export interface ProductData {
     is_latest: boolean;
     created_at: string;
   }[];
+  created_at?: string;
+  updated_at?: string;
+  primary_use_case?: string;
+  seo_title?: string;
+  seo_description?: string;
 }
 
 export const FALLBACK_PRODUCTS: ProductData[] = [

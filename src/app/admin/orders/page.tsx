@@ -7,6 +7,17 @@ export const metadata = {
   title: 'Orders & Payments — Admin',
 };
 
+interface AdminOrderRow {
+  id: string;
+  amount_inr: number;
+  status: string;
+  razorpay_order_id: string | null;
+  razorpay_payment_id: string | null;
+  created_at: string;
+  user: { email: string; full_name: string | null } | null;
+  order_items: Array<{ product: { title: string } | null }>;
+}
+
 export default async function AdminOrdersPage() {
   await requireAdmin();
   const supabase = await createClient();
@@ -23,7 +34,8 @@ export default async function AdminOrdersPage() {
       user:profiles(email, full_name),
       order_items(product:products(title))
     `)
-    .order('created_at', { ascending: false });
+    .order('created_at', { ascending: false })
+    .returns<AdminOrderRow[]>();
 
   return (
     <div className="bg-[var(--surface)] p-6 sm:p-8 rounded-3xl border border-border shadow-xs space-y-6">
@@ -56,7 +68,7 @@ export default async function AdminOrdersPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-border">
-              {orders.map((order: any) => (
+              {orders.map((order) => (
                 <tr key={order.id} className="hover:bg-soft/30 transition-colors">
                   <td className="py-3.5 px-4 font-mono font-bold text-ink">
                     #{order.id.slice(0, 8)}
@@ -66,7 +78,7 @@ export default async function AdminOrdersPage() {
                     <span className="text-[11px] text-slate">{order.user?.full_name || ''}</span>
                   </td>
                   <td className="py-3.5 px-4 text-ink max-w-[180px] truncate">
-                    {(order.order_items || []).map((i: any) => i.product?.title).join(', ') || 'Item'}
+                    {(order.order_items || []).map((i) => i.product?.title).filter(Boolean).join(', ') || 'Item'}
                   </td>
                   <td className="py-3.5 px-4 font-extrabold text-ink">
                     ₹{((order.amount_inr || 0) / 100).toLocaleString('en-IN')}

@@ -1,36 +1,54 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useSyncExternalStore } from 'react';
+
+function subscribeReducedMotion(callback: () => void) {
+  if (typeof window === 'undefined') return () => {};
+  const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+  mediaQuery.addEventListener('change', callback);
+  return () => mediaQuery.removeEventListener('change', callback);
+}
+
+function getReducedMotionSnapshot() {
+  if (typeof window === 'undefined') return false;
+  return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+}
+
+function getReducedMotionServerSnapshot() {
+  return false;
+}
 
 /**
  * Global hook to observe and enforce user's prefers-reduced-motion OS setting.
  * All animations (GSAP, Lenis, Preloader, Transitions) must respect this.
  */
 export function useReducedMotion(): boolean {
-  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
-
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-
-    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-    setPrefersReducedMotion(mediaQuery.matches);
-
-    const handler = (event: MediaQueryListEvent) => {
-      setPrefersReducedMotion(event.matches);
-    };
-
-    if (mediaQuery.addEventListener) {
-      mediaQuery.addEventListener('change', handler);
-      return () => mediaQuery.removeEventListener('change', handler);
-    } else {
-      // Fallback for older browsers
-      mediaQuery.addListener(handler);
-      return () => mediaQuery.removeListener(handler);
-    }
-  }, []);
-
-  return prefersReducedMotion;
+  return useSyncExternalStore(
+    subscribeReducedMotion,
+    getReducedMotionSnapshot,
+    getReducedMotionServerSnapshot
+  );
 }
+
+interface NetworkInformation {
+  saveData?: boolean;
+}
+
+interface NavigatorWithConnection extends Navigator {
+  connection?: NetworkInformation;
+}
+
+function checkIsLowEnd(): boolean {
+  if (typeof window === 'undefined' || typeof navigator === 'undefined') return false;
+
+  const concurrency = navigator.hardwareConcurrency ?? 8;
+  const nav = navigator as NavigatorWithConnection;
+  const saveData = Boolean(nav.connection?.saveData);
+
+  return concurrency <= 4 || saveData;
+}
+
+const emptySubscribe = () => () => {};
 
 /**
  * Low-end device gate per Section 1:
@@ -38,22 +56,11 @@ export function useReducedMotion(): boolean {
  * -> disable Lenis + parallax + magnetic effects (core fades still OK).
  */
 export function useLowEndDevice(): boolean {
-  const [isLowEnd, setIsLowEnd] = useState(false);
-
-  useEffect(() => {
-    if (typeof window === 'undefined' || typeof navigator === 'undefined') return;
-
-    const concurrency = navigator.hardwareConcurrency ?? 8;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const connection = (navigator as any).connection;
-    const saveData = Boolean(connection && connection.saveData);
-
-    if (concurrency <= 4 || saveData) {
-      setIsLowEnd(true);
-    }
-  }, []);
-
-  return isLowEnd;
+  return useSyncExternalStore(
+    emptySubscribe,
+    checkIsLowEnd,
+    () => false
+  );
 }
 
 /**

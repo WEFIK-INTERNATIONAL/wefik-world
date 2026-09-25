@@ -2,7 +2,7 @@ import React from 'react';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { Metadata } from 'next';
-import { getProductBySlug, getProducts, FALLBACK_PRODUCTS } from '@/lib/data/products';
+import { getProductBySlug, getProducts } from '@/lib/data/products';
 import { ProductDetailView } from '@/components/marketplace/product-detail-view';
 import { ProductCard } from '@/components/marketplace/product-card';
 import { ArrowLeft } from 'lucide-react';
@@ -34,12 +34,12 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
 
   const categoryName = product.category?.name || (product.is_bundle ? 'Bundle' : 'Digital Product');
   const priceFormatted = product.is_free ? 'Free' : `₹${Math.round(product.price_inr / 100)}`;
-  const primaryUseCase = (product as any).primary_use_case || 'Agencies & Professionals';
+  const primaryUseCase = product.primary_use_case || 'Agencies & Professionals';
   const fallbackTitle = `${product.title} – ${categoryName} for ${primaryUseCase} | Wefik.world`;
   const fallbackDescription = `${product.tagline || product.title}. Single & unlimited licenses from ${priceFormatted}. Instant download, lifetime updates.`;
 
-  const title = (product as any).seo_title || fallbackTitle;
-  const description = (product as any).seo_description || fallbackDescription;
+  const title = product.seo_title || fallbackTitle;
+  const description = product.seo_description || fallbackDescription;
   const canonicalUrl = `https://wefik.world/products/${product.slug}`;
 
   return {

@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { Sparkles, CheckCircle2, ShieldCheck, AlertTriangle, Loader2 } from 'lucide-react';
+import { Sparkles, CheckCircle2, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import { createClient } from '@/lib/supabase/client';
@@ -30,7 +30,7 @@ export function MembershipManager({ membership }: MembershipProps) {
 
     setLoading(true);
     try {
-      const { error } = await (supabase as any)
+      const { error } = await supabase
         .from('memberships')
         .update({ status: 'cancelled' })
         .eq('id', membership.id);

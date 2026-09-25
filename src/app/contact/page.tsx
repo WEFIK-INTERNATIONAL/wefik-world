@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
-import { Phone, Mail, Clock, ShieldCheck, MapPin, ExternalLink, HelpCircle } from 'lucide-react';
+import { Phone, Mail, Clock, ShieldCheck, ExternalLink, HelpCircle } from 'lucide-react';
 import { ContactForm } from '@/components/contact/contact-form';
 
 export const metadata: Metadata = {

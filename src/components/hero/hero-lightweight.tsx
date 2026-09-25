@@ -2,7 +2,7 @@
 
 import React, { useRef, useEffect } from 'react';
 import gsap from 'gsap';
-import { Sparkles, ArrowRight, Zap, Shield, Code2, Star } from 'lucide-react';
+import { ArrowRight, Zap, Shield } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { TransitionLink } from '@/components/transitions/transition-link';
 import { MagneticButton } from '@/components/ui/magnetic-button';
@@ -19,6 +19,8 @@ export function HeroLightweight() {
   useEffect(() => {
     const container = containerRef.current;
     const cardStack = cardStackRef.current;
+    const card1 = card1Ref.current;
+    const card2 = card2Ref.current;
     if (!container || !cardStack || disableHeavyMotion || typeof window === 'undefined') {
       return;
     }
@@ -30,11 +32,11 @@ export function HeroLightweight() {
 
     const rotX = gsap.quickTo(cardStack, 'rotationX', { duration: 0.6, ease: 'power2.out' });
     const rotY = gsap.quickTo(cardStack, 'rotationY', { duration: 0.6, ease: 'power2.out' });
-    const c1Z = card1Ref.current
-      ? gsap.quickTo(card1Ref.current, 'z', { duration: 0.6, ease: 'power2.out' })
+    const c1Z = card1
+      ? gsap.quickTo(card1, 'z', { duration: 0.6, ease: 'power2.out' })
       : null;
-    const c2Z = card2Ref.current
-      ? gsap.quickTo(card2Ref.current, 'z', { duration: 0.6, ease: 'power2.out' })
+    const c2Z = card2
+      ? gsap.quickTo(card2, 'z', { duration: 0.6, ease: 'power2.out' })
       : null;
 
     const handleMouseMove = (e: MouseEvent) => {
@@ -62,8 +64,8 @@ export function HeroLightweight() {
       container.removeEventListener('mousemove', handleMouseMove);
       container.removeEventListener('mouseleave', handleMouseLeave);
       gsap.killTweensOf(cardStack);
-      if (card1Ref.current) gsap.killTweensOf(card1Ref.current);
-      if (card2Ref.current) gsap.killTweensOf(card2Ref.current);
+      if (card1) gsap.killTweensOf(card1);
+      if (card2) gsap.killTweensOf(card2);
     };
   }, [disableHeavyMotion]);
 

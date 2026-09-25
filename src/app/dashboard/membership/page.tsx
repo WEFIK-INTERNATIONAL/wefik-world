@@ -12,12 +12,20 @@ export default async function MembershipPage() {
   const user = await requireAuth('/dashboard/membership');
   const supabase = await createClient();
 
+  interface MembershipRow {
+    id: string;
+    plan: string;
+    status: string;
+    current_period_end: string | null;
+    created_at: string;
+  }
+
   const { data: membership } = await supabase
     .from('memberships')
     .select('id, plan, status, current_period_end, created_at')
     .eq('user_id', user.id)
     .order('created_at', { ascending: false })
-    .maybeSingle<any>();
+    .maybeSingle<MembershipRow>();
 
   return (
     <div className="bg-[var(--surface)] p-6 sm:p-8 rounded-3xl border border-border shadow-xs space-y-6">

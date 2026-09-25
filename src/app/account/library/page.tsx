@@ -5,6 +5,20 @@ import { LibraryView, LibraryItem } from '@/components/account/library-view';
 
 export const revalidate = 0; // Dynamic user library
 
+interface LicenseWithProduct {
+  id: string;
+  license_key: string;
+  license_type: 'single' | 'unlimited' | 'lifetime';
+  created_at: string;
+  product: {
+    id: string;
+    title: string;
+    slug: string;
+    tagline: string | null;
+    thumbnail_url: string | null;
+  } | null;
+}
+
 export default async function AccountLibraryPage() {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
@@ -14,7 +28,7 @@ export default async function AccountLibraryPage() {
   }
 
   // Fetch licenses with product relations
-  const { data: licenses } = await (supabase as any)
+  const { data: licenses } = await supabase
     .from('licenses')
     .select(`
       id,
@@ -30,14 +44,15 @@ export default async function AccountLibraryPage() {
       )
     `)
     .eq('user_id', user.id)
-    .order('created_at', { ascending: false });
+    .order('created_at', { ascending: false })
+    .returns<LicenseWithProduct[]>();
 
   // Fetch latest version for products
-  const productIds = licenses?.map((l: any) => l.product?.id).filter(Boolean) || [];
-  let versionMap: { [productId: string]: { version: string; changelog: string | null } } = {};
+  const productIds = licenses?.map((l) => l.product?.id).filter((id): id is string => Boolean(id)) || [];
+  const versionMap: Record<string, { version: string; changelog: string | null }> = {};
 
   if (productIds.length > 0) {
-    const { data: versions } = await (supabase as any)
+    const { data: versions } = await supabase
       .from('product_versions')
       .select('product_id, version, changelog')
       .in('product_id', productIds)
@@ -51,16 +66,16 @@ export default async function AccountLibraryPage() {
   }
 
   const items: LibraryItem[] = (licenses || [])
-    .filter((l: any) => l.product)
-    .map((l: any) => ({
+    .filter((l): l is LicenseWithProduct & { product: NonNullable<LicenseWithProduct['product']> } => Boolean(l.product))
+    .map((l) => ({
       licenseId: l.id,
       licenseKey: l.license_key,
       licenseType: l.license_type,
       productId: l.product.id,
       productTitle: l.product.title,
       productSlug: l.product.slug,
-      productTagline: l.product.tagline,
-      productThumbnail: l.product.thumbnail_url,
+      productTagline: l.product.tagline || '',
+      productThumbnail: l.product.thumbnail_url || '',
       version: versionMap[l.product.id]?.version || '1.0.0',
       changelog: versionMap[l.product.id]?.changelog || null,
       createdAt: l.created_at,

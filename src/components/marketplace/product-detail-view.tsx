@@ -8,7 +8,6 @@ import {
   Star,
   Check,
   ShoppingBag,
-  ExternalLink,
   ShieldCheck,
   Zap,
   Globe,
@@ -167,7 +166,7 @@ export function ProductDetailView({ product, initialReviews = [] }: ProductDetai
         rating: reviewRating,
         title: reviewTitle.trim(),
         comment: reviewComment.trim(),
-      } as any);
+      });
 
       if (error) throw error;
 
@@ -594,7 +593,7 @@ export function ProductDetailView({ product, initialReviews = [] }: ProductDetai
           </div>
 
           <div className="space-y-4 pt-2 relative before:absolute before:left-3 before:top-4 before:bottom-4 before:w-0.5 before:bg-border">
-            {versionsList.map((ver, idx) => (
+            {versionsList.map((ver) => (
               <div key={ver.version} className="relative pl-8 space-y-1.5">
                 <div className="absolute left-1.5 top-1.5 w-3.5 h-3.5 rounded-full bg-[var(--surface)] border-2 border-lime -translate-x-1/2" />
                 <div className="p-3.5 rounded-xl bg-[var(--surface)] border border-border space-y-1.5">

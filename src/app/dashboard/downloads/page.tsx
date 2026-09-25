@@ -9,6 +9,36 @@ export const metadata = {
   title: 'My Downloads — wefik.world',
 };
 
+interface DownloadableProductItem {
+  id: string;
+  title: string;
+  slug: string;
+  thumbnail_url: string;
+  version: string;
+  license_type: string;
+}
+
+interface MemberProductRow {
+  id: string;
+  title: string;
+  slug: string;
+  thumbnail_url: string | null;
+  versions?: Array<{ version: string }> | null;
+}
+
+interface LicenseDownloadRow {
+  id: string;
+  product_id: string;
+  license_type: string;
+  product: {
+    id: string;
+    title: string;
+    slug: string;
+    thumbnail_url: string | null;
+    versions?: Array<{ version: string }> | null;
+  } | null;
+}
+
 export default async function DownloadsPage() {
   const user = await requireAuth('/dashboard/downloads');
   const supabase = await createClient();
@@ -19,28 +49,29 @@ export default async function DownloadsPage() {
     .select('plan, status, current_period_end')
     .eq('user_id', user.id)
     .eq('status', 'active')
-    .maybeSingle<any>();
+    .maybeSingle();
 
   const isMember =
     membership &&
     (membership.plan === 'lifetime' ||
       (membership.current_period_end && new Date(membership.current_period_end) > new Date()));
 
-  let downloadableProducts: any[] = [];
+  let downloadableProducts: DownloadableProductItem[] = [];
 
   if (isMember) {
     // Member has access to all published products!
     const { data: allProds } = await supabase
       .from('products')
       .select('id, title, slug, thumbnail_url, versions:product_versions(version)')
-      .eq('status', 'published');
+      .eq('status', 'published')
+      .returns<MemberProductRow[]>();
 
     if (allProds && allProds.length > 0) {
-      downloadableProducts = allProds.map((p: any) => ({
+      downloadableProducts = allProds.map((p) => ({
         id: p.id,
         title: p.title,
         slug: p.slug,
-        thumbnail_url: p.thumbnail_url,
+        thumbnail_url: p.thumbnail_url || '',
         version: p.versions?.[0]?.version || 'v1.0.0',
         license_type: 'All-Access Member',
       }));
@@ -65,9 +96,10 @@ export default async function DownloadsPage() {
         product:products(id, title, slug, thumbnail_url, versions:product_versions(version))
       `)
       .eq('user_id', user.id)
-      .eq('status', 'active');
+      .eq('status', 'active')
+      .returns<LicenseDownloadRow[]>();
 
-    downloadableProducts = (licenses || []).map((l: any) => ({
+    downloadableProducts = (licenses || []).map((l) => ({
       id: l.product?.id || l.product_id,
       title: l.product?.title || 'Product',
       slug: l.product?.slug || '',

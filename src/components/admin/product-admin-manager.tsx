@@ -2,11 +2,9 @@
 
 import React, { useState } from 'react';
 import { SafeImage } from '@/components/ui/safe-image';
-import Link from 'next/link';
-import { Package, Plus, Upload, Loader2, CheckCircle2, FileArchive, ArrowUpRight } from 'lucide-react';
+import { Upload, Loader2, CheckCircle2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
 import { createClient } from '@/lib/supabase/client';
 
@@ -36,10 +34,14 @@ interface AdminProduct {
   status: string;
   thumbnail_url: string;
   versions?: { version: string; is_latest: boolean }[];
+  seo_title?: string | null;
+  seo_description?: string | null;
+  primary_use_case?: string | null;
+  image_alt?: string | null;
 }
 
 export function ProductAdminManager({ initialProducts }: { initialProducts: AdminProduct[] }) {
-  const [products, setProducts] = useState(initialProducts);
+  const [products] = useState(initialProducts);
   const [selectedProduct, setSelectedProduct] = useState<AdminProduct | null>(null);
   const [seoModalProduct, setSeoModalProduct] = useState<AdminProduct | null>(null);
   const [seoTitle, setSeoTitle] = useState('');
@@ -60,7 +62,7 @@ export function ProductAdminManager({ initialProducts }: { initialProducts: Admi
 
     setUploading(true);
     try {
-      let storagePath = `${selectedProduct.slug}/${newVersion}.zip`;
+      const storagePath = `${selectedProduct.slug}/${newVersion}.zip`;
 
       if (file) {
         // Upload zip file to private product-files bucket
@@ -74,12 +76,12 @@ export function ProductAdminManager({ initialProducts }: { initialProducts: Admi
       }
 
       // Per spec Section 4 Fix 12: Set is_latest = true on new version insert, false on older versions
-      await (supabase as any)
+      await supabase
         .from('product_versions')
         .update({ is_latest: false })
         .eq('product_id', selectedProduct.id);
 
-      const { error: insertError } = await (supabase as any).from('product_versions').insert({
+      const { error: insertError } = await supabase.from('product_versions').insert({
         product_id: selectedProduct.id,
         version: newVersion.trim(),
         changelog: changelog.trim(),
@@ -102,10 +104,10 @@ export function ProductAdminManager({ initialProducts }: { initialProducts: Admi
 
   const openSeoEditor = (p: AdminProduct) => {
     setSeoModalProduct(p);
-    setSeoTitle((p as any).seo_title || `${p.title} – Digital Product | Wefik.world`);
-    setSeoDescription((p as any).seo_description || `${p.title} with commercial license from ₹${Math.round(p.price_inr / 100)}. Instant download, lifetime updates.`);
-    setPrimaryUseCase((p as any).primary_use_case || 'agencies');
-    setImageAlt((p as any).image_alt || `${p.title} preview screenshot`);
+    setSeoTitle(p.seo_title || `${p.title} – Digital Product | Wefik.world`);
+    setSeoDescription(p.seo_description || `${p.title} with commercial license from ₹${Math.round(p.price_inr / 100)}. Instant download, lifetime updates.`);
+    setPrimaryUseCase(p.primary_use_case || 'agencies');
+    setImageAlt(p.image_alt || `${p.title} preview screenshot`);
   };
 
   const handleSaveSeo = async (e: React.FormEvent) => {
@@ -120,7 +122,7 @@ export function ProductAdminManager({ initialProducts }: { initialProducts: Admi
 
     setSavingSeo(true);
     try {
-      const { error } = await (supabase as any)
+      const { error } = await supabase
         .from('products')
         .update({
           seo_title: seoTitle.trim(),

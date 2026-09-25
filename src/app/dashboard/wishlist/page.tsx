@@ -14,6 +14,27 @@ export default async function WishlistPage() {
   const user = await requireAuth('/dashboard/wishlist');
   const supabase = await createClient();
 
+  interface WishlistProduct {
+    id: string;
+    title: string;
+    slug: string;
+    tagline: string | null;
+    price_inr: number;
+    is_free: boolean;
+    is_featured: boolean;
+    is_bundle: boolean;
+    thumbnail_url: string | null;
+    tech_stack: string[] | null;
+    rating_avg: number;
+    rating_count: number;
+    category: { name: string; slug: string } | null;
+  }
+
+  interface WishlistRow {
+    id: string;
+    product: WishlistProduct | null;
+  }
+
   const { data: wishlists } = await supabase
     .from('wishlists')
     .select(`
@@ -34,11 +55,12 @@ export default async function WishlistPage() {
         category:categories(name, slug)
       )
     `)
-    .eq('user_id', user.id);
+    .eq('user_id', user.id)
+    .returns<WishlistRow[]>();
 
   const wishlistProducts = (wishlists || [])
-    .map((w: any) => w.product)
-    .filter(Boolean);
+    .map((w) => w.product)
+    .filter((p): p is WishlistProduct => Boolean(p));
 
   return (
     <div className="bg-[var(--surface)] p-6 sm:p-8 rounded-3xl border border-border shadow-xs space-y-6">
@@ -63,7 +85,7 @@ export default async function WishlistPage() {
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6">
-          {wishlistProducts.map((p: any) => (
+          {wishlistProducts.map((p) => (
             <ProductCard
               key={p.id}
               id={p.id}

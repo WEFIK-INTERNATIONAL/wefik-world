@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
-import { ShieldAlert, Cookie, CheckCircle2, ShieldCheck } from 'lucide-react';
+import { ShieldAlert, ShieldCheck } from 'lucide-react';
 import { PrintButton } from '@/components/account/print-button';
 
 export const metadata: Metadata = {

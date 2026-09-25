@@ -74,7 +74,7 @@ export function OrderSuccessView({ order }: OrderSuccessViewProps) {
       }
 
       toast.success(`Download starting for ${title}`);
-      window.location.href = data.download_url;
+      window.location.assign(data.download_url);
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : 'Download failed';
       toast.error(msg);

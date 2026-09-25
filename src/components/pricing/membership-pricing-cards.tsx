@@ -3,10 +3,16 @@
 import React, { useState } from 'react';
 import Script from 'next/script';
 import { useRouter } from 'next/navigation';
-import { CheckCircle2, Sparkles, Loader2, Zap, Shield, ArrowRight } from 'lucide-react';
+import { CheckCircle2, Sparkles, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import { createClient } from '@/lib/supabase/client';
+
+interface RazorpayPaymentResponse {
+  razorpay_payment_id?: string;
+  razorpay_order_id?: string;
+  razorpay_signature?: string;
+}
 
 interface PlanProps {
   plan: 'monthly' | 'lifetime';
@@ -71,7 +77,7 @@ export function MembershipPricingCards({ plans }: MembershipPricingCardsProps) {
           subscription_id: data.subscription_id,
           name: 'Wefik World',
           description: 'All-Access Monthly Membership',
-          handler: function (response: any) {
+          handler: function (_response: RazorpayPaymentResponse) {
             toast.success('Subscription activated successfully!');
             router.push('/dashboard/membership');
           },
@@ -116,7 +122,7 @@ export function MembershipPricingCards({ plans }: MembershipPricingCardsProps) {
           name: 'Wefik World',
           description: 'Lifetime Deal All-Access Membership',
           order_id: data.razorpay_order_id,
-          handler: function (response: any) {
+          handler: function (_response: RazorpayPaymentResponse) {
             toast.success('Lifetime membership payment successful!');
             router.push(`/order-success?order_id=${data.order_id}`);
           },

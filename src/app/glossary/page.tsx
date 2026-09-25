@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
-import { BookOpen, ArrowRight } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { GLOSSARY_TERMS } from '@/lib/seo/programmatic-data';
 
 export const metadata: Metadata = {

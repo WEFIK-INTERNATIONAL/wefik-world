@@ -14,7 +14,7 @@ export async function POST(request: Request) {
     // Insert into newsletter_subscribers table
     const { error } = await supabase
       .from('newsletter_subscribers')
-      .insert([{ email: email.toLowerCase().trim() }] as any);
+      .insert([{ email: email.toLowerCase().trim() }]);
 
     if (error) {
       // 23505 is unique_violation in Postgres

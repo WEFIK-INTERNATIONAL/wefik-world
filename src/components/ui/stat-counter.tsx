@@ -25,10 +25,7 @@ export function StatCounter({
   const prefersReducedMotion = useReducedMotion();
 
   useEffect(() => {
-    if (prefersReducedMotion) {
-      setValue(end);
-      return;
-    }
+    if (prefersReducedMotion) return;
 
     const el = elementRef.current;
     if (!el || typeof window === 'undefined') return;
@@ -57,7 +54,7 @@ export function StatCounter({
 
   return (
     <span ref={elementRef} className={`font-mono ${className}`}>
-      {prefix}{value}{suffix}
+      {prefix}{prefersReducedMotion ? end : value}{suffix}
     </span>
   );
 }

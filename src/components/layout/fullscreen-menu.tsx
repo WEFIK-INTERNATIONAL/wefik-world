@@ -36,7 +36,6 @@ export function FullscreenMenu({ isOpen, onClose }: FullscreenMenuProps) {
   const linksContainerRef = useRef<HTMLDivElement | null>(null);
   const searchInputRef = useRef<HTMLInputElement | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
-  const [hoveredIndex, setHoveredIndex] = useState<string | null>(null);
 
   // Body scroll lock on mobile (iOS Safari + Android Chrome)
   useEffect(() => {
@@ -204,8 +203,6 @@ export function FullscreenMenu({ isOpen, onClose }: FullscreenMenuProps) {
             <div
               key={item.index}
               className="fs-menu-item group flex items-baseline gap-4 cursor-pointer py-1.5 transition-transform duration-200 hover:translate-x-2 active:scale-[0.97]"
-              onMouseEnter={() => setHoveredIndex(item.index)}
-              onMouseLeave={() => setHoveredIndex(null)}
               onClick={() => handleLinkClick(item.href)}
             >
               <span className="font-mono text-xs text-[#2d5208] dark:text-lime font-bold tracking-wider shrink-0">

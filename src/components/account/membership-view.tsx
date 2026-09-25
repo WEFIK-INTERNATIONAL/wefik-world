@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { Crown, Sparkles, CheckCircle2, AlertCircle, ArrowRight, Loader2, Calendar } from 'lucide-react';
+import { Crown, CheckCircle2, ArrowRight, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { createClient } from '@/lib/supabase/client';
 import { toast } from 'sonner';
@@ -35,7 +35,7 @@ export function MembershipView({ membership }: MembershipViewProps) {
 
     setLoading(true);
     try {
-      const { error } = await (supabase as any)
+      const { error } = await supabase
         .from('memberships')
         .update({ status: 'cancelled' })
         .eq('id', membership.id);
@@ -44,8 +44,9 @@ export function MembershipView({ membership }: MembershipViewProps) {
 
       setStatus('cancelled');
       toast.success('Subscription cancelled. You retain full access until the end of your current billing period.');
-    } catch (err: any) {
-      toast.error(err.message || 'Failed to cancel subscription.');
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Failed to cancel subscription.';
+      toast.error(message);
     } finally {
       setLoading(false);
     }

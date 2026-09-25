@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { TicketPercent, Plus, Loader2 } from 'lucide-react';
+import { Plus, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { toast } from 'sonner';
@@ -39,30 +39,41 @@ export function CouponAdminManager({ initialCoupons }: { initialCoupons: CouponI
 
     setLoading(true);
     try {
+      const validUntil = new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString();
       const { data, error } = await supabase
         .from('coupons')
         .insert({
           code: cleanCode,
           discount_percent: percent,
           max_uses: uses,
-          is_active: true,
-        } as any)
+          valid_until: validUntil,
+        })
         .select('*')
-        .single<any>();
+        .single();
 
       if (error) throw error;
 
       toast.success(`Coupon ${cleanCode} created successfully!`);
       setCoupons((prev) => [
-        data || {
-          id: 'temp-' + Date.now(),
-          code: cleanCode,
-          discount_percent: percent,
-          used_count: 0,
-          max_uses: uses,
-          is_active: true,
-          valid_until: null,
-        },
+        data
+          ? {
+              id: data.id,
+              code: data.code,
+              discount_percent: data.discount_percent,
+              used_count: data.uses_count,
+              max_uses: data.max_uses,
+              is_active: true,
+              valid_until: data.valid_until,
+            }
+          : {
+              id: 'temp-' + Date.now(),
+              code: cleanCode,
+              discount_percent: percent,
+              used_count: 0,
+              max_uses: uses,
+              is_active: true,
+              valid_until: null,
+            },
         ...prev,
       ]);
       setCode('');

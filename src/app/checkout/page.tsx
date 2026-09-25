@@ -9,28 +9,50 @@ import { useCart } from '@/lib/cart-context';
 import { createClient } from '@/lib/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import type { Session } from '@supabase/supabase-js';
 import {
   ShieldCheck,
   Lock,
   Loader2,
   Tag,
   Trash2,
-  ArrowRight,
-  AlertCircle,
   CheckCircle2,
 } from 'lucide-react';
 import { toast } from 'sonner';
 
+interface RazorpaySuccessResponse {
+  razorpay_payment_id?: string;
+  razorpay_order_id?: string;
+  razorpay_signature?: string;
+}
+
+interface RazorpayFailureResponse {
+  error?: {
+    code?: string;
+    description?: string;
+    source?: string;
+    step?: string;
+    reason?: string;
+  };
+}
+
+interface RazorpayInstance {
+  open: () => void;
+  on: (event: string, callback: (resp: RazorpayFailureResponse) => void) => void;
+}
+
+type RazorpayOptions = Record<string, unknown>;
+
 declare global {
   interface Window {
-    Razorpay: any;
+    Razorpay?: new (options: RazorpayOptions) => RazorpayInstance;
   }
 }
 
 export default function CheckoutPage() {
   const router = useRouter();
   const { items, totalPaise, removeItem, clearCart } = useCart();
-  const [session, setSession] = useState<any>(null);
+  const [session, setSession] = useState<Session | null>(null);
   const [loadingUser, setLoadingUser] = useState(true);
 
   // Coupon state
@@ -42,7 +64,6 @@ export default function CheckoutPage() {
   } | null>(null);
   const [couponLoading, setCouponLoading] = useState(false);
   const [checkoutLoading, setCheckoutLoading] = useState(false);
-  const [scriptLoaded, setScriptLoaded] = useState(false);
 
   const supabase = createClient();
 
@@ -79,13 +100,23 @@ export default function CheckoutPage() {
 
     setCouponLoading(true);
     try {
+      interface CouponRecord {
+        code: string;
+        discount_percent: number;
+        valid_from?: string | null;
+        valid_until?: string | null;
+        max_uses?: number | null;
+        used_count?: number | null;
+        min_order_paise?: number | null;
+      }
+
       // Validate coupon against Supabase coupons table
       const { data: coupon, error } = await supabase
         .from('coupons')
         .select('*')
         .eq('code', code)
         .eq('is_active', true)
-        .single<any>();
+        .single<CouponRecord>();
 
       if (error || !coupon) {
         toast.error('Invalid or expired coupon code.');
@@ -194,14 +225,14 @@ export default function CheckoutPage() {
         name: 'Wefik World',
         description: `Order #${data.order_id.slice(0, 8)}`,
         order_id: data.razorpay_order_id,
-        handler: async function (response: any) {
+        handler: async function (_response: RazorpaySuccessResponse) {
           clearCart();
           toast.success('Payment captured successfully!');
           router.push(`/order-success?order_id=${data.order_id}`);
         },
         prefill: {
-          name: session.user?.user_metadata?.full_name || '',
-          email: session.user?.email || '',
+          name: session?.user?.user_metadata?.full_name || '',
+          email: session?.user?.email || '',
         },
         theme: {
           color: '#4F741B', // Deep Green
@@ -215,7 +246,7 @@ export default function CheckoutPage() {
       };
 
       const rzp = new window.Razorpay(options);
-      rzp.on('payment.failed', function (resp: any) {
+      rzp.on('payment.failed', function (resp: RazorpayFailureResponse) {
         toast.error(`Payment failed: ${resp.error?.description || 'Declined'}`);
         setCheckoutLoading(false);
       });

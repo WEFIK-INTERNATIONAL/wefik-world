@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { toast } from 'sonner';
-import { Loader2, Bell, Shield, User as UserIcon, Upload } from 'lucide-react';
+import { Loader2, Bell, Upload } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 
 interface SettingsFormProps {
@@ -34,7 +34,7 @@ export function SettingsForm({ user }: SettingsFormProps) {
     setSaving(true);
 
     try {
-      const { error } = await (supabase as any)
+      const { error } = await supabase
         .from('profiles')
         .update({
           full_name: fullName.trim(),
@@ -82,7 +82,7 @@ export function SettingsForm({ user }: SettingsFormProps) {
       setAvatarUrl(publicUrl);
 
       // Auto update profile record
-      await (supabase as any)
+      await supabase
         .from('profiles')
         .update({ avatar_url: publicUrl })
         .eq('id', user.id);

@@ -2,7 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import { SafeImage } from '@/components/ui/safe-image';
 import { SEED_POSTS } from '@/lib/sanity/seed-posts';
-import { BookOpen, ArrowRight, Clock, User, Calendar } from 'lucide-react';
+import { BookOpen, ArrowRight, Clock } from 'lucide-react';
 
 export const metadata = {
   title: 'Engineering & Design Blog — wefik.world',

@@ -13,6 +13,21 @@ export default async function PurchasesPage() {
   const user = await requireAuth('/dashboard/purchases');
   const supabase = await createClient();
 
+  interface OrderItemWithProduct {
+    id: string;
+    license_type: string;
+    price_inr: number;
+    product: { title: string; slug: string } | null;
+  }
+
+  interface DashboardOrder {
+    id: string;
+    amount_inr: number;
+    status: string;
+    created_at: string;
+    order_items: OrderItemWithProduct[] | null;
+  }
+
   const { data: orders } = await supabase
     .from('orders')
     .select(`
@@ -23,7 +38,8 @@ export default async function PurchasesPage() {
       order_items(id, license_type, price_inr, product:products(title, slug))
     `)
     .eq('user_id', user.id)
-    .order('created_at', { ascending: false });
+    .order('created_at', { ascending: false })
+    .returns<DashboardOrder[]>();
 
   return (
     <div className="bg-[var(--surface)] p-6 sm:p-8 rounded-3xl border border-border shadow-xs space-y-6">
@@ -60,7 +76,7 @@ export default async function PurchasesPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-border">
-              {orders.map((order: any) => (
+              {orders.map((order) => (
                 <tr key={order.id} className="hover:bg-soft/40 transition-colors">
                   <td className="py-3.5 px-4 font-mono font-bold text-ink">
                     #{order.id.slice(0, 8)}
@@ -74,7 +90,7 @@ export default async function PurchasesPage() {
                   </td>
                   <td className="py-3.5 px-4 text-ink font-medium max-w-[200px] truncate">
                     {(order.order_items || [])
-                      .map((i: any) => i.product?.title || 'Product')
+                      .map((i) => i.product?.title || 'Product')
                       .join(', ')}
                   </td>
                   <td className="py-3.5 px-4 font-extrabold text-ink">

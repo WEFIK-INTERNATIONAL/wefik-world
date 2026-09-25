@@ -102,7 +102,7 @@ export async function requestRecoveryReset(accountEmail: string, recoveryEmail: 
       ok: res.ok,
       message: data.message || data.error || 'If an account exists with this verified recovery email, a password reset link has been dispatched.',
     };
-  } catch (err) {
+  } catch {
     return {
       ok: true,
       message: 'If an account exists with this verified recovery email, a password reset link has been dispatched.',
@@ -126,7 +126,7 @@ export async function requestMfaReset(accountEmail: string): Promise<{ ok: boole
       ok: res.ok,
       message: data.message || data.error || 'If a verified recovery email exists, a 6-digit code has been sent.',
     };
-  } catch (err) {
+  } catch {
     return {
       ok: false,
       message: 'Service temporarily unavailable. Please try again shortly.',
@@ -154,7 +154,7 @@ export async function confirmMfaReset(accountEmail: string, code: string): Promi
       message: data.message || '',
       error: data.error,
     };
-  } catch (err) {
+  } catch {
     return {
       ok: false,
       message: '',
@@ -181,8 +181,8 @@ export async function requestRecoveryEmailOtp(recoveryEmail: string, accessToken
       message: data.message,
       error: data.error,
     };
-  } catch (err: any) {
-    return { ok: false, error: err.message || 'Request failed' };
+  } catch (err: unknown) {
+    return { ok: false, error: err instanceof Error ? err.message : 'Request failed' };
   }
 }
 
@@ -204,8 +204,8 @@ export async function verifyRecoveryEmailOtp(recoveryEmail: string, code: string
       message: data.message,
       error: data.error,
     };
-  } catch (err: any) {
-    return { ok: false, error: err.message || 'Verification failed' };
+  } catch (err: unknown) {
+    return { ok: false, error: err instanceof Error ? err.message : 'Verification failed' };
   }
 }
 
@@ -223,8 +223,8 @@ export async function removeRecoveryEmail(accessToken: string): Promise<{ ok: bo
 
     const data = await res.json();
     return { ok: res.ok, error: data.error };
-  } catch (err: any) {
-    return { ok: false, error: err.message };
+  } catch (err: unknown) {
+    return { ok: false, error: err instanceof Error ? err.message : 'Failed to remove recovery email' };
   }
 }
 
@@ -246,7 +246,7 @@ export async function deleteUserAccount(confirmEmail: string, accessToken: strin
       message: data.message,
       error: data.error,
     };
-  } catch (err: any) {
-    return { ok: false, error: err.message || 'Deletion failed' };
+  } catch (err: unknown) {
+    return { ok: false, error: err instanceof Error ? err.message : 'Deletion failed' };
   }
 }

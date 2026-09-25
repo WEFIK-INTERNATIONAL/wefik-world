@@ -11,7 +11,7 @@ export async function POST(req: Request) {
 
     const result = await isPasswordBreached(password);
     return NextResponse.json(result);
-  } catch (err) {
+  } catch {
     return NextResponse.json({ breached: false });
   }
 }

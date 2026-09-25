@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
-import { ShieldAlert, ShieldCheck, Mail, Phone, Lock } from 'lucide-react';
+import { ShieldAlert } from 'lucide-react';
 import { PrintButton } from '@/components/account/print-button';
 
 export const metadata: Metadata = {

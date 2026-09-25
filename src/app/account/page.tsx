@@ -11,9 +11,6 @@ import {
   Crown,
   ArrowRight,
   ExternalLink,
-  ShieldCheck,
-  CheckCircle2,
-  Clock,
   Inbox,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -29,14 +26,14 @@ export default async function AccountOverviewPage() {
   }
 
   // 1. Fetch user profile
-  const { data: profile } = await (supabase as any)
+  const { data: profile } = await supabase
     .from('profiles')
     .select('full_name, display_name, avatar_url, recovery_email, recovery_email_verified_at')
     .eq('id', user.id)
     .maybeSingle();
 
   // 2. Fetch user membership
-  const { data: membership } = await (supabase as any)
+  const { data: membership } = await supabase
     .from('memberships')
     .select('plan, status, current_period_end, razorpay_subscription_id')
     .eq('user_id', user.id)
@@ -44,16 +41,16 @@ export default async function AccountOverviewPage() {
     .maybeSingle();
 
   // 3. Fetch active licenses & products owned count
-  const { data: licenses } = await (supabase as any)
+  const { data: licenses } = await supabase
     .from('licenses')
     .select('id, product_id, is_active')
     .eq('user_id', user.id);
 
-  const activeLicensesCount = licenses?.filter((l: any) => l.is_active).length || 0;
-  const uniqueProductsCount = new Set(licenses?.map((l: any) => l.product_id) || []).size;
+  const activeLicensesCount = licenses?.filter((l) => l.is_active).length || 0;
+  const uniqueProductsCount = new Set(licenses?.map((l) => l.product_id) || []).size;
 
   // 4. Fetch recent orders (last 5)
-  const { data: orders } = await (supabase as any)
+  const { data: orders } = await supabase
     .from('orders')
     .select('id, order_number, total_amount_inr, status, created_at')
     .eq('user_id', user.id)
@@ -112,7 +109,7 @@ export default async function AccountOverviewPage() {
                 {membership?.plan === 'lifetime'
                   ? 'Perpetual commercial access to all current and future themes, plugins, and templates.'
                   : membership?.plan === 'monthly'
-                  ? `Active monthly subscription. Auto-renews on ${new Date(membership.current_period_end).toLocaleDateString()}.`
+                  ? `Active monthly subscription. Auto-renews on ${membership.current_period_end ? new Date(membership.current_period_end).toLocaleDateString() : 'the next billing cycle'}.`
                   : 'You can purchase individual licenses or upgrade to an All-Access membership for unlimited downloads.'}
               </p>
             </div>
@@ -200,7 +197,7 @@ export default async function AccountOverviewPage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-[var(--border)]">
-                {orders.map((order: any) => (
+                {orders.map((order) => (
                   <tr key={order.id} className="hover:bg-[var(--surface-2)] transition-colors">
                     <td className="py-3 font-mono font-medium text-[var(--text)]">
                       {order.order_number || order.id.slice(0, 8)}

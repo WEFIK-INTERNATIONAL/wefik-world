@@ -9,14 +9,14 @@ export async function GET() {
 
   // Sort products by updated_at descending per Section 9
   const sorted = [...products].sort((a, b) => {
-    const timeA = new Date((a as any).updated_at || (a as any).created_at || '2026-09-22T00:00:00.000Z').getTime();
-    const timeB = new Date((b as any).updated_at || (b as any).created_at || '2026-09-22T00:00:00.000Z').getTime();
+    const timeA = new Date(a.updated_at || a.created_at || '2026-09-22T00:00:00.000Z').getTime();
+    const timeB = new Date(b.updated_at || b.created_at || '2026-09-22T00:00:00.000Z').getTime();
     return timeB - timeA;
   });
 
   const urls = sorted
     .map((p) => {
-      const lastmod = new Date((p as any).updated_at || (p as any).created_at || '2026-09-22T00:00:00.000Z').toISOString();
+      const lastmod = new Date(p.updated_at || p.created_at || '2026-09-22T00:00:00.000Z').toISOString();
       return `  <url>
     <loc>${baseUrl}/products/${p.slug}</loc>
     <lastmod>${lastmod}</lastmod>

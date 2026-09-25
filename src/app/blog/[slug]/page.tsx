@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { SafeImage } from '@/components/ui/safe-image';
 import { Metadata } from 'next';
 import { SEED_POSTS } from '@/lib/sanity/seed-posts';
-import { ArrowLeft, Clock, Calendar, User, Share2 } from 'lucide-react';
+import { ArrowLeft, Clock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 interface BlogPostPageProps {

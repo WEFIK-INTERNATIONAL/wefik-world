@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { ProductData } from '@/lib/data/products';
 
 const RECENTLY_VIEWED_KEY = 'wefik_recently_viewed_v1';
@@ -20,22 +20,21 @@ export function recordProductView(product: ProductData) {
 }
 
 export function useRecentlyViewed(excludeProductId?: string) {
-  const [items, setItems] = useState<ProductData[]>([]);
-
-  useEffect(() => {
+  const [items] = useState<ProductData[]>(() => {
+    if (typeof window === 'undefined') return [];
     try {
-      const raw = localStorage.getItem(RECENTLY_VIEWED_KEY);
+      const raw = window.localStorage.getItem(RECENTLY_VIEWED_KEY);
       if (raw) {
         const parsed: ProductData[] = JSON.parse(raw);
-        const filtered = excludeProductId
+        return excludeProductId
           ? parsed.filter((item) => item.id !== excludeProductId)
           : parsed;
-        setItems(filtered);
       }
+      return [];
     } catch {
-      // ignore
+      return [];
     }
-  }, [excludeProductId]);
+  });
 
   return items;
 }

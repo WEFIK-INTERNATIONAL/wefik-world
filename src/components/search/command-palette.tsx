@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState, useRef, useCallback, useMemo } from 'react';
 import { Command } from 'cmdk';
-import { useRouter } from 'next/navigation';
 import {
   Search,
   Package,
@@ -44,11 +43,16 @@ export function CommandPalette() {
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState('');
   const [debouncedSearch, setDebouncedSearch] = useState('');
-  const router = useRouter();
   const { setIsOpen: setCartOpen } = useCart();
   const { navigate } = usePageTransition();
   const { stopScroll, startScroll } = useLenis();
   const wasOpenRef = useRef(false);
+
+  const handleClose = useCallback(() => {
+    setOpen(false);
+    setSearch('');
+    setDebouncedSearch('');
+  }, []);
 
   // 200ms debounce on search text for product filtering
   useEffect(() => {
@@ -66,20 +70,18 @@ export function CommandPalette() {
     wasOpenRef.current = open;
   }, [open, stopScroll, startScroll]);
 
-  // Reset search when closing
-  useEffect(() => {
-    if (!open) {
-      setSearch('');
-      setDebouncedSearch('');
-    }
-  }, [open]);
-
   // Toggle on Cmd+K or Ctrl+K
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
         e.preventDefault();
-        setOpen((prev) => !prev);
+        setOpen((prev) => {
+          if (prev) {
+            setSearch('');
+            setDebouncedSearch('');
+          }
+          return !prev;
+        });
       }
     };
 
@@ -95,9 +97,9 @@ export function CommandPalette() {
   }, []);
 
   const handleSelect = useCallback((callback: () => void) => {
-    setOpen(false);
+    handleClose();
     callback();
-  }, []);
+  }, [handleClose]);
 
   // Debounced product filtering
   const filteredProducts = useMemo(() => {
@@ -118,7 +120,7 @@ export function CommandPalette() {
       aria-modal="true"
       data-lenis-prevent
       className="fixed inset-0 z-[99999] bg-black/60 backdrop-blur-sm flex items-start justify-center p-4 pt-16 sm:pt-24 select-none animate-in fade-in duration-150"
-      onClick={() => setOpen(false)}
+      onClick={handleClose}
     >
       <div
         className="w-full max-w-xl bg-[var(--surface)] text-[var(--text)] rounded-2xl shadow-2xl border border-[var(--border)] overflow-hidden"

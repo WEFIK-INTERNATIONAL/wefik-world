@@ -1,8 +1,5 @@
 'use client';
 
-import React from 'react';
-import Link from 'next/link';
-import { Sparkles, ArrowRight, Zap, CheckCircle2, Shield } from 'lucide-react';
 import { TransitionLink } from '@/components/transitions/transition-link';
 
 const MARQUEE_ITEMS = [

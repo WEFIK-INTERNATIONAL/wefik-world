@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { getProducts } from '@/lib/data/products';
 import { FreebieClaimCard } from '@/components/marketplace/freebie-claim-card';
 import { FreebieMagnetKit } from '@/components/freebies/freebie-magnet-kit';
-import { Gift, Zap, ShieldCheck, CheckCircle2 } from 'lucide-react';
+import { Gift } from 'lucide-react';
 
 export const metadata = {
   title: 'Freebies & Lead Magnets — 100% Free Templates',

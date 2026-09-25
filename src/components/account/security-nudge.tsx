@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import { ShieldAlert, ArrowRight, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -10,21 +10,24 @@ interface SecurityNudgeProps {
 }
 
 export function SecurityNudge({ hasMfa }: SecurityNudgeProps) {
-  const [visible, setVisible] = useState(false);
-
-  useEffect(() => {
-    if (hasMfa) return;
-    const dismissedAt = localStorage.getItem('wefik_2fa_nudge_dismissed');
-    if (dismissedAt) {
-      const days = (Date.now() - parseInt(dismissedAt, 10)) / (1000 * 60 * 60 * 24);
-      if (days < 30) {
-        return;
+  const [visible, setVisible] = useState(() => {
+    if (hasMfa) return false;
+    if (typeof window === 'undefined') return false;
+    try {
+      const dismissedAt = window.localStorage.getItem('wefik_2fa_nudge_dismissed');
+      if (dismissedAt) {
+        const days = (Date.now() - parseInt(dismissedAt, 10)) / (1000 * 60 * 60 * 24);
+        if (days < 30) {
+          return false;
+        }
       }
+      return true;
+    } catch {
+      return false;
     }
-    setVisible(true);
-  }, [hasMfa]);
+  });
 
-  if (!visible) return null;
+  if (hasMfa || !visible) return null;
 
   function dismiss() {
     localStorage.setItem('wefik_2fa_nudge_dismissed', Date.now().toString());

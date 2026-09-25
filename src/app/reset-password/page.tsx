@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, Suspense } from 'react';
+import React, { useState, Suspense } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
@@ -22,29 +22,6 @@ function ResetPasswordContent() {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [ready, setReady] = useState(false);
-
-  useEffect(() => {
-    // Check if recovery session or token is active
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (session) {
-        setReady(true);
-      } else {
-        // Also listen to onAuthStateChange for PASSWORD_RECOVERY
-        const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-          if (event === 'PASSWORD_RECOVERY' || session) {
-            setReady(true);
-          }
-        });
-        // Allow user 2 seconds to settle, else set ready anyway so form is accessible
-        const timer = setTimeout(() => setReady(true), 2000);
-        return () => {
-          subscription.unsubscribe();
-          clearTimeout(timer);
-        };
-      }
-    });
-  }, [supabase]);
 
   async function handleResetPassword(e: React.FormEvent) {
     e.preventDefault();

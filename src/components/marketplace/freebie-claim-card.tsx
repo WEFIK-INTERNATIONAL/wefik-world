@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { SafeImage } from '@/components/ui/safe-image';
 import { useRouter } from 'next/navigation';
-import { Download, Loader2, ArrowUpRight, Star, ShieldCheck } from 'lucide-react';
+import { Download, Loader2, ArrowUpRight, Star } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';

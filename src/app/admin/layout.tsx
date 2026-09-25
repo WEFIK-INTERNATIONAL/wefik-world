@@ -2,7 +2,6 @@ import React from 'react';
 import Link from 'next/link';
 import { requireAdmin } from '@/lib/auth';
 import {
-  Shield,
   LayoutDashboard,
   Package,
   ShoppingBag,

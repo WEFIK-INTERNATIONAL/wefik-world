@@ -6,14 +6,21 @@ import { usePreloaderProgress } from '@/hooks/use-preloader-progress';
 import { useMotionGates } from '@/hooks/use-reduced-motion';
 import { useLenis } from '@/components/providers/smooth-scroll-provider';
 import { Logo } from '@/components/brand/logo';
-import { Zap, Palette, Code, Sparkles, Cpu } from 'lucide-react';
+import { Zap, Palette, Code, Cpu } from 'lucide-react';
 
 export function UnboxingPreloader() {
   const { progress, isLoaded } = usePreloaderProgress();
   const { disableHeavyMotion } = useMotionGates();
   const { stopScroll, startScroll } = useLenis();
   const [mounted, setMounted] = useState(true);
-  const [isReturnVisitor, setIsReturnVisitor] = useState(false);
+  const [isReturnVisitor] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    try {
+      return sessionStorage.getItem('wfk_intro_seen') === 'true';
+    } catch {
+      return false;
+    }
+  });
 
   // Lock scroll while preloader is mounted; unlock on completion / unmount
   useEffect(() => {
@@ -32,15 +39,6 @@ export function UnboxingPreloader() {
   const heroCardRef = useRef<HTMLDivElement | null>(null);
   const dustRef = useRef<HTMLDivElement | null>(null);
   const timelineRef = useRef<gsap.core.Timeline | null>(null);
-
-  // Check once-per-session storage
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-    const seen = sessionStorage.getItem('wfk_intro_seen');
-    if (seen === 'true') {
-      setIsReturnVisitor(true);
-    }
-  }, []);
 
   // Failsafe timer: ensure preloader unmounts even if GSAP or window event stalls
   useEffect(() => {
@@ -256,7 +254,7 @@ export function UnboxingPreloader() {
     }, containerRef);
 
     return () => ctx.revert();
-  }, [mounted, isReturnVisitor, disableHeavyMotion]);
+  }, [mounted, isReturnVisitor, disableHeavyMotion, isLoaded]);
 
   // Trigger timeline play when progress reaches ready or asset loaded
   useEffect(() => {

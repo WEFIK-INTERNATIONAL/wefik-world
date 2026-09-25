@@ -2,9 +2,8 @@ import React from 'react';
 import Link from 'next/link';
 import { notFound, redirect } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
-import { Button } from '@/components/ui/button';
 import { Logo } from '@/components/brand/logo';
-import { ArrowLeft, Printer, CheckCircle2, ShieldCheck } from 'lucide-react';
+import { ArrowLeft, CheckCircle2 } from 'lucide-react';
 import { PrintButton } from '@/components/account/print-button';
 
 interface OrderReceiptPageProps {
@@ -12,6 +11,37 @@ interface OrderReceiptPageProps {
 }
 
 export const revalidate = 0;
+
+interface OrderDetail {
+  id: string;
+  order_number: string | null;
+  total_amount_inr: number;
+  subtotal_inr: number;
+  discount_inr: number;
+  tax_inr: number;
+  status: string;
+  razorpay_payment_id: string | null;
+  created_at: string;
+  user_id: string;
+  order_items: Array<{
+    id: string;
+    price_inr: number;
+    license_type: string;
+    product: {
+      id: string;
+      title: string;
+      slug: string;
+    } | null;
+  }>;
+}
+
+interface OrderLicense {
+  license_key: string;
+  license_type: string;
+  product: {
+    title: string;
+  } | null;
+}
 
 export default async function OrderReceiptPage({ params }: OrderReceiptPageProps) {
   const { id } = await params;
@@ -23,7 +53,7 @@ export default async function OrderReceiptPage({ params }: OrderReceiptPageProps
   }
 
   // Fetch order details
-  const { data: order } = await (supabase as any)
+  const { data: order } = await supabase
     .from('orders')
     .select(`
       id,
@@ -48,14 +78,15 @@ export default async function OrderReceiptPage({ params }: OrderReceiptPageProps
       )
     `)
     .eq('id', id)
-    .maybeSingle();
+    .maybeSingle()
+    .returns<OrderDetail>();
 
   if (!order) {
     notFound();
   }
 
   // RLS enforcement: user must own this order or be admin
-  const { data: profile } = await (supabase as any)
+  const { data: profile } = await supabase
     .from('profiles')
     .select('role, full_name, display_name')
     .eq('id', user.id)
@@ -66,10 +97,11 @@ export default async function OrderReceiptPage({ params }: OrderReceiptPageProps
   }
 
   // Fetch licenses issued for this order
-  const { data: licenses } = await (supabase as any)
+  const { data: licenses } = await supabase
     .from('licenses')
     .select('license_key, license_type, product:products(title)')
-    .eq('order_id', order.id);
+    .eq('order_id', order.id)
+    .returns<OrderLicense[]>();
 
   const customerName = profile?.full_name || profile?.display_name || user.email;
 
@@ -142,7 +174,7 @@ export default async function OrderReceiptPage({ params }: OrderReceiptPageProps
               </tr>
             </thead>
             <tbody className="divide-y divide-[var(--border)]">
-              {order.order_items?.map((item: any) => (
+              {order.order_items?.map((item) => (
                 <tr key={item.id}>
                   <td className="py-3.5 font-medium text-[var(--text)] print:text-black">
                     {item.product?.title || 'Digital Product'}
@@ -196,14 +228,14 @@ export default async function OrderReceiptPage({ params }: OrderReceiptPageProps
               Generated License Keys
             </h5>
             <div className="space-y-2">
-              {licenses.map((lic: any, idx: number) => (
+              {licenses.map((lic, idx) => (
                 <div
                   key={idx}
                   className="p-3 rounded-xl bg-[var(--surface-2)] print:bg-gray-100 flex items-center justify-between text-xs font-mono"
                 >
                   <span className="text-[var(--text)] print:text-black font-semibold">{lic.license_key}</span>
                   <span className="text-slate print:text-gray-600 capitalize text-[11px]">
-                    {(lic.product as any)?.title} ({lic.license_type})
+                    {lic.product?.title} ({lic.license_type})
                   </span>
                 </div>
               ))}

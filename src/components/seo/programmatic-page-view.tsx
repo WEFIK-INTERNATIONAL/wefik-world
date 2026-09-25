@@ -1,6 +1,5 @@
 import React from 'react';
 import Link from 'next/link';
-import { Check, X, Shield, ArrowRight, Star, HelpCircle, Layers, ExternalLink } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ProductCard } from '@/components/marketplace/product-card';
 import { ProductData } from '@/lib/data/products';

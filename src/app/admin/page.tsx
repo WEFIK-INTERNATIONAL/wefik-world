@@ -7,15 +7,21 @@ import {
   ShoppingBag,
   Package,
   KeyRound,
-  Users,
   Sparkles,
-  ArrowRight,
   TrendingUp,
 } from 'lucide-react';
 
 export const metadata = {
   title: 'Admin Console — wefik.world',
 };
+
+interface AdminOverviewOrder {
+  id: string;
+  amount_inr: number;
+  status: string;
+  created_at: string;
+  user: { email: string; full_name: string | null } | null;
+}
 
 export default async function AdminOverviewPage() {
   await requireAdmin();
@@ -24,10 +30,11 @@ export default async function AdminOverviewPage() {
   // 1. Total Gross Revenue & Orders
   const { data: orders } = await supabase
     .from('orders')
-    .select('id, amount_inr, status, created_at, user:profiles(email, full_name)');
+    .select('id, amount_inr, status, created_at, user:profiles(email, full_name)')
+    .returns<AdminOverviewOrder[]>();
 
-  const paidOrders = (orders || []).filter((o: any) => o.status === 'paid');
-  const grossRevenuePaise = paidOrders.reduce((sum: number, o: any) => sum + (o.amount_inr || 0), 0);
+  const paidOrders = (orders || []).filter((o) => o.status === 'paid');
+  const grossRevenuePaise = paidOrders.reduce((sum: number, o) => sum + (o.amount_inr || 0), 0);
   const formattedRevenue = (grossRevenuePaise / 100).toLocaleString('en-IN');
 
   // 2. Active Memberships
@@ -128,7 +135,7 @@ export default async function AdminOverviewPage() {
           <p className="text-xs text-slate py-6 text-center">No orders placed yet.</p>
         ) : (
           <div className="space-y-3 divide-y divide-border">
-            {recentOrders.map((order: any) => (
+            {recentOrders.map((order) => (
               <div key={order.id} className="pt-3 first:pt-0 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 text-xs">
                 <div>
                   <span className="font-mono text-ink font-bold block">

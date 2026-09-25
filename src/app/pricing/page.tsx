@@ -2,7 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase/server';
 import { MembershipPricingCards } from '@/components/pricing/membership-pricing-cards';
-import { ShieldCheck, HelpCircle, ArrowRight, Zap, Code2 } from 'lucide-react';
+import { Zap } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 export const metadata = {
