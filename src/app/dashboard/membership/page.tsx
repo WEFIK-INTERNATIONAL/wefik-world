@@ -14,8 +14,8 @@ export default async function MembershipPage() {
 
   interface MembershipRow {
     id: string;
-    plan: string;
-    status: string;
+    plan: 'monthly' | 'lifetime';
+    status: 'active' | 'cancelled' | 'expired';
     current_period_end: string | null;
     created_at: string;
   }

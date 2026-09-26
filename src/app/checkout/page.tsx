@@ -64,6 +64,7 @@ export default function CheckoutPage() {
   } | null>(null);
   const [couponLoading, setCouponLoading] = useState(false);
   const [checkoutLoading, setCheckoutLoading] = useState(false);
+  const [, setScriptLoaded] = useState(false);
 
   const supabase = createClient();
 
@@ -103,6 +104,7 @@ export default function CheckoutPage() {
       interface CouponRecord {
         code: string;
         discount_percent: number;
+        discount_fixed_inr?: number | null;
         valid_from?: string | null;
         valid_until?: string | null;
         max_uses?: number | null;
@@ -138,7 +140,7 @@ export default function CheckoutPage() {
       }
 
       // Check max uses
-      if (coupon.max_uses && coupon.used_count >= coupon.max_uses) {
+      if (coupon.max_uses && (coupon.used_count ?? 0) >= coupon.max_uses) {
         toast.error('Coupon usage limit reached.');
         setCouponLoading(false);
         return;
@@ -148,8 +150,8 @@ export default function CheckoutPage() {
       let calcDiscountPaise = 0;
       if (coupon.discount_percent) {
         calcDiscountPaise = Math.round((totalPaise * coupon.discount_percent) / 100);
-      } else if (coupon.discount_amount_inr) {
-        calcDiscountPaise = coupon.discount_amount_inr;
+      } else if (coupon.discount_fixed_inr) {
+        calcDiscountPaise = coupon.discount_fixed_inr;
       }
 
       setAppliedCoupon({

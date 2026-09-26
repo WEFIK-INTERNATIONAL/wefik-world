@@ -299,3 +299,19 @@ Takeover: 2026-09-22T01:13:00+05:30 — resuming from 4.1 login/signup/callback 
        - Documented audit in `internal/qa/fix03/qa-report.md`.
 
 
+
+- [2026-09-26T18:27:00+05:30] Fix Pack 04 Completed — CI/CD Pipeline & Zero Lint Warnings:
+    1. Part A: Zero Lint Warnings (completed from office PC, verified on personal laptop):
+       - 4 ESLint errors (react-hooks/refs in before-after-slider.tsx) fixed at root cause in commit `3a8436c`.
+       - 295 warnings fixed mechanically across 95 files: unused imports/vars removed, `any` replaced with proper types from `src/types/database.ts`, `let` → `const`, wishlist context lazy initializer.
+       - Additional type fixes on personal laptop: checkout `CouponRecord` aligned with DB schema (`discount_fixed_inr`), `used_count` nullability guard, `setScriptLoaded` state added; dashboard membership `plan`/`status` narrowed to union types; wishlist ProductCard nullable prop fallbacks.
+       - `npm run lint` (`--max-warnings=0`) → 0 errors, 0 warnings, exit 0.
+       - `npm run typecheck` → clean, exit 0.
+       - `npm run build` → 129/129 routes compiled, exit 0.
+    2. Part B: CI/CD Pipeline:
+       - B1: Pre-commit guard installed: husky v9 + lint-staged v17. `.husky/pre-commit` runs `npx lint-staged`; config: `*.{ts,tsx}` → `eslint --fix --max-warnings=0`. No prettier (not in use).
+       - B2: `.github/workflows/ci.yml` rewritten with 3 parallel jobs (ESLint, TypeScript, Next.js build with `needs` gate), `.nvmrc` pinned to Node 20, concurrency cancels superseded runs, env vars via GitHub Secrets.
+       - B3: Vercel deployment wiring pending confirmation by founder.
+       - B4: Branch protection instructions documented in PROGRESS.md.
+       - B5: `.github/dependabot.yml` committed (weekly npm, 5 PR limit).
+       - B6: End-to-end verification pending push + PR creation.

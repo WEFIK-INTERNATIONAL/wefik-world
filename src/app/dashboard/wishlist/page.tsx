@@ -91,12 +91,12 @@ export default async function WishlistPage() {
               id={p.id}
               title={p.title}
               slug={p.slug}
-              tagline={p.tagline}
+              tagline={p.tagline || ''}
               price_inr={p.price_inr}
               is_free={p.is_free}
               is_featured={p.is_featured}
               is_bundle={p.is_bundle}
-              thumbnail_url={p.thumbnail_url}
+              thumbnail_url={p.thumbnail_url || '/placeholder.svg'}
               category={p.category}
               rating_avg={p.rating_avg}
               rating_count={p.rating_count}

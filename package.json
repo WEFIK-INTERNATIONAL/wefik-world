@@ -12,7 +12,8 @@
     "devibe-audit": "node scripts/devibe-audit.mjs",
     "lighthouse-audit": "node scripts/lighthouse-audit.mjs",
     "assert:images": "node scripts/assert-image-hostnames.mjs",
-    "lint:theme": "node scripts/lint-theme-colors.mjs"
+    "lint:theme": "node scripts/lint-theme-colors.mjs",
+    "prepare": "husky"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",
@@ -65,10 +66,17 @@
     "@types/styled-components": "^5.1.36",
     "eslint": "^9",
     "eslint-config-next": "16.3.5",
+    "husky": "^9.1.7",
+    "lint-staged": "^17.6.0",
     "tailwindcss": "^4",
     "typescript": "^5"
   },
   "engines": {
     "node": ">=20.9.0"
+  },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "eslint --fix --max-warnings=0"
+    ]
   }
 }
