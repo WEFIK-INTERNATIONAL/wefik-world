@@ -157,7 +157,7 @@ export default function TermsPage() {
               6. All-Access Memberships &amp; Subscriptions
             </h2>
             <p>
-              We offer All-Access Monthly and Lifetime Deal membership plans. Memberships unlock access to all digital products in our catalog during the active term.
+              We offer All-Access Monthly and Lifetime Deal membership plans. Memberships provide access to all digital products in our catalog during the active term.
             </p>
             <p>
               Monthly memberships renew automatically every 30 days until cancelled. You may cancel your membership at any time directly through your <Link href="/account/membership" className="underline font-semibold">Account Membership</Link> tab with zero termination fees. Cancellation takes effect at the end of the current billing cycle. Full terms are detailed in our <Link href="/membership-terms" className="underline font-semibold">Membership Terms</Link>.

@@ -105,17 +105,17 @@ export function HeroLightweight() {
             <span className="eyebrow text-[var(--muted)]">Single-Vendor Engineering</span>
           </div>
 
-          {/* Display-XL Headline per Phase 2 Spec */}
+          {/* Display-XL Headline per Part C & D Spec */}
           <h1 className="display-xl max-w-5xl mx-auto mb-6 text-[var(--text)]">
-            Production-ready WordPress themes, plugins &amp; code — built and supported by the Wefik team
+            Tools for developers, by developers — built and supported by Wefik
           </h1>
 
           {/* Subtitle */}
-          <p className="body-lg max-w-3xl mx-auto mb-8 text-[var(--muted)] font-normal">
-            Single-vendor digital tools engineered for freelance developers and digital agencies. Zero visual page builder bloat, native Gutenberg block patterns, and modern CSS—backed directly by the team that authored every line.
+          <p className="body-lg max-w-2xl mx-auto mb-8 text-[var(--muted)] font-normal">
+            WordPress themes, plugins, and web templates built for client work. No page-builder bloat. You own the code.
           </p>
 
-          {/* Hero CTAs: Destination Named */}
+          {/* Hero CTAs: Destination Named (Generosity First) */}
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 mb-10 sm:mb-14">
             <MagneticButton strength={0.25} className="w-full sm:w-auto">
               <Button
@@ -124,8 +124,8 @@ export function HeroLightweight() {
                 size="lg"
                 className="w-full sm:w-auto h-12 px-8 rounded-xl font-semibold text-sm shadow-md transition-shadow hover:shadow-lime/20 hover:shadow-lg"
               >
-                <TransitionLink href="/wordpress-themes" className="flex items-center gap-2">
-                  <span>Browse WordPress Themes</span>
+                <TransitionLink href="/freebies" className="flex items-center gap-2">
+                  <span>Explore free products</span>
                   <ArrowRight className="w-4 h-4" />
                 </TransitionLink>
               </Button>
@@ -137,8 +137,8 @@ export function HeroLightweight() {
                 size="lg"
                 className="w-full sm:w-auto h-12 px-8 rounded-xl border-[var(--border)] bg-[var(--surface)] text-[var(--text)] hover:bg-[var(--surface-2)] font-semibold text-sm"
               >
-                <TransitionLink href="/pricing">
-                  <span>View All-Access Membership</span>
+                <TransitionLink href="/marketplace">
+                  <span>Browse marketplace</span>
                 </TransitionLink>
               </Button>
             </MagneticButton>
@@ -163,14 +163,14 @@ export function HeroLightweight() {
             >
               <div className="flex items-center justify-between pb-2 mb-2 border-b border-[var(--border)]">
                 <span className="eyebrow text-sky-500 font-bold">HTML5 / Tailwind</span>
-                <span className="font-mono text-xs font-bold text-lime">₹799</span>
+                <span className="font-mono text-xs font-bold text-sky-500">Starter</span>
               </div>
               <h4 className="heading-3 text-sm text-[var(--text)] mb-1">DevStarter Kit Pro</h4>
               <p className="body-small text-xs text-[var(--muted)] line-clamp-2">
                 Semantic HTML, responsive grid, zero jQuery, 100/100 Core Web Vitals.
               </p>
               <div className="mt-3 flex items-center gap-1.5 text-[10px] font-mono text-[var(--muted)]">
-                <span className="px-1.5 py-0.5 rounded bg-[var(--surface-2)] border border-[var(--border)]">Single & Unlimited</span>
+                <span className="px-1.5 py-0.5 rounded bg-[var(--surface-2)] border border-[var(--border)]">Single &amp; Unlimited</span>
               </div>
             </div>
 
@@ -186,7 +186,7 @@ export function HeroLightweight() {
               </div>
               <h4 className="heading-3 text-sm text-[var(--text)] mb-1">SuperCache Turbo</h4>
               <p className="body-small text-xs text-[var(--muted)] line-clamp-2">
-                Lightweight object cache & CSS minification for instant TTFB.
+                Lightweight object cache &amp; CSS minification for instant TTFB.
               </p>
               <div className="mt-3 flex items-center gap-2 text-[10px] font-mono text-deep-green-light">
                 <Zap className="w-3 h-3 text-lime" />
@@ -211,7 +211,7 @@ export function HeroLightweight() {
                   </div>
                 </div>
                 <div className="text-right">
-                  <span className="text-base font-display font-bold text-lime tabular-nums">₹999</span>
+                  <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-lime/20 text-[#2d5208] dark:text-lime">Block Theme</span>
                 </div>
               </div>
 

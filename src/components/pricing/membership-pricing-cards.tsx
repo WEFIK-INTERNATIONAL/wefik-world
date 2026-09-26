@@ -180,28 +180,50 @@ export function MembershipPricingCards({ plans }: MembershipPricingCardsProps) {
     <>
       <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="lazyOnload" />
 
+      {/* Free Tier Row First: Generosity Anchor per Part C2 */}
+      <div className="max-w-5xl mx-auto mb-10 p-6 sm:p-7 rounded-3xl bg-[var(--surface)] border border-[var(--border)] shadow-xs flex flex-col sm:flex-row items-center justify-between gap-6">
+        <div className="space-y-1 text-left">
+          <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full bg-lime/20 text-deep-green text-[11px] font-bold">
+            <span>Free Tier</span>
+          </div>
+          <h3 className="text-lg sm:text-xl font-bold text-[var(--text)]">
+            Free forever — every free product, no card required.
+          </h3>
+          <p className="text-xs text-[var(--muted)]">
+            Download our free themes, utilities, and starters to test code quality on your local machine.
+          </p>
+        </div>
+        <Button asChild variant="outline" className="h-11 px-6 rounded-xl font-semibold text-xs whitespace-nowrap border-[var(--border)] text-[var(--text)] hover:bg-[var(--surface-2)]">
+          <a href="/freebies">Explore Free Products</a>
+        </Button>
+      </div>
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto items-stretch">
         {/* Monthly Plan Card */}
-        <div className="bg-[var(--surface)] p-8 sm:p-10 rounded-3xl border border-border hover:border-slate-300 shadow-sm transition-all flex flex-col justify-between">
+        <div className="bg-[var(--surface)] p-8 sm:p-10 rounded-3xl border border-border hover:border-slate-300 dark:hover:border-slate-600 shadow-sm transition-all flex flex-col justify-between">
           <div>
             <div className="flex items-center justify-between mb-2">
               <span className="text-xs font-bold uppercase text-slate tracking-wider">
-                Monthly Subscription
+                Monthly Membership
               </span>
               <span className="px-2 py-0.5 text-[10px] font-bold bg-soft text-slate rounded-full border border-border">
-                Flexible
+                Cancel Anytime
               </span>
             </div>
 
             <h3 className="text-2xl font-extrabold text-ink">{monthlyPlan.name}</h3>
             <p className="text-xs text-slate mt-2 leading-relaxed">{monthlyPlan.description}</p>
 
-            <div className="mt-6 mb-8 flex items-baseline gap-1">
+            <div className="mt-6 mb-4 flex items-baseline gap-1">
               <span className="text-4xl sm:text-5xl font-black text-ink font-mono tabular-nums">
                 ₹{(monthlyPlan.price_inr / 100).toLocaleString('en-IN')}
               </span>
               <span className="text-xs font-semibold text-slate">/ month</span>
             </div>
+
+            <p className="text-[11px] text-slate mb-6">
+              Covered by our <a href="/refunds" className="text-deep-green underline font-medium">7-day defect guarantee</a>. No lock-in.
+            </p>
 
             <ul className="space-y-3.5 text-xs text-slate">
               {monthlyPlan.features.map((feature, i) => (
@@ -221,7 +243,7 @@ export function MembershipPricingCards({ plans }: MembershipPricingCardsProps) {
             {loadingPlan === 'monthly' ? (
               <Loader2 className="w-4 h-4 animate-spin mr-2" />
             ) : null}
-            Subscribe Monthly (₹{(monthlyPlan.price_inr / 100).toLocaleString('en-IN')}/mo)
+            Become a Monthly Member
           </Button>
         </div>
 
@@ -229,7 +251,7 @@ export function MembershipPricingCards({ plans }: MembershipPricingCardsProps) {
         <div className="bg-[#141714] text-white p-8 sm:p-10 rounded-3xl border-2 border-lime/60 shadow-2xl transition-all flex flex-col justify-between relative overflow-hidden">
           <div className="absolute top-4 right-4 bg-lime text-[#0a0f0a] text-[10px] font-black uppercase px-2.5 py-1 rounded-full shadow-sm flex items-center gap-1">
             <Sparkles className="w-3 h-3" />
-            <span>Best Value</span>
+            <span>Perpetual</span>
           </div>
 
           <div>
@@ -242,12 +264,16 @@ export function MembershipPricingCards({ plans }: MembershipPricingCardsProps) {
             <h3 className="text-2xl font-extrabold text-white">{lifetimePlan.name}</h3>
             <p className="text-xs text-slate-300 mt-2 leading-relaxed">{lifetimePlan.description}</p>
 
-            <div className="mt-6 mb-8 flex items-baseline gap-1">
+            <div className="mt-6 mb-4 flex items-baseline gap-1">
               <span className="text-4xl sm:text-5xl font-black text-white font-mono tabular-nums">
                 ₹{(lifetimePlan.price_inr / 100).toLocaleString('en-IN')}
               </span>
               <span className="text-xs font-semibold text-slate-400">one-time payment</span>
             </div>
+
+            <p className="text-[11px] text-slate-400 mb-6">
+              Includes lifetime updates. Covered by our <a href="/refunds" className="text-lime underline font-medium">7-day guarantee</a>.
+            </p>
 
             <ul className="space-y-3.5 text-xs text-slate-200">
               {lifetimePlan.features.map((feature, i) => (
@@ -267,7 +293,7 @@ export function MembershipPricingCards({ plans }: MembershipPricingCardsProps) {
             {loadingPlan === 'lifetime' ? (
               <Loader2 className="w-4 h-4 animate-spin mr-2" />
             ) : null}
-            Get Lifetime Deal (₹{(lifetimePlan.price_inr / 100).toLocaleString('en-IN')})
+            Choose Lifetime Access
           </Button>
         </div>
       </div>

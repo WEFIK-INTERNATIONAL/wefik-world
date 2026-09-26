@@ -56,7 +56,7 @@ export function MembershipManager({ membership }: MembershipProps) {
         <div>
           <h2 className="text-lg font-bold text-ink">No Active Membership</h2>
           <p className="text-xs text-slate mt-1 max-w-sm mx-auto">
-            Upgrade to All-Access Monthly (₹999/mo) or Lifetime Deal (₹9,999) to unlock unlimited downloads of every theme, plugin, and template in our catalog.
+            Upgrade to All-Access Monthly (₹999/mo) or Lifetime Deal (₹9,999) for unlimited downloads of every theme, plugin, and template in our catalog.
           </p>
         </div>
         <Button asChild className="bg-deep-green hover:bg-deep-green/90 text-white font-bold text-xs h-10 px-6 rounded-xl">

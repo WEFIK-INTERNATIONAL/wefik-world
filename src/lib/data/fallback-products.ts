@@ -129,7 +129,7 @@ Includes commercial usage rights on client sites under Single or Unlimited licen
 
 SaaSPulse is a production-ready marketing and dashboard starter kit designed for indie hackers, software founders, and digital agencies building high-converting web applications. Built on modern Next.js 15 App Router architecture with React 19, SaaSPulse eliminates weeks of boilerplate frontend development.
 
-The template includes 12 modular landing page sections: high-impact hero variations, feature grids, interactive comparison tables, multi-tier pricing toggles, customer testimonial cards, and an integrated blog shell. Styled with Tailwind CSS and accessible shadcn/ui component primitives, every component supports seamless dual-mode dark and light theme switching.
+The template includes 12 modular landing page sections: high-impact hero variations, feature grids, interactive comparison tables, multi-tier pricing toggles, customer testimonial cards, and an integrated blog shell. Styled with Tailwind CSS and accessible shadcn/ui component primitives, every component supports built-in dark and light theme switching.
 
 #### Technical Specifications & System Requirements
 - **Framework:** Next.js 15 (App Router, Server Components & Suspense boundaries)

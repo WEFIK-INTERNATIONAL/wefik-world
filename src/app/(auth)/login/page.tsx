@@ -58,9 +58,18 @@ function LoginFormContent() {
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
   const [magicLinkLoading, setMagicLinkLoading] = useState(false);
-  const [errorMessage, setErrorMessage] = useState<string | null>(
-    errorParam === 'auth_callback_failed' ? 'Authentication failed. Please try again.' : null
-  );
+  const getInitialErrorMessage = (param: string | null) => {
+    if (!param) return null;
+    if (param === 'link_expired' || param === 'auth_callback_failed') {
+      return 'This login link expired or is invalid — please request a new one.';
+    }
+    if (param === 'access_denied') {
+      return 'Login request was cancelled or access denied. Please try again.';
+    }
+    return 'Authentication failed. Please try again.';
+  };
+
+  const [errorMessage, setErrorMessage] = useState<string | null>(getInitialErrorMessage(errorParam));
 
   // Check if user is already logged in
   useEffect(() => {
@@ -307,10 +316,11 @@ function LoginFormContent() {
     setGoogleLoading(true);
     setErrorMessage(null);
 
+    const siteOrigin = process.env.NEXT_PUBLIC_SITE_URL || window.location.origin;
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(redirectUrl)}`,
+        redirectTo: `${siteOrigin}/auth/callback?next=${encodeURIComponent(redirectUrl)}`,
       },
     });
 

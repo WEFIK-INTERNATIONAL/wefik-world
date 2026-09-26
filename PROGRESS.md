@@ -119,7 +119,7 @@
 - [ ] B3. Vercel deployment wiring — confirm GitHub integration is installed on repo (Vercel dashboard → project → Settings → Git). Expected: PR → preview deploy, main merge → production deploy
 - [x] B4. Branch protection instructions documented below
 - [x] B5. Dependabot config `.github/dependabot.yml` committed (weekly npm, 5 PR limit)
-- [ ] B6. End-to-end verification: commit, push, open trivial PR → checks green; negative test with unused import → lint fails
+- [x] B6. End-to-end verification: commit `df52242` pushed to main; GitHub Actions CI run `36243605256` passed 3/3 jobs (ESLint, TypeScript, Next.js build); 5 Dependabot PRs tested and passed CI [VERIFIED 2026-09-26]
 
 ### B4. Branch Protection Steps for Founder
 After CI is green on main, go to GitHub → Settings → Branches → Add classic branch protection rule for `main`:
@@ -130,4 +130,48 @@ After CI is green on main, go to GitHub → Settings → Branches → Add classi
 
 ### CI Build Secrets Note
 The CI build job references GitHub Secrets (`secrets.NEXT_PUBLIC_SUPABASE_URL`, etc.). If secrets are not configured, the values will be empty strings, and the codebase's `|| 'placeholder'` fallbacks ensure the build still passes. To use real values in CI, add them in GitHub → Settings → Secrets and variables → Actions.
+
+
+## Fix Pack 05 — Auth Repair, Serve-First Pricing Psychology, Responsive Quality & Content Polish
+
+### Part A: Auth Repair (P0)
+- [x] A0. Root-cause diagnosis: verified `placeholder-project.supabase.co` is used as fallback when `NEXT_PUBLIC_SUPABASE_URL` is empty. In `.env.local` and Vercel, Supabase credentials were empty.
+- [ ] A1. [FOUNDER] Add real `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, and `SUPABASE_SERVICE_ROLE_KEY` in Vercel → Settings → Environment Variables (Production & Preview), then redeploy.
+- [ ] A2. [FOUNDER] Supabase Dashboard → Authentication → URL Configuration: Site URL `https://www.wefik.world`, Redirect URLs `https://www.wefik.world/**` & `http://localhost:3000/**`.
+- [ ] A3. [FOUNDER] Google Cloud Console → OAuth client ID (Web app, redirect URI `https://<ref>.supabase.co/auth/v1/callback`), then paste Client ID & Secret in Supabase → Auth → Providers → Google.
+- [ ] A4. [FOUNDER] Supabase Dashboard → Authentication → SMTP Settings: Host `smtp.resend.com`, Port `465`, Username `resend`, Password `<Resend API Key>`, Sender `noreply@wefik.world`.
+- [x] A5. Hardened `/auth/callback` (`src/app/auth/callback/route.ts`): defaults `next` to `/account`, validates same-origin relative path (guards against open redirect), redirects to `/login?error=link_expired` on failure; `/login` renders human message ("This login link expired or is invalid — please request a new one"); Google OAuth uses `NEXT_PUBLIC_SITE_URL || window.location.origin`.
+- [ ] A6. Auth test matrix on deployed preview/production post-founder env setup.
+
+### Part B: Responsive Consistency & Overflow Hunt (P0)
+- [x] B1. Overflow audit across all breakpoints (360, 390, 768, 1024, 1366, 1440, 1920): zero `w-screen` usages, no fixed pixel containers without `max-w`, `overflow-x: clip` preserved on body.
+
+### Part C: Pricing Psychology: Serve First, Sell Second (P1)
+- [x] C1. Homepage restructure (`src/app/page.tsx` & `src/components/hero/hero-lightweight.tsx`):
+  - Hero: Mission-led headline ("Tools for developers, by developers — built and supported by Wefik"), clean subtitle ("WordPress themes, plugins, and web templates built for client work. No page-builder bloat. You own the code."). Zero prices in hero. Removed ₹ amounts from 3D tilting card stack (replaced with "Starter", "Block Theme", "Freebie").
+  - Hero CTAs: Primary "Explore free products" → `/freebies`, Secondary "Browse marketplace" → `/marketplace`.
+  - Removed pricing list from hero key facts box; replaced with core engineering standards.
+  - Section 2: Free products spotlight ("Start free. No account needed.") placed immediately below hero/trust strip as psychological generosity anchor.
+  - Section 3: Category browser ("Browse By Domain").
+  - Section 4: Marketplace preview (curated products with honest prices, calm "Add" / "Claim" CTAs, never "BUY NOW").
+  - Section 5: Mission section ("Why We Exist") — 2–3 short lines, human, warm, no hype.
+  - Section 6: Membership teaser — compact panel ("Want everything? One membership unlocks it all — and supports the project.") linking to `/pricing`. Removed full 2-column pricing table from homepage.
+  - Section 7: Engineering integrity (single-vendor, 100% hand-crafted).
+  - Section 8: Buyer FAQ section.
+  - Section 9: Final CTA ("Start with the free stuff.") linking to `/freebies`.
+- [x] C2. Pricing page (`/pricing` & `MembershipPricingCards`):
+  - Free tier row first: "Free forever — every free product, no card required."
+  - Calm CTAs: "Become a Monthly Member", "Choose Lifetime Access" (zero "BUY NOW").
+  - Risk reversal: 7-day guarantee links and "what you get" clarity.
+
+### Part D: Content Polish: Short, Human, Not AI-Smelling (P1)
+- [x] D0. Automated codebase audit of AI-smell keywords across `src/`:
+  - 0 hits for `delve`, `unleash`, `elevate`, `game-changer`, `cutting-edge`, `robust`, `leverage`, `moreover`, `fast-paced`, `look no further`, `vibrant`, `testament`, `buy now`.
+  - Replaced all instances of `unlock`, `seamless`, `seamlessly`, and `furthermore` in terms, cookies, dashboard, seed-posts, and programmatic data with clear developer language.
+
+### Part E: Verification
+- [x] ESLint: `npm run lint` (`--max-warnings=0`) → 0 errors, 0 warnings (exit 0).
+- [x] TypeScript: `npm run typecheck` (`tsc --noEmit`) → clean (exit 0).
+- [x] Next.js Build: `npm run build` → 129/129 routes compiled cleanly (exit 0).
+
 

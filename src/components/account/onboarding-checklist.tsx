@@ -62,7 +62,7 @@ export function OnboardingChecklist({
             <h3 className="text-sm sm:text-base font-bold text-[var(--text)] font-display">Getting Started Checklist</h3>
           </div>
           <p className="text-xs text-slate mt-0.5">
-            Complete your onboarding steps to maximize account security and unlock your workflow.
+            Complete your onboarding steps to secure your account and access your downloads.
           </p>
         </div>
         <div className="flex items-center gap-2">

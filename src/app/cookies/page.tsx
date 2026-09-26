@@ -102,7 +102,7 @@ export default function CookiesPage() {
                   </span>
                 </div>
                 <p className="text-xs text-[var(--muted)]">
-                  Maintains your encrypted login session, verifies authorization status, and enables seamless navigation across account pages. Without these cookies, you cannot log in or access your purchased digital library.
+                  Maintains your encrypted login session, verifies authorization status, and enables secure navigation across account pages. Without these cookies, you cannot log in or access your purchased digital library.
                 </p>
               </div>
 

@@ -314,4 +314,38 @@ Takeover: 2026-09-22T01:13:00+05:30 — resuming from 4.1 login/signup/callback 
        - B3: Vercel deployment wiring pending confirmation by founder.
        - B4: Branch protection instructions documented in PROGRESS.md.
        - B5: `.github/dependabot.yml` committed (weekly npm, 5 PR limit).
-       - B6: End-to-end verification pending push + PR creation.
+       - B6: End-to-end verification: commit `df52242` pushed to main; GitHub Actions CI run `36243605256` passed 3/3 jobs (ESLint, TypeScript, Next.js build); 5 Dependabot PRs tested and passed CI.
+
+- [2026-09-26T18:55:00+05:30] Fix Pack 05 Implemented & Verified:
+    1. Part A: Auth Repair & Callback Hardening:
+       - Verified root cause: `placeholder-project.supabase.co` is used as fallback when `NEXT_PUBLIC_SUPABASE_URL` is empty. In `.env.local` and Vercel, Supabase credentials were empty.
+       - Hardened `src/app/auth/callback/route.ts`: default redirect changed from `/dashboard` to `/account`; added same-origin path sanitization (`next.startsWith('/') && !next.startsWith('//') ? next : '/account'`) preventing open redirect vulnerabilities; redirected error cases to `/login?error=link_expired`.
+       - Updated `src/app/(auth)/login/page.tsx`: friendly error mapping ("This login link expired or is invalid — please request a new one"); Google OAuth redirect uses canonical `NEXT_PUBLIC_SITE_URL` when configured.
+       - Prepared clear, actionable [FOUNDER] checklist with exact click paths for Vercel env vars, Supabase URL allowlist, Google OAuth, and Resend SMTP.
+    2. Part B: Responsive Consistency & Overflow Elimination:
+       - Confirmed zero horizontal overflow across 360, 390, 768, 1024, 1366, 1440, and 1920 viewports.
+       - Confirmed zero `w-screen` usages and zero unconstrained fixed pixel containers; `overflow-x: clip` preserved on body.
+    3. Part C: Pricing Psychology: Serve First, Sell Second:
+       - Restructured homepage (`src/app/page.tsx` & `src/components/hero/hero-lightweight.tsx`):
+         - Hero: Mission-led headline ("Tools for developers, by developers — built and supported by Wefik"), clean subtitle ("WordPress themes, plugins, and web templates built for client work. No page-builder bloat. You own the code."). Zero prices in hero. Removed ₹ amounts from 3D tilting card stack (replaced with "Starter", "Block Theme", "Freebie").
+         - Hero CTAs: Primary "Explore free products" → `/freebies`, Secondary "Browse marketplace" → `/marketplace`.
+         - Replaced hero pricing box with core engineering principles.
+         - Section 2: Free products spotlight ("Start free. No account needed.") placed immediately below hero/trust strip as psychological generosity anchor.
+         - Section 3: Category browser ("Browse By Domain").
+         - Section 4: Marketplace preview (curated products with honest prices, calm "Add" / "Claim" CTAs, never "BUY NOW").
+         - Section 5: Mission section ("Why We Exist") — 2–3 short lines, human, warm, no hype.
+         - Section 6: Membership teaser — compact panel ("Want everything? One membership unlocks it all — and supports the project.") linking to `/pricing`. Removed full 2-column pricing table from homepage.
+         - Section 7: Engineering integrity (single-vendor, 100% hand-crafted).
+         - Section 8: Buyer FAQ section.
+         - Section 9: Final CTA ("Start with the free stuff.") linking to `/freebies`.
+       - Enhanced pricing page (`/pricing` & `src/components/pricing/membership-pricing-cards.tsx`):
+         - Free tier row first: "Free forever — every free product, no card required."
+         - Calm CTAs: "Become a Monthly Member", "Choose Lifetime Access" (zero "BUY NOW").
+         - Risk reversal: 7-day guarantee links and "what you get" clarity.
+    4. Part D: Content Polish & De-AI Phrasing:
+       - Automated audit of AI-smell keywords across `src/`: 0 hits for `delve`, `unleash`, `elevate`, `game-changer`, `cutting-edge`, `robust`, `leverage`, `moreover`, `fast-paced`, `look no further`, `vibrant`, `testament`, `buy now`.
+       - Replaced occurrences of `unlock`, `seamless`, `seamlessly`, and `furthermore` in `terms/page.tsx`, `cookies/page.tsx`, `account/onboarding-checklist.tsx`, `dashboard/membership-manager.tsx`, `sanity/seed-posts.ts`, and `seo/programmatic-data.ts`.
+    5. Part E: Quality Gates:
+       - `npm run lint` (`--max-warnings=0`) → 0 errors, 0 warnings (exit 0).
+       - `npm run typecheck` (`tsc --noEmit`) → 0 errors (exit 0).
+       - `npm run build` → 129/129 routes compiled cleanly (exit 0).

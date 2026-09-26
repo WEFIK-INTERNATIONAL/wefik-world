@@ -206,7 +206,7 @@ export const USE_CASE_PAGES: Record<string, ProgrammaticPageData> = {
       { q: 'Does the theme support Veg and Non-Veg food dietary indicators?', a: 'Yes, native green and red dietary badges are integrated into the menu block system.' },
       { q: 'Can customers view the food menu without downloading slow PDFs?', a: 'Yes, responsive digital HTML menus are built into the theme for instant mobile viewing and SEO indexing.' },
       { q: 'Is there support for WhatsApp food ordering links?', a: 'Yes, one-click WhatsApp order buttons can be linked directly to individual dishes or table reservations.' },
-      { q: 'Can I accept UPI payments for online orders?', a: 'Yes, the theme integrates seamlessly with WooCommerce and Indian UPI gateways via Razorpay.' },
+      { q: 'Can I accept UPI payments for online orders?', a: 'Yes, the theme integrates directly with WooCommerce and Indian UPI gateways via Razorpay.' },
       { q: 'Does the theme include opening hours and location maps?', a: 'Yes, schema-optimized LocalBusiness opening hours and interactive location maps are pre-styled.' },
     ],
   },
@@ -375,7 +375,7 @@ export const USE_CASE_PAGES: Record<string, ProgrammaticPageData> = {
     faqs: [
       { q: 'What UI components are included in the dashboard?', a: 'Sidebars, metric summary cards, interactive charts, data tables, modals, tabs, and notification badges.' },
       { q: 'Is the sidebar navigation responsive on mobile tablets and phones?', a: 'Yes, a slide-out drawer with backdrop blur provides effortless mobile navigation.' },
-      { q: 'Can I connect charting libraries like Chart.js or ApexCharts?', a: 'Yes, canvas and SVG placeholders are configured for seamless charting integration.' },
+      { q: 'Can I connect charting libraries like Chart.js or ApexCharts?', a: 'Yes, canvas and SVG placeholders are configured for straightforward chart integration.' },
       { q: 'Does it support authentication screens like Login and Signup?', a: 'Yes, matched Login, Register, Forgot Password, and 404 error page templates are included.' },
       { q: 'Is the CSS easy to adapt to my company colors?', a: 'Yes, Tailwind theme tokens or CSS variables allow comprehensive palette updates.' },
     ],
@@ -497,7 +497,7 @@ export const ALTERNATIVES_PAGES: Record<string, ProgrammaticPageData> = {
       ],
     },
     faqs: [
-      { q: 'Will my Google rankings drop if I deactivate Yoast?', a: 'No. As long as your title tags, meta descriptions, and canonical URLs remain intact, Google will index your content seamlessly.' },
+      { q: 'Will my Google rankings drop if I deactivate Yoast?', a: 'No. As long as your title tags, meta descriptions, and canonical URLs remain intact, Google will index your content normally.' },
       { q: 'Does your alternative generate XML sitemaps automatically?', a: 'Yes, high-speed XML sitemaps are generated on-the-fly and updated upon publishing.' },
       { q: 'Can I set custom social share images for Facebook and Twitter?', a: 'Yes, dedicated OpenGraph and Twitter card image uploaders are built into every post.' },
     ],
@@ -678,7 +678,7 @@ export const ALTERNATIVES_PAGES: Record<string, ProgrammaticPageData> = {
     title: 'Envato Elements Alternatives: Clean Code Without Subscriptions | Wefik.world',
     metaDescription: 'Tired of monthly Envato Elements subscriptions and bloated template kits? Explore All-Access Lifetime Deals on high-performance themes and templates.',
     h1: 'Best Envato Elements Alternatives: Clean Code with Lifetime Access',
-    intro: 'Envato Elements promises unlimited downloads for a recurring monthly fee, but the majority of items are low-effort template kits that require heavy Elementor builders and third-party plugins to look like the preview. Furthermore, the moment you stop paying your monthly fee, your access to new downloads and updates vanishes. Wefik.world offers an All-Access Lifetime Deal where you pay once and own perpetual commercial rights to our entire digital catalog forever.',
+    intro: 'Envato Elements promises unlimited downloads for a recurring monthly fee, but the majority of items are low-effort template kits that require heavy Elementor builders and third-party plugins to look like the preview. Also, the moment you stop paying your monthly fee, your access to new downloads and updates vanishes. Wefik.world offers an All-Access Lifetime Deal where you pay once and own perpetual commercial rights to our entire digital catalog forever.',
     competitorComparison: {
       competitorName: 'Envato Elements',
       competitorCons: ['Endless recurring subscription model ($16.50–$33/mo)', 'Template kits require heavy page builders to function', 'Losing subscription access halts all product updates'],
@@ -996,7 +996,7 @@ export const GLOSSARY_TERMS: Record<string, {
     slug: 'what-is-a-wordpress-child-theme',
     primaryKeyword: 'what is a wordpress child theme',
     definition: 'A WordPress child theme is a theme that inherits the functionality, styling, and templates of another theme (the parent theme), allowing developers to modify or add functionality without losing custom changes when the parent theme updates.',
-    deepDive: 'When modifying WordPress themes, editing core parent files directly is a major technical mistake: the moment the parent theme receives an update, all direct code edits are permanently overwritten. A child theme keeps custom CSS in its own style.css and custom PHP in functions.php, ensuring safe, seamless lifetime parent updates.',
+    deepDive: 'When modifying WordPress themes, editing core parent files directly is a major technical mistake: the moment the parent theme receives an update, all direct code edits are permanently overwritten. A child theme keeps custom CSS in its own style.css and custom PHP in functions.php, ensuring parent updates never overwrite your custom work.',
     codeExample: `/*
  Theme Name:   AgencyPro Child
  Theme URI:    https://wefik.world/products/agencypro-theme
