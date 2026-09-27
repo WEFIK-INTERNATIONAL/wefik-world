@@ -365,9 +365,23 @@ Takeover: 2026-09-22T01:13:00+05:30 — resuming from 4.1 login/signup/callback 
       - Zero occurrences of "BUY NOW" or artificial urgency across the entire project.
     - Part D Content Polish:
       - Ripgrep verified 0 hits for all 17 AI-smell keywords (`delve`, `unlock`, `unleash`, `elevate`, `game-changer`, `cutting-edge`, `seamless`, `seamlessly`, `robust`, `leverage`, `furthermore`, `moreover`, `fast-paced`, `look no further`, `vibrant`, `testament`, `buy now`).
-    - Part E Quality Gates:
-      - `npm run lint` (`--max-warnings=0`) passed with 0 errors and 0 warnings.
-      - `npm run typecheck` (`tsc --noEmit`) passed clean.
+- [2026-09-27T17:52:00+05:30] Fix Pack 06 Mobile UX Overhaul, Tap Latency & Secret Guarding Initial Pass Complete:
+    - Part C Mobile UX Overhaul:
+      - C1: Logo SVG mark only below md (768px). Updated `src/components/brand/logo.tsx` with `wordmarkClassName`. Updated `src/components/layout/header.tsx` with `wordmarkClassName="hidden md:inline"`.
+      - Streamlined mobile header controls on phones (<sm / 360px & 390px): nav consists exclusively of Logo mark on the left, and Cart icon CTA + Hamburger takeover button on the right. Search, Auth, and ThemeToggle cleanly hidden on mobile chrome (all accessible inside FullscreenMenu).
+      - C3: Removed mobile 300ms tap delay via global `touch-action: manipulation` and `-webkit-tap-highlight-color: transparent` across all interactive elements in `src/app/globals.css`.
+      - Added instant active touch feedback (`:active { transform: scale(0.97); opacity: 0.92; }`) on buttons, links, and cards with reduced-motion safety.
+    - Part D Lenis Repair:
+      - Configured `syncTouch: false` and removed `touchMultiplier: 1.5` in `src/components/providers/smooth-scroll-provider.tsx` to preserve 100% native mobile touch momentum while keeping desktop wheel scrolling silky smooth.
+    - Part A3 Secret Guarding:
+      - Implemented automated secret detection scanner `scripts/check-secrets.mjs`.
+      - Wired `check-secrets.mjs` into Husky `.husky/pre-commit` and `package.json` (`npm run check:secrets`).
+      - Added `Secret Leak Scan` CI job in `.github/workflows/ci.yml`.
+    - Verification:
+      - `npm run check:secrets` passed with 0 detected secrets.
+      - `npm run lint` passed with 0 errors, 0 warnings.
+      - `npm run typecheck` passed clean.
       - `npm test` passed 100% of tests.
-      - `npm run build` compiled 129/129 static and dynamic routes cleanly.
+      - `npm run build` compiled 129/129 routes cleanly.
+
 

@@ -6,6 +6,7 @@ export interface LogoProps {
   size?: number | 'sm' | 'md' | 'lg' | 'xl';
   className?: string;
   showWordmark?: boolean;
+  wordmarkClassName?: string;
   markOnly?: boolean;
 }
 
@@ -24,6 +25,7 @@ export function Logo({
   size = 'md',
   className = '',
   showWordmark = true,
+  wordmarkClassName = '',
   markOnly = false,
 }: LogoProps) {
   const isPreset = typeof size === 'string' && size in SIZE_MAP;
@@ -63,7 +65,7 @@ export function Logo({
         {svgMark}
       </div>
       {showWordmark && (
-        <span className={`font-display font-bold tracking-tight text-[var(--text)] ${config.text}`}>
+        <span className={`font-display font-bold tracking-tight text-[var(--text)] ${config.text} ${wordmarkClassName}`}>
           wefik<span className="text-[var(--accent)]">.world</span>
         </span>
       )}

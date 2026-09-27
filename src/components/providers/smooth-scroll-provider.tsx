@@ -72,12 +72,12 @@ export function SmoothScrollProvider({ children }: { children: React.ReactNode }
       lenisRef.current = null;
     }
 
-    // Baseline configuration per Section 1: lerp 0.1, smoothWheel true, wheelMultiplier 1, touchMultiplier 1.5
+    // Baseline configuration: lerp 0.1, smoothWheel true, syncTouch false (native touch scrolling on mobile per Fix Pack 06 D2)
     const lenis = new Lenis({
       lerp: 0.1,
       smoothWheel: true,
       wheelMultiplier: 1,
-      touchMultiplier: 1.5,
+      syncTouch: false,
       infinite: false,
     });
 

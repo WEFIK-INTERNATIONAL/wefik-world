@@ -281,6 +281,29 @@ p {
   font-variant-numeric: tabular-nums;
 }
 
+/* --- Mobile Tap Responsiveness & Immediate Touch Feedback (Fix Pack 06 C3) --- */
+html,
+body,
+a,
+button,
+input,
+select,
+textarea,
+[role="button"],
+label {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Instant active press states on interactive elements */
+button:active:not(:disabled),
+a:active,
+[role="button"]:active {
+  transform: scale(0.97);
+  opacity: 0.92;
+  transition: transform 100ms ease, opacity 100ms ease;
+}
+
 /* --- Reduced Motion (Section 1.2 & 13) --- */
 @media (prefers-reduced-motion: reduce) {
   *,

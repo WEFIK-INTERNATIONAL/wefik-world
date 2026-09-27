@@ -13,6 +13,7 @@
     "lighthouse-audit": "node scripts/lighthouse-audit.mjs",
     "assert:images": "node scripts/assert-image-hostnames.mjs",
     "lint:theme": "node scripts/lint-theme-colors.mjs",
+    "check:secrets": "node scripts/check-secrets.mjs",
     "prepare": "husky"
   },
   "dependencies": {

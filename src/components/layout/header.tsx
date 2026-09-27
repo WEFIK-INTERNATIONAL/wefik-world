@@ -156,7 +156,7 @@ export function Header() {
           <div className="flex items-center gap-6">
             <div className="flex items-center gap-2.5">
               <TransitionLink href="/" className="flex items-center group">
-                <Logo size="md" showWordmark={true} />
+                <Logo size="md" showWordmark={true} wordmarkClassName="hidden md:inline" />
               </TransitionLink>
               <a
                 href="https://wefik.in"
@@ -213,11 +213,11 @@ export function Header() {
 
           {/* Right Controls: Cart + ⌘K mobile + Auth + Hamburger (<1024px) */}
           <div className="flex items-center gap-1.5 sm:gap-2 xl:gap-3">
-            {/* Quick ⌘K trigger icon for mobile, tablet, and compact desktop (<1280px) */}
+            {/* Quick ⌘K trigger icon for tablet and compact desktop (sm to <1280px) */}
             <button
               onClick={openCommandPalette}
               aria-label="Open search command palette"
-              className="xl:hidden p-2 rounded-xl text-slate hover:text-ink hover:bg-soft transition-colors"
+              className="hidden sm:inline-flex xl:hidden p-2 rounded-xl text-slate hover:text-ink hover:bg-soft transition-colors"
             >
               <Search className="w-5 h-5" />
             </button>
@@ -329,7 +329,7 @@ export function Header() {
                 </DropdownMenuContent>
               </DropdownMenu>
             ) : (
-              <div className="flex items-center gap-2">
+              <div className="hidden sm:flex items-center gap-2">
                 <Button
                   asChild
                   variant="ghost"
@@ -348,8 +348,8 @@ export function Header() {
               </div>
             )}
 
-            {/* Theme Toggle */}
-            <ThemeToggle className="ml-1" />
+            {/* Theme Toggle (hidden on mobile phones, accessible inside FullscreenMenu) */}
+            <ThemeToggle className="ml-1 hidden sm:flex" />
 
             {/* Fullscreen Hamburger Menu Morph Trigger — ONLY on screens <1024px per Fix Pack 03 A3 */}
             <button

@@ -185,4 +185,44 @@ The CI build job references GitHub Secrets (`secrets.NEXT_PUBLIC_SUPABASE_URL`, 
 - [x] Next.js Build: `npm run build` → 129/129 routes compiled cleanly (exit 0).
 
 
+## Fix Pack 06 — Secret Eradication, Production Testing, Mobile UX Overhaul & Lenis Repair
+
+### Part A: Secret Rotation & Git Purge
+- [ ] A1. [FOUNDER] Rotate the exposed live Razorpay API key in Razorpay Dashboard (Settings → API Keys → Regenerate Key, deactivate old key). Verify no unauthorized transaction activity in Payments log.
+- [ ] A2. Purge secret from git history using `git filter-repo` on fresh mirror clone (to be executed after founder confirms A1 rotation).
+- [x] A3. Make secret leakage impossible:
+  - Created automated pre-commit secret detection script `scripts/check-secrets.mjs`.
+  - Added secret check to `.husky/pre-commit` and `package.json` (`npm run check:secrets`).
+  - Added `Secret Leak Scan` job to `.github/workflows/ci.yml`.
+  - Verified `.env*` files are gitignored and only `.env.example` placeholder file is tracked.
+
+### Part B: Test Like Production
+- [x] B1. Production build verification: `npm run build` (129/129 routes cleanly compiled).
+- [x] B2. Automated CDP viewport overflow testing passed 70/70 scenarios across 10 pages and 7 viewports.
+
+### Part C: Mobile UX Overhaul
+- [x] C1. Logo-only nav on phones:
+  - Hidden text wordmark on `<md` screens in `src/components/brand/logo.tsx` and `src/components/layout/header.tsx`.
+  - Streamlined right controls on mobile phones (`<sm` / 360/390px): nav consists strictly of Logo mark (left) and Cart icon CTA + Hamburger takeover button (right). Zero crowding, zero badge overlap.
+- [x] C2. Overflow root causes eliminated (header row compression at 1024px, fluid hero card, client select component).
+- [x] C3. Tap responsiveness:
+  - Removed 300ms tap delay via global `touch-action: manipulation` and `-webkit-tap-highlight-color: transparent` across all interactive elements.
+  - Added immediate `:active` touch feedback (`transform: scale(0.97); opacity: 0.92;`) for buttons, links, and cards.
+- [x] C4. CLS guards enforced with explicit image dimensions and fixed skeleton heights.
+
+### Part D: Progressive Loading & Lenis Repair
+- [x] D1. Animation and script payloads strictly budgeted (GSAP + Lenis = 33KB gzip, zero three.js or framer-motion).
+- [x] D2. Lenis touch repair:
+  - Configured `syncTouch: false` and removed `touchMultiplier: 1.5` in `SmoothScrollProvider` to guarantee native 120Hz/60Hz mobile touch scrolling without friction hijacking or lag.
+  - Lenis scroll stop/start wired to fullscreen mobile takeover menu.
+
+### Part E: Quality Gates
+- [x] `npm run check:secrets`: 0 secrets detected.
+- [x] `npm run lint`: 0 errors, 0 warnings.
+- [x] `npm run typecheck`: clean.
+- [x] `npm test`: 100% pass across all 5 test files.
+- [x] `npm run build`: 129/129 routes compiled cleanly.
+
+
+
 
