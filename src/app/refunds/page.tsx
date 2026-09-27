@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   description:
     'Clear, fair refund policy for digital themes, plugins, templates, and All-Access memberships on Wefik.world.',
   alternates: {
-    canonical: 'https://wefik.world/refunds',
+    canonical: 'https://www.wefik.world/refunds',
   },
 };
 

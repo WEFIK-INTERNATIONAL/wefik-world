@@ -55,7 +55,7 @@ export const metadata: Metadata = {
     icon: [{ url: "/logo.svg", type: "image/svg+xml" }],
     apple: "/logo.svg",
   },
-  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://wefik.world"),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://www.wefik.world"),
   alternates: {
     canonical: "/",
   },
@@ -79,7 +79,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_IE",
-    url: "https://wefik.world",
+    url: "https://www.wefik.world",
     title: "wefik.world — Premium Digital Products for Agencies & Developers",
     description:
       "Curated WordPress themes, plugins, HTML templates, and code starters by Wefik Agency. Commercial licenses & instant downloads.",
@@ -116,7 +116,7 @@ const organizationJsonLd = {
   '@id': 'https://www.wefik.in/#organization',
   name: 'Wefik',
   url: 'https://www.wefik.in/',
-  logo: 'https://wefik.world/icon.svg',
+  logo: 'https://www.wefik.world/icon.svg',
   description:
     'Wefik is a digital agency specializing in web design, digital products, and full-stack engineering. Creator and single-vendor publisher of the Wefik.world marketplace.',
   telephone: '+91 96096 53522',
@@ -135,7 +135,7 @@ const organizationJsonLd = {
     },
   ],
   sameAs: [
-    'https://wefik.world',
+    'https://www.wefik.world',
     'https://twitter.com/wefik',
     'https://github.com/WEFIK-INTERNATIONAL',
     'https://linkedin.com/company/wefik',
@@ -145,9 +145,9 @@ const organizationJsonLd = {
 const websiteJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'WebSite',
-  '@id': 'https://wefik.world/#website',
+  '@id': 'https://www.wefik.world/#website',
   name: 'Wefik World',
-  url: 'https://wefik.world',
+  url: 'https://www.wefik.world',
   description:
     'The official digital marketplace of Wefik. Production-ready WordPress themes, plugins, and web templates built and supported by the Wefik team.',
   publisher: {
@@ -155,7 +155,7 @@ const websiteJsonLd = {
   },
   potentialAction: {
     '@type': 'SearchAction',
-    target: 'https://wefik.world/marketplace?q={search_term_string}',
+    target: 'https://www.wefik.world/marketplace?q={search_term_string}',
     'query-input': 'required name=search_term_string',
   },
 };

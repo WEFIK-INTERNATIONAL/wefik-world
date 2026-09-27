@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   description:
     'Instant electronic delivery policy for digital software, themes, plugins, and templates purchased on Wefik.world.',
   alternates: {
-    canonical: 'https://wefik.world/delivery',
+    canonical: 'https://www.wefik.world/delivery',
   },
 };
 

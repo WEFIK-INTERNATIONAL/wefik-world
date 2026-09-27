@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   description:
     'Transparent disclosure of essential cookies, theme preferences, and privacy-respecting storage practices on Wefik.world.',
   alternates: {
-    canonical: 'https://wefik.world/cookies',
+    canonical: 'https://www.wefik.world/cookies',
   },
 };
 

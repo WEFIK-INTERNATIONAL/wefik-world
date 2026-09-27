@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   description:
     'Single-Site and Unlimited-Site commercial license terms for themes, plugins, and web templates purchased on Wefik.world.',
   alternates: {
-    canonical: 'https://wefik.world/license',
+    canonical: 'https://www.wefik.world/license',
   },
 };
 

@@ -17,10 +17,10 @@ export function FreebieMagnetKit({ productTitle, productSlug }: FreebieMagnetKit
 
   const title = productTitle || 'Free WordPress Themes & Plugins';
   const url = productSlug
-    ? `https://wefik.world/products/${productSlug}`
-    : 'https://wefik.world/freebies';
+    ? `https://www.wefik.world/products/${productSlug}`
+    : 'https://www.wefik.world/freebies';
 
-  const badgeHtml = `<a href="${url}?ref=badge" target="_blank" rel="noopener"><img src="https://wefik.world/badges/free-from-wefik.svg" alt="Free from Wefik.world" width="160" height="38" /></a>`;
+  const badgeHtml = `<a href="${url}?ref=badge" target="_blank" rel="noopener"><img src="https://www.wefik.world/badges/free-from-wefik.svg" alt="Free from Wefik.world" width="160" height="38" /></a>`;
 
   const copyUrl = () => {
     navigator.clipboard.writeText(url);

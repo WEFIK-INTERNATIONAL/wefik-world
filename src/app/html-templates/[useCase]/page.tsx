@@ -28,7 +28,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: data.title,
     description: data.metaDescription,
     alternates: {
-      canonical: `https://wefik.world/html-templates/${useCase}`,
+      canonical: `https://www.wefik.world/html-templates/${useCase}`,
     },
   };
 }
@@ -51,7 +51,7 @@ export default async function HtmlTemplateUseCasePage({ params }: Props) {
         parentHub: { label: 'HTML Templates', url: '/html-templates' },
       }}
       products={products}
-      canonicalUrl={`https://wefik.world/html-templates/${useCase}`}
+      canonicalUrl={`https://www.wefik.world/html-templates/${useCase}`}
     />
   );
 }

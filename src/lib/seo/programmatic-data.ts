@@ -999,7 +999,7 @@ export const GLOSSARY_TERMS: Record<string, {
     deepDive: 'When modifying WordPress themes, editing core parent files directly is a major technical mistake: the moment the parent theme receives an update, all direct code edits are permanently overwritten. A child theme keeps custom CSS in its own style.css and custom PHP in functions.php, ensuring parent updates never overwrite your custom work.',
     codeExample: `/*
  Theme Name:   AgencyPro Child
- Theme URI:    https://wefik.world/products/agencypro-theme
+ Theme URI:    https://www.wefik.world/products/agencypro-theme
  Description:  Child theme for AgencyPro
  Author:       Wefik Agency
  Template:     agencypro

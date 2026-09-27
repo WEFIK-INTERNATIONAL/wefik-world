@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   title: data.title,
   description: data.metaDescription,
   alternates: {
-    canonical: 'https://wefik.world/wordpress-themes',
+    canonical: 'https://www.wefik.world/wordpress-themes',
   },
 };
 
@@ -19,7 +19,7 @@ export default async function WordPressThemesHub() {
     <ProgrammaticPageView
       data={data}
       products={products}
-      canonicalUrl="https://wefik.world/wordpress-themes"
+      canonicalUrl="https://www.wefik.world/wordpress-themes"
       categoryLabel="WordPress Themes"
     />
   );

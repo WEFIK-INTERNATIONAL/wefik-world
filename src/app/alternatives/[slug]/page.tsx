@@ -22,7 +22,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: data.title,
     description: data.metaDescription,
     alternates: {
-      canonical: `https://wefik.world/alternatives/${slug}`,
+      canonical: `https://www.wefik.world/alternatives/${slug}`,
     },
   };
 }
@@ -44,7 +44,7 @@ export default async function AlternativePage({ params }: Props) {
         parentHub: { label: 'Marketplace', url: '/marketplace' },
       }}
       products={products}
-      canonicalUrl={`https://wefik.world/alternatives/${slug}`}
+      canonicalUrl={`https://www.wefik.world/alternatives/${slug}`}
     />
   );
 }

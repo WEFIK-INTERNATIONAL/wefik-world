@@ -28,7 +28,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: data.title,
     description: data.metaDescription,
     alternates: {
-      canonical: `https://wefik.world/wordpress-plugins/${useCase}`,
+      canonical: `https://www.wefik.world/wordpress-plugins/${useCase}`,
     },
   };
 }
@@ -51,7 +51,7 @@ export default async function WordPressPluginUseCasePage({ params }: Props) {
         parentHub: { label: 'WordPress Plugins', url: '/wordpress-plugins' },
       }}
       products={products}
-      canonicalUrl={`https://wefik.world/wordpress-plugins/${useCase}`}
+      canonicalUrl={`https://www.wefik.world/wordpress-plugins/${useCase}`}
     />
   );
 }

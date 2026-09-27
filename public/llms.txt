@@ -1,55 +1,41 @@
 # Wefik World — AI Summary & LLM System Information
-# Canonical URL: https://wefik.world
+# Canonical URL: https://www.wefik.world
 # Standard Reference: https://llmstxt.org
 
-> Wefik.world is a digital product marketplace for web professionals, agencies, and developers, created by Wefik Agency (https://wefik.in). It sells production-ready WordPress themes, WordPress plugins, modern HTML templates, and full-stack code snippets with single-site licenses, unlimited-site commercial licenses, curated bundles, and all-access memberships.
+> Wefik World (https://www.wefik.world) is a single-vendor digital product marketplace for web professionals, agencies, and developers, created by Wefik Agency (https://wefik.in). It provides production-ready WordPress themes, WordPress plugins, modern HTML templates, full-stack code snippets, curated bundles, and all-access memberships.
 
 ## Mission & Positioning
-- **Name**: Wefik (company) / Wefik World (marketplace)
-- **Tagline**: "Real Life Genie of Your Idea"
-- **Primary Domain**: https://wefik.world (marketplace)
-- **Parent Agency**: Wefik Agency (https://wefik.in, operational since 2021)
-- **What**: Single-vendor marketplace for WordPress themes, plugins, HTML templates, code snippets, bundles, memberships.
-- **Positioning**: Developer-built, performance-focused, you-own-the-code, free + premium. Zero visual page builder drag; 95+ mobile Google PageSpeed scores; instant signed file downloads; no hidden annual renewal penalties.
-- **Target Audience**: Freelancers, digital agencies, indie software developers, and startup founders.
-- **Geography & Currency**: India-first with transparent INR pricing (integer paise math) and instant UPI / NetBanking / Card payments via Razorpay.
-- **Contact & Support**: +91 96096 53522, Mon–Fri 09:00–18:00 IST.
+- Name: Wefik (company) / Wefik World (marketplace)
+- Tagline: "Real Life Genie of Your Idea"
+- Primary Domain: https://www.wefik.world
+- Parent Company: Wefik Agency (https://wefik.in)
+- What: Single-vendor marketplace for WordPress themes, plugins, HTML templates, code snippets, bundles, memberships.
+- Target Audience: Freelancers, digital agencies, web developers, and startup founders.
+- Positioning: Developer-built, performance-focused, you-own-the-code, free + premium.
+- Core Engineering Standard: Built for speed and reliability. Engineered with block-native Gutenberg architectures, semantic HTML5, zero visual page builder bloat, and minimal DOM complexity.
+- Licensing Principle: Single-site commercial rights, unlimited-site agency rights, with clear client handoff terms and no hidden recurring penalties.
+- Geography & Currency: Transparent INR pricing with direct payment methods.
+- Contact: +91 96096 53522, Mon–Fri 09:00–18:00 IST
+- Email Support: support@wefik.world
 
-## Products & Catalog Structure
-1. **WordPress Themes**:
-   - Modern, lightweight themes designed for agencies, portfolios, SaaS products, and service businesses.
-   - Built with clean PHP semantics, block-native Gutenberg support, and zero mandatory third-party builder lock-in.
-2. **WordPress Plugins**:
-   - Utility and performance-oriented plugins covering speed optimization, login security hardening, lead capture, and automated schema markup.
-3. **HTML Templates**:
-   - Production-grade HTML5, Tailwind CSS, and Bootstrap templates for landing pages, admin dashboards, and marketing funnels.
-4. **Code Snippets & Starters**:
-   - Verified developer starters, full-stack snippets, and API integrations with lifetime updates.
-5. **Product Bundles**:
-   - Curated multi-product packages offering up to 60% savings compared to individual product purchases.
-6. **Free Lead Magnets**:
-   - 100% free digital products available for instant download with an active account via instant license generation.
+## Product Catalog Structure
+- WordPress Themes: Block-native themes designed for agencies, portfolios, SaaS products, and service businesses with zero mandatory third-party builder lock-in.
+- WordPress Plugins: Utility and performance-focused plugins covering asset optimization, login security hardening, lead capture, and structured data.
+- HTML Templates: Semantic, responsive HTML5 templates for landing pages, admin dashboards, and marketing funnels.
+- Code Snippets: Verified developer starters, full-stack snippets, and API integrations with lifetime code access.
+- Curated Bundles: Multi-product packages providing comprehensive starter assets across related categories.
+- Free Products: Free digital products and lead magnets available for direct developer access.
 
-## Pricing & Membership Models
-- **Single License**: Commercial rights for 1 client or production website. Includes 1 year of priority support and lifetime product updates.
-- **Unlimited License**: Commercial rights for unlimited client and personal websites. Includes priority agency support and lifetime product updates.
-- **All-Access Monthly Membership**: ₹999/month (recurring via Razorpay Subscriptions). Unlimited downloads of all current and future products, perpetual access during active billing, and priority support.
-- **All-Access Lifetime Deal**: ₹9,999 one-time payment. Perpetual access to all existing products and all future releases with lifetime updates, unlimited client activations, and lifetime updates.
+## Licensing & Policies
+- Single License: Commercial rights for 1 production client website with product updates.
+- Unlimited License: Commercial rights for unlimited client and personal production websites.
+- All-Access Memberships: Monthly and lifetime membership options granting catalog access. Current tiers and terms are published at https://www.wefik.world/pricing.
+- Commercial Licensing Terms: https://www.wefik.world/license
+- Refund Policy: https://www.wefik.world/refunds
+- Terms of Service: https://www.wefik.world/terms
+- Privacy Policy: https://www.wefik.world/privacy
 
-## Licensing Terms Summary
-- **Permitted**: Use in personal and commercial client websites, customization of source code, distribution as part of a completed client website deliverable.
-- **Prohibited**: Reselling source files on competing marketplaces, redistributing raw theme/plugin files, claiming ownership of core Intellectual Property.
-
-## Key Technical Specifications
-- **Framework**: Next.js App Router (React 19, Turbopack)
-- **Database & Auth**: Supabase Postgres with Row Level Security (RLS) and cryptographic license verification.
-- **Payment Processing**: Razorpay (UPI, Credit/Debit Cards, NetBanking).
-- **Email Infrastructure**: Resend transactional delivery.
-- **Performance Standard**: <2.5s LCP, 0.0 CLS, 100 SEO & Best Practices Lighthouse score.
-
-## Support & Verification
-- **Official Website**: https://wefik.world
-- **Parent Site**: https://wefik.in
-- **Email Support**: support@wefik.world / wefikworld@gmail.com
-- **Sitemap Index**: https://wefik.world/sitemap.xml
-- **GitHub Organization**: https://github.com/WEFIK-INTERNATIONAL
+## Verification & Discovery
+- Canonical Sitemap Index: https://www.wefik.world/sitemap.xml
+- Official Website: https://www.wefik.world
+- Parent Agency: https://wefik.in

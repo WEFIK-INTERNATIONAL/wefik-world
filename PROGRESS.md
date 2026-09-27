@@ -222,7 +222,63 @@ The CI build job references GitHub Secrets (`secrets.NEXT_PUBLIC_SUPABASE_URL`, 
 - [x] `npm run typecheck`: clean.
 - [x] `npm test`: 100% pass across all 5 test files.
 - [x] `npm run build`: 129/129 routes compiled cleanly.
-- [x] GitHub OAuth: Added "Continue with GitHub" button and auth handler in unified `/login` flow with reconnect state handling.
+
+## Fix Pack 07 — Canonical Lock-In, Sitemap Architecture Rebuild, Robots & LLMs Hardening
+
+### Part A: Canonical Domain Lock-In
+- [x] A1. Live HTTP Curl Verification:
+  - `https://wefik.world` returns `307 Temporary Redirect` -> `https://www.wefik.world/`.
+  - `https://www.wefik.world` returns `200 OK`.
+  - `http://wefik.world` returns `308 Permanent Redirect` -> `https://wefik.world/` -> 307 -> `https://www.wefik.world/`.
+  - `http://www.wefik.world` returns `308 Permanent Redirect` -> `https://www.wefik.world/`.
+- [x] A2. Founder Decision: Canonical winner confirmed as **`https://www.wefik.world`** [VERIFIED 2026-09-27].
+- [x] A3. Domain Lock-in Sweep: Updated all baseUrl fallbacks, sitemap routes, `robots.ts`, `layout.tsx` metadataBase, OpenGraph, JSON-LD, and page templates across `src/` to strictly use `https://www.wefik.world`. Zero mixed signals.
+
+### Part B: Sitemap Architecture Rebuild
+- [x] B1. Sitemap Index & Dedicated Child Sitemaps:
+  - Replaced monolithic `src/app/sitemap.ts` with `src/app/sitemap.xml/route.ts` outputting `<sitemapindex>` pointing to all 4 child sitemaps.
+  - Created `src/app/sitemap-static.xml/route.ts` containing 20 static pages (homepage, marketplace, bundles, freebies, pricing, about, contact, faqs, licensing, category hubs, and legal policies).
+  - Single `/delivery` page included; `/status` utility page permanently deleted.
+  - No user-specific or transactional pages (/login, /account, /checkout, /cart).
+- [x] B2. Real lastmod and sane metadata:
+  - Products: real `updated_at` from Supabase database.
+  - Content: real `publishedAt` from Sanity seed posts.
+  - Static: real content edit date (`2026-09-27T00:00:00.000Z` for core pages, `2026-09-22T00:00:00.000Z` for legal pages).
+  - Sane priority and changefreq hints (1.0 daily for home, 0.9 daily for marketplace, 0.4 yearly for legal).
+- [x] B3. Image Extensions on Products:
+  - Updated `src/app/sitemap-products.xml/route.ts` with `xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"`.
+  - Output `<image:image>` entries (`<image:loc>`, `<image:title>`, `<image:caption>`) for verified product CDN images.
+- [x] B4. Zero Duplication Rule:
+  - Automated test `tests/sitemap-e2e.test.mjs` verifies that every one of the 93 URLs lives in EXACTLY ONE child sitemap. Zero duplicates.
+
+### Part C: Robots.txt Cleanup
+- [x] C1. Deprecated `Host:` directive removed from `src/app/robots.ts`.
+- [x] C2. Canonical sitemap index referenced exclusively (`https://www.wefik.world/sitemap.xml`).
+- [x] C3. AI Crawlers preserved and expanded: `GPTBot`, `ChatGPT-User`, `OAI-SearchBot`, `ClaudeBot`, `PerplexityBot`, `Perplexity-User`, `Google-Extended`, `Bytespider`, `Diffbot`, `Applebot-Extended`.
+- [x] C4. Disallow paths restricted to real private routes (`/dashboard`, `/admin`, `/checkout`, `/order-success`, `/studio`, `/api`, `/auth`, `/account`).
+
+### Part D: LLMS.txt Rewrite & Security Hardening
+- [x] D1. Tech stack disclosure deleted: Completely removed Next.js, Supabase, Razorpay, Resend, and Turbopack references. Replaced with single safe engineering standard: "Built for speed and reliability."
+- [x] D2. Unverified claims softened: Removed hardcoded "95+ PageSpeed", "100 SEO", "0.0 CLS", "operational since 2021", and price figures. Replaced with clear links to live `/pricing` and official terms.
+- [x] D3. Machine-readable entity facts preserved: Canonical URL header, mission, positioning, category breakdown, licensing policies, and contact channels.
+
+### Part E: UI Invisibility
+- [x] E1. Removed `/sitemap.xml` and `/llms.txt` links from `src/components/layout/footer.tsx` (replaced with `/glossary`).
+- [x] E2. Created automated script `scripts/audit-sitemaps-and-seo.mjs` verifying zero crawler file links across all `src/components` and `src/app` TSX files.
+
+### Part F: Programmatic Pages Quality Audit
+- [x] F1. Quality Assessment:
+  - All 38 programmatic pages (`/themeforest-alternative`, 12 use-cases, 10 alternatives, 5 comparisons, 4 free hubs, 6 collections) contain substantial unique content (300-500 words intro, competitor pros/cons matrix, 5-8 unique FAQs, breadcrumbs, ItemList schema).
+  - All pages approved for indexing with zero thin-content flags.
+
+### Part G: Quality Gates & Verification
+- [x] `node scripts/check-secrets.mjs`: PASS (0 secrets).
+- [x] `node scripts/audit-sitemaps-and-seo.mjs`: PASS (0 violations).
+- [x] `npx tsx tests/sitemap-e2e.test.mjs`: PASS (100% valid XML, 93 unique URLs, 0 duplicates, 100% canonical domain).
+- [x] `npm run lint`: PASS (0 errors, 0 warnings with `--max-warnings=0`).
+- [x] `npm run typecheck`: PASS (0 errors).
+- [x] `npm test`: PASS (6/6 test suites passed).
+- [x] `npm run build`: PASS (all 130 routes cleanly compiled).
 
 
 

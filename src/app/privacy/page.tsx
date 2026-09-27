@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   description:
     'Privacy Policy and data protection framework for Wefik.world. Details on account data, payment processors, security practices, and rights under India DPDP Act 2023.',
   alternates: {
-    canonical: 'https://wefik.world/privacy',
+    canonical: 'https://www.wefik.world/privacy',
   },
 };
 

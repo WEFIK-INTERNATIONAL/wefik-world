@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   description:
     'Direct support from the engineering team that builds Wefik World products. Phone: +91 96096 53522, Email: hello@wefik.world, Hours: Mon-Fri 09:00-18:00 IST.',
   alternates: {
-    canonical: 'https://wefik.world/contact',
+    canonical: 'https://www.wefik.world/contact',
   },
 };
 
@@ -16,7 +16,7 @@ const contactJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'ContactPage',
   name: 'Contact Wefik World',
-  url: 'https://wefik.world/contact',
+  url: 'https://www.wefik.world/contact',
   mainEntity: {
     '@type': 'Organization',
     '@id': 'https://www.wefik.in/#organization',

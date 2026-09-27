@@ -382,7 +382,35 @@ Takeover: 2026-09-22T01:13:00+05:30 — resuming from 4.1 login/signup/callback 
     - Added `handleGithubOAuth` handler calling `supabase.auth.signInWithOAuth({ provider: 'github', ... })`.
     - Added GitHub reconnect alert for accounts previously bound to GitHub without a password.
     - Verified all quality gates: `check:secrets` (0), `lint` (0/0), `typecheck` (0), `test` (100%), and `build` (129/129 routes cleanly compiled).
-    - Pushed commit `65812eb` to `origin/main`.
+- [2026-09-27T19:30:00+05:30] Fix Pack 07 Canonical Lock-In, Sitemap Architecture Rebuild, Robots & LLMs Hardening Complete:
+    - Part A Canonical Domain Lock-In:
+      - Live curl check confirmed https://wefik.world 307-redirects to https://www.wefik.world (which returns 200 OK).
+      - Founder confirmed canonical winner as https://www.wefik.world.
+      - Conducted complete codebase sweep updating all baseUrl fallbacks, metadataBase, OpenGraph, JSON-LD, sitemaps, robots.ts, and page alternates across src/ to https://www.wefik.world with 0 non-www remnants.
+    - Part B Sitemap Architecture Rebuild:
+      - Rebuilt /sitemap.xml into a sitemap index route handler pointing to 4 dedicated child sitemaps.
+      - Created /sitemap-static.xml with 20 unique static & legal routes (single /delivery, zero /status, zero user utility pages).
+      - Updated /sitemap-products.xml with real database updated_at timestamps and Google Image extensions (<image:image>, <image:loc>, <image:title>, <image:caption>).
+      - Updated /sitemap-content.xml containing 29 routes (7 blog posts + 20 glossary items + 2 hubs) with real publishedAt dates.
+      - Updated /sitemap-programmatic.xml with 38 rich programmatic SEO routes.
+      - Verified zero duplicate URLs across all child sitemaps (all 93 URLs unique).
+    - Part C Robots.txt Cleanup:
+      - Removed deprecated Host: directive. Pointed sitemap directive exclusively to https://www.wefik.world/sitemap.xml.
+      - Preserved and expanded AI crawler allowances (GPTBot, ChatGPT-User, OAI-SearchBot, ClaudeBot, PerplexityBot, Perplexity-User, Google-Extended, Bytespider, Diffbot, Applebot-Extended).
+    - Part D LLMS.txt Rewrite & Security:
+      - Purged entire Key Technical Specifications section (Next.js, Supabase, Razorpay, Resend deleted).
+      - Softened unverified claims; linked to live pricing and terms.
+    - Part E UI Invisibility:
+      - Removed crawler file links from footer.tsx; verified zero UI references across all TSX files.
+    - Part F Programmatic Pages Quality:
+      - Audited all 38 programmatic pages; verified substantial, non-thin content.
+    - Part G Verification:
+      - check:secrets passed (0 leaks).
+      - audit-sitemaps-and-seo passed (0 violations).
+      - sitemap-e2e test passed (100% pass).
+      - npm test passed (6/6 suites).
+      - npm run lint (0/0) & npm run typecheck (clean).
+      - npm run build (130/130 routes compiled).
 
 
 

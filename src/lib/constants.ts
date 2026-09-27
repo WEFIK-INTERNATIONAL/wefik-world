@@ -10,7 +10,7 @@ export const SITE_CONFIG = {
   tagline: "Premium digital products for people who build the web",
   description:
     "WordPress themes, HTML templates, plugins, and code snippets — crafted by Wefik, the digital agency behind hundreds of web projects.",
-  url: process.env.NEXT_PUBLIC_APP_URL ?? "https://wefik.world",
+  url: process.env.NEXT_PUBLIC_APP_URL ?? "https://www.wefik.world",
   ogImage: "/og-default.png",
   creator: "Wefik",
   creatorUrl: "https://wefik.in",

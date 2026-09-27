@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   description:
     'Tired of bloated 80MB themes and abandoned plugins on ThemeForest? Discover Wefik.world: single-vendor code, 100/100 speed, lifetime updates, and Indian UPI payments.',
   alternates: {
-    canonical: 'https://wefik.world/themeforest-alternative',
+    canonical: 'https://www.wefik.world/themeforest-alternative',
   },
 };
 

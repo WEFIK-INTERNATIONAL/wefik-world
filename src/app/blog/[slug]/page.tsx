@@ -75,12 +75,12 @@ export default async function BlogPostDetailPage({ params }: BlogPostPageProps) 
       name: 'Wefik World',
       logo: {
         '@type': 'ImageObject',
-        url: 'https://wefik.world/logo.png',
+        url: 'https://www.wefik.world/logo.png',
       },
     },
     mainEntityOfPage: {
       '@type': 'WebPage',
-      '@id': `https://wefik.world/blog/${post.slug}`,
+      '@id': `https://www.wefik.world/blog/${post.slug}`,
     },
   };
 

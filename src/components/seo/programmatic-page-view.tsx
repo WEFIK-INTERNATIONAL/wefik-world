@@ -262,7 +262,7 @@ export function ProgrammaticPageView({
                   "@type": "ListItem",
                   position: 1,
                   name: "Home",
-                  item: "https://wefik.world",
+                  item: "https://www.wefik.world",
                 },
                 {
                   "@type": "ListItem",
@@ -287,7 +287,7 @@ export function ProgrammaticPageView({
                 "@type": "ListItem",
                 position: idx + 1,
                 name: p.title,
-                url: `https://wefik.world/products/${p.slug}`,
+                url: `https://www.wefik.world/products/${p.slug}`,
               })),
             }),
           }}

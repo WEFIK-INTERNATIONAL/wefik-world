@@ -28,7 +28,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: data.title,
     description: data.metaDescription,
     alternates: {
-      canonical: `https://wefik.world/free/${category}`,
+      canonical: `https://www.wefik.world/free/${category}`,
     },
   };
 }
@@ -51,7 +51,7 @@ export default async function FreeCategoryHubPage({ params }: Props) {
         parentHub: { label: 'Freebies', url: '/freebies' },
       }}
       products={products}
-      canonicalUrl={`https://wefik.world/free/${category}`}
+      canonicalUrl={`https://www.wefik.world/free/${category}`}
     />
   );
 }

@@ -1,14 +1,16 @@
 import { MetadataRoute } from 'next';
 
 export default function robots(): MetadataRoute.Robots {
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://wefik.world';
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://www.wefik.world';
 
-  // Section 5.1 & 9 — Explicitly allow major AI search & citation crawlers
+  // Section 5.1 & Part C — Explicitly allow AI search & citation crawlers
   const aiBots = [
     'GPTBot',
     'ChatGPT-User',
+    'OAI-SearchBot',
     'ClaudeBot',
     'PerplexityBot',
+    'Perplexity-User',
     'Google-Extended',
     'Bytespider',
     'Diffbot',
@@ -23,8 +25,16 @@ export default function robots(): MetadataRoute.Robots {
     '/freebies',
     '/pricing',
     '/about',
+    '/contact',
     '/faqs',
     '/licensing',
+    '/license',
+    '/terms',
+    '/privacy',
+    '/refunds',
+    '/cookies',
+    '/membership-terms',
+    '/delivery',
     '/blog',
     '/blog/*',
     '/wordpress-themes',
@@ -40,6 +50,7 @@ export default function robots(): MetadataRoute.Robots {
     '/themeforest-alternative',
     '/free/*',
     '/collections/*',
+    '/glossary',
     '/glossary/*',
     '/llms.txt',
   ];
@@ -55,6 +66,8 @@ export default function robots(): MetadataRoute.Robots {
     '/studio/*',
     '/api/*',
     '/auth/*',
+    '/account',
+    '/account/*',
   ];
 
   return {
@@ -70,12 +83,7 @@ export default function robots(): MetadataRoute.Robots {
         disallow: privateDisallowedPaths,
       })),
     ],
-    sitemap: [
-      `${baseUrl}/sitemap.xml`,
-      `${baseUrl}/sitemap-products.xml`,
-      `${baseUrl}/sitemap-content.xml`,
-      `${baseUrl}/sitemap-programmatic.xml`,
-    ],
-    host: baseUrl,
+    // Canonical sitemap index (child sitemaps are discovered via index)
+    sitemap: `${baseUrl}/sitemap.xml`,
   };
 }

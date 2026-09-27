@@ -40,7 +40,7 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
 
   const title = product.seo_title || fallbackTitle;
   const description = product.seo_description || fallbackDescription;
-  const canonicalUrl = `https://wefik.world/products/${product.slug}`;
+  const canonicalUrl = `https://www.wefik.world/products/${product.slug}`;
 
   return {
     title,
@@ -98,7 +98,7 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
     },
     offers: {
       '@type': 'Offer',
-      url: `https://wefik.world/products/${product.slug}`,
+      url: `https://www.wefik.world/products/${product.slug}`,
       priceCurrency: 'INR',
       price: (product.price_inr / 100).toFixed(2),
       availability: 'https://schema.org/InStock',
@@ -122,19 +122,19 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
         '@type': 'ListItem',
         position: 1,
         name: 'Home',
-        item: 'https://wefik.world',
+        item: 'https://www.wefik.world',
       },
       {
         '@type': 'ListItem',
         position: 2,
         name: 'Marketplace',
-        item: 'https://wefik.world/marketplace',
+        item: 'https://www.wefik.world/marketplace',
       },
       {
         '@type': 'ListItem',
         position: 3,
         name: product.title,
-        item: `https://wefik.world/products/${product.slug}`,
+        item: `https://www.wefik.world/products/${product.slug}`,
       },
     ],
   };

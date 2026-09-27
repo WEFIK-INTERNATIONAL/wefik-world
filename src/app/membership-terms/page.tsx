@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   description:
     'Commercial terms governing Wefik.world All-Access Monthly and Lifetime Deal memberships. Billing, renewals, cancellation rules, and post-expiry license rights.',
   alternates: {
-    canonical: 'https://wefik.world/membership-terms',
+    canonical: 'https://www.wefik.world/membership-terms',
   },
 };
 

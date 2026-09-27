@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   title: data.title,
   description: data.metaDescription,
   alternates: {
-    canonical: 'https://wefik.world/code-snippets',
+    canonical: 'https://www.wefik.world/code-snippets',
   },
 };
 
@@ -19,7 +19,7 @@ export default async function CodeSnippetsHub() {
     <ProgrammaticPageView
       data={data}
       products={products}
-      canonicalUrl="https://wefik.world/code-snippets"
+      canonicalUrl="https://www.wefik.world/code-snippets"
       categoryLabel="Code Snippets"
     />
   );

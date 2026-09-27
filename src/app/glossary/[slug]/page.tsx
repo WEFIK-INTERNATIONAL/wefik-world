@@ -25,7 +25,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: `${term.term}: Definition & Practical Guide | Wefik.world`,
     description: term.definition.slice(0, 155),
     alternates: {
-      canonical: `https://wefik.world/glossary/${slug}`,
+      canonical: `https://www.wefik.world/glossary/${slug}`,
     },
   };
 }
@@ -197,7 +197,7 @@ export default async function GlossaryTermPage({ params }: Props) {
               "@type": "DefinedTerm",
               name: term.term,
               description: term.definition,
-              inDefinedTermSet: "https://wefik.world/glossary",
+              inDefinedTermSet: "https://www.wefik.world/glossary",
             }),
           }}
         />

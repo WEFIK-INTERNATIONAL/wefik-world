@@ -12,7 +12,7 @@ export const metadata = {
   description:
     'Complete collections of WordPress themes, performance plugins, and Next.js templates bundled at high discounts for freelance developers and digital agencies.',
   alternates: {
-    canonical: 'https://wefik.world/bundles',
+    canonical: 'https://www.wefik.world/bundles',
   },
 };
 

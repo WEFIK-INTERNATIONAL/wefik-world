@@ -58,7 +58,7 @@ export async function POST(request: Request) {
               <h4 style="margin: 0 0 8px 0; color: #5F6368;">Message:</h4>
               <p style="margin: 0; white-space: pre-wrap; line-height: 1.6;">${message}</p>
             </div>
-            <p style="font-size: 12px; color: #5F6368; margin-top: 24px;">Sent from https://wefik.world/contact</p>
+            <p style="font-size: 12px; color: #5F6368; margin-top: 24px;">Sent from https://www.wefik.world/contact</p>
           </div>
         `,
       }),

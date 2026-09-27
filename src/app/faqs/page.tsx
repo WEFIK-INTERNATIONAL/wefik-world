@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   description:
     'Answers to all your questions about commercial licenses, lifetime updates, payment options, memberships, and technical support on Wefik.world.',
   alternates: {
-    canonical: 'https://wefik.world/faqs',
+    canonical: 'https://www.wefik.world/faqs',
   },
 };
 

@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   description:
     'The story of Wefik.world. Built and supported directly by the engineering team at Wefik Agency (wefik.in). Single-vendor themes, plugins, and web templates.',
   alternates: {
-    canonical: 'https://wefik.world/about',
+    canonical: 'https://www.wefik.world/about',
   },
 };
 
@@ -16,7 +16,7 @@ const aboutJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'AboutPage',
   name: 'About Wefik.world',
-  url: 'https://wefik.world/about',
+  url: 'https://www.wefik.world/about',
   mainEntity: {
     '@type': 'Organization',
     '@id': 'https://www.wefik.in/#organization',
@@ -25,7 +25,7 @@ const aboutJsonLd = {
     telephone: '+91 96096 53522',
     description: 'Digital agency specializing in web design, digital products, and full-stack development.',
     sameAs: [
-      'https://wefik.world',
+      'https://www.wefik.world',
       'https://twitter.com/wefik',
       'https://github.com/WEFIK-INTERNATIONAL',
       'https://linkedin.com/company/wefik',

@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   description:
     'Comprehensive technical glossary of web development, WordPress architecture, speed optimization, and licensing terms for developers and agencies.',
   alternates: {
-    canonical: 'https://wefik.world/glossary',
+    canonical: 'https://www.wefik.world/glossary',
   },
 };
 

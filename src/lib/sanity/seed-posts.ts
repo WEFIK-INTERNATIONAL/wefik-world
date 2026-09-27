@@ -402,7 +402,7 @@ A child theme requires only two files in its folder (e.g., \`/wp-content/themes/
 \`\`\`css
 /*
  Theme Name:   AgencyPro Child
- Theme URI:    https://wefik.world/products/agencypro
+ Theme URI:    https://www.wefik.world/products/agencypro
  Description:  Custom child theme for AgencyPro
  Author:       Your Name or Agency
  Template:     agencypro

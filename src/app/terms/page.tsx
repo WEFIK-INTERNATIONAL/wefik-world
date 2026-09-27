@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   description:
     'Terms of Service and commercial conditions governing accounts, purchases, digital delivery, memberships, and usage of Wefik.world assets.',
   alternates: {
-    canonical: 'https://wefik.world/terms',
+    canonical: 'https://www.wefik.world/terms',
   },
 };
 

@@ -225,13 +225,8 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <a href="/llms.txt" target="_blank" className="hover:text-[var(--text)] transition-colors flex items-center gap-1 font-mono text-[11px] text-[var(--accent)]">
-                  /llms.txt (AI Specs)
-                </a>
-              </li>
-              <li>
-                <Link href="/sitemap.xml" className="hover:text-[var(--text)] transition-colors">
-                  XML Sitemap
+                <Link href="/glossary" className="hover:text-[var(--text)] transition-colors">
+                  Developer Glossary
                 </Link>
               </li>
             </ul>

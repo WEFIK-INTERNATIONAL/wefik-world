@@ -10,7 +10,7 @@ export const metadata = {
   description:
     'Claim high-quality free WordPress themes, HTML templates, and code starters by Wefik. Zero payment, instant license keys, full commercial rights.',
   alternates: {
-    canonical: 'https://wefik.world/freebies',
+    canonical: 'https://www.wefik.world/freebies',
   },
 };
 
