@@ -22,7 +22,7 @@ export function UnboxingPreloader() {
     }
   });
 
-  // Lock scroll while preloader is mounted; unlock on completion / unmount
+  // Lock scroll while preloader is mounted; restore on completion / unmount
   useEffect(() => {
     if (mounted) {
       stopScroll('unboxing-preloader');
@@ -236,7 +236,7 @@ export function UnboxingPreloader() {
           '-=0.3'
         );
 
-      // PHASE 4: Seamless Reveal (2.2s -> 2.8s)
+      // PHASE 4: Smooth Reveal (2.2s -> 2.8s)
       tl.to(heroCardRef.current, {
         scale: 4,
         opacity: 0,

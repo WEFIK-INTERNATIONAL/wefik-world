@@ -5,6 +5,7 @@ import { getProducts } from '@/lib/data/products';
 import { Search, PackageX } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { RecentlyViewedShelf } from '@/components/marketplace/recently-viewed-shelf';
+import { MarketplaceFilterSelect } from '@/components/marketplace/marketplace-filter-select';
 
 export const revalidate = 300;
 
@@ -192,10 +193,9 @@ export default async function MarketplacePage({ searchParams }: MarketplacePageP
               {type !== 'all' && <input type="hidden" name="type" value={type} />}
               {sort !== 'featured' && <input type="hidden" name="sort" value={sort} />}
               {tech !== 'all' && <input type="hidden" name="tech" value={tech} />}
-              <select
+              <MarketplaceFilterSelect
                 name="price"
                 defaultValue={priceRange}
-                onChange={(e) => (e.target as HTMLSelectElement).form?.submit()}
                 className="bg-[var(--surface)] border border-[var(--border)] text-xs rounded-xl px-3 py-2 text-[var(--text)] font-medium focus:outline-none cursor-pointer"
               >
                 <option value="all">Any Price</option>
@@ -203,7 +203,7 @@ export default async function MarketplacePage({ searchParams }: MarketplacePageP
                 <option value="under-1000">Under ₹1,000</option>
                 <option value="1000-3000">₹1,000 – ₹3,000</option>
                 <option value="above-3000">Above ₹3,000</option>
-              </select>
+              </MarketplaceFilterSelect>
             </form>
 
             {/* Type Filter */}
@@ -213,17 +213,16 @@ export default async function MarketplacePage({ searchParams }: MarketplacePageP
               {sort !== 'featured' && <input type="hidden" name="sort" value={sort} />}
               {tech !== 'all' && <input type="hidden" name="tech" value={tech} />}
               {priceRange !== 'all' && <input type="hidden" name="price" value={priceRange} />}
-              <select
+              <MarketplaceFilterSelect
                 name="type"
                 defaultValue={type}
-                onChange={(e) => (e.target as HTMLSelectElement).form?.submit()}
                 className="bg-[var(--surface)] border border-[var(--border)] text-xs rounded-xl px-3 py-2 text-[var(--text)] font-medium focus:outline-none cursor-pointer"
               >
                 <option value="all">All Types</option>
                 <option value="paid">Premium Only</option>
                 <option value="free">100% Free</option>
                 <option value="bundle">Bundles</option>
-              </select>
+              </MarketplaceFilterSelect>
             </form>
 
             {/* Sort Selector */}
@@ -233,17 +232,16 @@ export default async function MarketplacePage({ searchParams }: MarketplacePageP
               {type !== 'all' && <input type="hidden" name="type" value={type} />}
               {tech !== 'all' && <input type="hidden" name="tech" value={tech} />}
               {priceRange !== 'all' && <input type="hidden" name="price" value={priceRange} />}
-              <select
+              <MarketplaceFilterSelect
                 name="sort"
                 defaultValue={sort}
-                onChange={(e) => (e.target as HTMLSelectElement).form?.submit()}
                 className="bg-[var(--surface)] border border-[var(--border)] text-xs rounded-xl px-3 py-2 text-[var(--text)] font-medium focus:outline-none cursor-pointer"
               >
                 <option value="featured">Featured First</option>
                 <option value="price-low">Price: Low to High</option>
                 <option value="price-high">Price: High to Low</option>
                 <option value="rating">Highest Rated</option>
-              </select>
+              </MarketplaceFilterSelect>
             </form>
           </div>
         </div>

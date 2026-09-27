@@ -407,7 +407,7 @@ export default async function HomePage() {
                 <span className="text-deep-green font-bold text-lg transition-transform group-open:rotate-45">+</span>
               </summary>
               <p className="text-xs text-slate mt-3 leading-relaxed">
-                We offer two All-Access options: Monthly (₹999/month, cancel anytime) and Lifetime Deal (₹9,999 one-time payment). Memberships unlock instant downloads of every single WordPress theme, plugin, HTML template, and starter in our catalog, including all new products added in the future.
+                We offer two All-Access options: Monthly (₹999/month, cancel anytime) and Lifetime Deal (₹9,999 one-time payment). Memberships provide instant downloads of every single WordPress theme, plugin, HTML template, and starter in our catalog, including all new products added in the future.
               </p>
             </details>
 

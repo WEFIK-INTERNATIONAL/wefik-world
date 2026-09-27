@@ -162,7 +162,7 @@ export function Header() {
                 href="https://wefik.in"
                 target="_blank"
                 rel="noreferrer"
-                className="hidden sm:inline-flex items-center whitespace-nowrap text-[10px] font-mono tracking-wider text-[var(--muted)] hover:text-deep-green dark:hover:text-lime transition-colors px-2 py-0.5 rounded-full border border-[var(--border)] bg-[var(--surface-2)]"
+                className="hidden xl:inline-flex items-center whitespace-nowrap text-[10px] font-mono tracking-wider text-[var(--muted)] hover:text-deep-green dark:hover:text-lime transition-colors px-2 py-0.5 rounded-full border border-[var(--border)] bg-[var(--surface-2)]"
                 title="Wefik Digital Agency (wefik.in)"
               >
                 by Wefik
@@ -170,14 +170,14 @@ export function Header() {
             </div>
 
             {/* Desktop Navigation: visible at >= 1024px */}
-            <nav className="hidden lg:flex items-center gap-1">
+            <nav className="hidden lg:flex items-center gap-0.5 xl:gap-1">
               {navLinks.map((link) => {
                 const isActive = pathname === link.href;
                 return (
                   <TransitionLink
                     key={link.href}
                     href={link.href}
-                    className={`relative px-3 py-1.5 rounded-lg text-xs font-semibold tracking-wide transition-colors inline-flex items-center ${
+                    className={`relative px-2 xl:px-3 py-1.5 rounded-lg text-xs font-semibold tracking-wide transition-colors inline-flex items-center ${
                       isActive
                         ? 'text-deep-green bg-soft font-bold'
                         : 'text-slate hover:text-ink hover:bg-soft/60'
@@ -195,8 +195,8 @@ export function Header() {
             </nav>
           </div>
 
-          {/* Search Button (Triggers ⌘K Command Palette) */}
-          <div className="hidden lg:block flex-1 max-w-xs">
+          {/* Search Button (Triggers ⌘K Command Palette): full input on xl+, icon on smaller */}
+          <div className="hidden xl:block flex-1 max-w-xs">
             <button
               onClick={openCommandPalette}
               className="w-full flex items-center justify-between px-3.5 py-2 text-xs bg-soft hover:bg-soft/90 border border-border rounded-xl text-slate transition-all group"
@@ -212,12 +212,12 @@ export function Header() {
           </div>
 
           {/* Right Controls: Cart + ⌘K mobile + Auth + Hamburger (<1024px) */}
-          <div className="flex items-center gap-2 sm:gap-3">
-            {/* Quick ⌘K trigger icon for mobile/tablet */}
+          <div className="flex items-center gap-1.5 sm:gap-2 xl:gap-3">
+            {/* Quick ⌘K trigger icon for mobile, tablet, and compact desktop (<1280px) */}
             <button
               onClick={openCommandPalette}
               aria-label="Open search command palette"
-              className="lg:hidden p-2 rounded-xl text-slate hover:text-ink hover:bg-soft transition-colors"
+              className="xl:hidden p-2 rounded-xl text-slate hover:text-ink hover:bg-soft transition-colors"
             >
               <Search className="w-5 h-5" />
             </button>
@@ -333,7 +333,7 @@ export function Header() {
                 <Button
                   asChild
                   variant="ghost"
-                  className="hidden sm:inline-flex text-xs font-semibold text-slate hover:text-ink h-9 px-3"
+                  className="hidden sm:inline-flex lg:hidden xl:inline-flex text-xs font-semibold text-slate hover:text-ink h-9 px-3"
                 >
                   <TransitionLink href="/login">Sign In</TransitionLink>
                 </Button>

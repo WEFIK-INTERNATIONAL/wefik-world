@@ -195,7 +195,7 @@ export function LiveDemoViewer({ product, isOpen, onClose }: LiveDemoViewerProps
             <span>
               {product.is_free
                 ? 'Claim Free'
-                : `Buy — ₹${(product.price_inr / 100).toLocaleString('en-IN')}`}
+                : `Get — ₹${(product.price_inr / 100).toLocaleString('en-IN')}`}
             </span>
           </Button>
         </div>

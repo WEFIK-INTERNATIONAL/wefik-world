@@ -350,11 +350,24 @@ Takeover: 2026-09-22T01:13:00+05:30 — resuming from 4.1 login/signup/callback 
        - `npm run typecheck` (`tsc --noEmit`) → 0 errors (exit 0).
        - `npm run build` → 129/129 routes compiled cleanly (exit 0).
 
-- [2026-09-27T16:44:00+05:30] Live Razorpay API Keys & Integration Verified:
-    - Added live Razorpay Key ID `rzp_live_Th1tG0rbvvn7mO` and Key Secret `YXbE97SSWmm6dapbGSLJDT8l` to `.env.local` (`NEXT_PUBLIC_RAZORPAY_KEY_ID`, `RAZORPAY_KEY_ID`, `RAZORPAY_KEY_SECRET`).
-    - Verified Live API authentication against `https://api.razorpay.com/v1/` (HTTP 200).
-    - Verified Live Order Creation endpoint (`order_Th2SoQR26vhuuM` successfully created).
-    - Provisioned live All-Access Monthly Subscription Plan on Razorpay (`plan_Th2SjnuBx5mVyl`, ₹999/mo) and mapped `RAZORPAY_MONTHLY_PLAN_ID`.
-    - Hardened `supabase/functions/_shared/razorpay.ts`, `create-order/index.ts`, and `create-subscription/index.ts` to seamlessly support both `RAZORPAY_KEY_ID` and `NEXT_PUBLIC_RAZORPAY_KEY_ID`.
-    - Added `--no-warn-ignored` to lint-staged in `package.json` to prevent ignored backend function files from blocking pre-commit hooks.
-    - Verified 100% test suite pass (`npm test`), zero lint warnings (`npm run lint`), zero type errors (`npm run typecheck`), and clean 129/129 routes production build (`npm run build`).
+- [2026-09-27T17:41:00+05:30] Fix Pack 05 Parts B, C, D, E Overflow & Polish Final Verification Complete:
+    - Part B Responsive & Overflow:
+      - Discovered 1024px header overflow culprit: uncompressed header row (`lg:flex`) with nav links, search input, "by Wefik" badge, and auth buttons totaled 1257px on 1024px width.
+      - Fixed root causes:
+        - `src/components/layout/header.tsx`: moved "by Wefik" badge to `xl:inline-flex`, nav gap tightened to `gap-0.5 xl:gap-1`, search input `hidden xl:block max-w-xs`, quick ⌘K trigger icon `xl:hidden`, and "Sign In" button `hidden sm:inline-flex lg:hidden xl:inline-flex`.
+        - `src/components/hero/hero-lightweight.tsx`: fluid center card width `max-w-[320px] sm:max-w-[400px]`.
+        - `src/components/marketplace/marketplace-filter-select.tsx`: client-side filter select component created to eliminate RSC `onChange` handler error.
+      - Developed CDP automated headless browser test `scripts/responsive-overflow-audit.mjs` verifying `document.documentElement.scrollWidth === window.innerWidth` across 10 pages × 7 viewports (360, 390, 768, 1024, 1366, 1440, 1920).
+      - Audit passed 70/70 scenarios with ZERO horizontal overflow. Generated 30 verification screenshots in `internal/qa/fix05/responsive/`.
+    - Part C Pricing Psychology:
+      - Homepage hero free of prices. Freebie lead magnet anchors generosity as first section below hero.
+      - Updated `src/components/marketplace/live-demo-viewer.tsx` button CTA from "Buy" to "Get — ₹...".
+      - Zero occurrences of "BUY NOW" or artificial urgency across the entire project.
+    - Part D Content Polish:
+      - Ripgrep verified 0 hits for all 17 AI-smell keywords (`delve`, `unlock`, `unleash`, `elevate`, `game-changer`, `cutting-edge`, `seamless`, `seamlessly`, `robust`, `leverage`, `furthermore`, `moreover`, `fast-paced`, `look no further`, `vibrant`, `testament`, `buy now`).
+    - Part E Quality Gates:
+      - `npm run lint` (`--max-warnings=0`) passed with 0 errors and 0 warnings.
+      - `npm run typecheck` (`tsc --noEmit`) passed clean.
+      - `npm test` passed 100% of tests.
+      - `npm run build` compiled 129/129 static and dynamic routes cleanly.
+

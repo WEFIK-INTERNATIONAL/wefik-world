@@ -16,6 +16,8 @@ const eslintConfig = defineConfig([
     "tests/**",
     "scripts/**",
     "docs/**",
+    ".tmp*/**",
+    "internal/**",
   ]),
   {
     rules: {

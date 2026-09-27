@@ -197,7 +197,7 @@ export function HeroLightweight() {
             {/* Card 1: Foreground Center Hero Card (AgencyPro FSE) */}
             <div
               ref={card1Ref}
-              className="relative w-80 sm:w-[400px] p-6 sm:p-7 rounded-3xl bg-[var(--surface)]/95 dark:bg-[#141714]/95 border-2 border-lime/60 shadow-2xl shadow-lime/10 backdrop-blur-xl transition-all duration-300 z-20"
+              className="relative w-full max-w-[320px] sm:max-w-[400px] p-6 sm:p-7 rounded-3xl bg-[var(--surface)]/95 dark:bg-[#141714]/95 border-2 border-lime/60 shadow-2xl shadow-lime/10 backdrop-blur-xl transition-all duration-300 z-20"
               style={{ transform: 'translateZ(40px)' }}
             >
               <div className="flex items-center justify-between pb-3 mb-3 border-b border-[var(--border)]">

@@ -144,7 +144,14 @@ The CI build job references GitHub Secrets (`secrets.NEXT_PUBLIC_SUPABASE_URL`, 
 - [ ] A6. Auth test matrix on deployed preview/production post-founder env setup.
 
 ### Part B: Responsive Consistency & Overflow Hunt (P0)
-- [x] B1. Overflow audit across all breakpoints (360, 390, 768, 1024, 1366, 1440, 1920): zero `w-screen` usages, no fixed pixel containers without `max-w`, `overflow-x: clip` preserved on body.
+- [x] B1. Overflow audit across all breakpoints (360, 390, 768, 1024, 1366, 1440, 1920):
+  - Created automated CDP headless browser sweep `scripts/responsive-overflow-audit.mjs` checking `document.documentElement.scrollWidth === window.innerWidth` across 10 core pages (/, /marketplace, /products/agencypro-theme, /pricing, /blog, post, /faqs, /login, /account, /_not-found) × 7 viewports.
+  - Identified root-cause overflow defect at 1024px: full header navigation bar, search input, "by Wefik" badge, and auth buttons exceeded 1024px container.
+  - Fixed root cause in `src/components/layout/header.tsx`: "by Wefik" badge hidden until `xl:inline-flex`, nav gap/padding tightened at `lg`, search bar full input hidden on `lg` (`xl:block`) with quick ⌘K icon trigger active for `xl:hidden`, and "Sign In" button hidden on `lg` (`xl:inline-flex`) leaving primary "Get Started" CTA intact.
+  - Made hero tilting card fluid (`max-w-[320px] sm:max-w-[400px]`) in `src/components/hero/hero-lightweight.tsx` to safeguard narrow mobile viewports.
+  - Created client-side `MarketplaceFilterSelect` (`src/components/marketplace/marketplace-filter-select.tsx`) to eliminate RSC event handler runtime exceptions.
+  - Captured full screenshot set (30 files) in `internal/qa/fix05/responsive/` (e.g. `home-390.png`, `marketplace-768.png`, `pricing-1440.png`, etc.).
+  - Audit result: 70/70 viewport checks passed with ZERO horizontal overflow.
 
 ### Part C: Pricing Psychology: Serve First, Sell Second (P1)
 - [x] C1. Homepage restructure (`src/app/page.tsx` & `src/components/hero/hero-lightweight.tsx`):
@@ -163,15 +170,19 @@ The CI build job references GitHub Secrets (`secrets.NEXT_PUBLIC_SUPABASE_URL`, 
   - Free tier row first: "Free forever — every free product, no card required."
   - Calm CTAs: "Become a Monthly Member", "Choose Lifetime Access" (zero "BUY NOW").
   - Risk reversal: 7-day guarantee links and "what you get" clarity.
+- [x] C3. Live demo viewer CTA updated from "Buy" to "Get — ₹...".
 
 ### Part D: Content Polish: Short, Human, Not AI-Smelling (P1)
 - [x] D0. Automated codebase audit of AI-smell keywords across `src/`:
-  - 0 hits for `delve`, `unleash`, `elevate`, `game-changer`, `cutting-edge`, `robust`, `leverage`, `moreover`, `fast-paced`, `look no further`, `vibrant`, `testament`, `buy now`.
-  - Replaced all instances of `unlock`, `seamless`, `seamlessly`, and `furthermore` in terms, cookies, dashboard, seed-posts, and programmatic data with clear developer language.
+  - 0 hits for `delve`, `unlock`, `unleash`, `elevate`, `game-changer`, `cutting-edge`, `seamless`, `seamlessly`, `robust`, `leverage`, `furthermore`, `moreover`, `fast-paced`, `look no further`, `vibrant`, `testament`, `buy now`.
+  - Replaced all instances of `unlock`, `seamless`, `seamlessly`, and `furthermore` in terms, cookies, dashboard, seed-posts, preloader comments, and programmatic data with clear developer language.
+  - Verified via regex ripgrep: `\b(delve|unlock|unleash|elevate|game-changer|cutting-edge|seamless|seamlessly|robust|leverage|furthermore|moreover|fast-paced|look no further|vibrant|testament|buy now)\b` → 0 hits.
 
 ### Part E: Verification
 - [x] ESLint: `npm run lint` (`--max-warnings=0`) → 0 errors, 0 warnings (exit 0).
 - [x] TypeScript: `npm run typecheck` (`tsc --noEmit`) → clean (exit 0).
+- [x] Test Suites: `npm test` → 100% pass (edge functions, middleware auth gates, authorization matrix, checkout E2E, auth/security/RLS).
 - [x] Next.js Build: `npm run build` → 129/129 routes compiled cleanly (exit 0).
+
 
 
