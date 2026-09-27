@@ -5,7 +5,7 @@ export class RazorpayClient {
   private keySecret: string;
 
   constructor() {
-    this.keyId = Deno.env.get("RAZORPAY_KEY_ID") ?? "";
+    this.keyId = Deno.env.get("RAZORPAY_KEY_ID") || Deno.env.get("NEXT_PUBLIC_RAZORPAY_KEY_ID") || "";
     this.keySecret = Deno.env.get("RAZORPAY_KEY_SECRET") ?? "";
   }
 

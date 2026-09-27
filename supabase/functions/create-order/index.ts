@@ -270,7 +270,7 @@ serve(async (req: Request) => {
         currency: "INR",
         subtotal: subtotalPaise,
         discount: discountPaise,
-        key_id: Deno.env.get("RAZORPAY_KEY_ID") || "",
+        key_id: Deno.env.get("RAZORPAY_KEY_ID") || Deno.env.get("NEXT_PUBLIC_RAZORPAY_KEY_ID") || "",
       }),
       { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );

@@ -74,7 +74,7 @@ serve(async (req: Request) => {
     return new Response(
       JSON.stringify({
         subscription_id: subscriptionData.id,
-        key_id: Deno.env.get("RAZORPAY_KEY_ID") || "",
+        key_id: Deno.env.get("RAZORPAY_KEY_ID") || Deno.env.get("NEXT_PUBLIC_RAZORPAY_KEY_ID") || "",
         plan: "monthly",
       }),
       { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
