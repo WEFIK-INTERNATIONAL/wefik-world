@@ -154,9 +154,6 @@ const getCachedProducts = unstable_cache(
   { revalidate: 3600, tags: ['products'] }
 );
 
-/**
- * Fetch products from Supabase with fallback to catalog (cached via ISR/unstable_cache)
- */
 export async function getProducts(options?: {
   featuredOnly?: boolean;
   categorySlug?: string;
@@ -165,7 +162,16 @@ export async function getProducts(options?: {
   limit?: number;
 }): Promise<ProductData[]> {
   const key = options ? JSON.stringify(options) : '';
-  const products = await getCachedProducts(key);
+  let products: ProductData[];
+  try {
+    products = await getCachedProducts(key);
+  } catch (err: unknown) {
+    if (err instanceof Error && err.message.includes('incrementalCache missing')) {
+      products = await fetchProductsInternal(key);
+    } else {
+      throw err;
+    }
+  }
   if (options?.categorySlug) {
     return products.filter((p) => p.category?.slug === options.categorySlug);
   }
@@ -228,7 +234,14 @@ const getCachedProductBySlug = unstable_cache(
  * Fetch single product by slug (cached via ISR/unstable_cache)
  */
 export async function getProductBySlug(slug: string): Promise<ProductData | null> {
-  return getCachedProductBySlug(slug);
+  try {
+    return await getCachedProductBySlug(slug);
+  } catch (err: unknown) {
+    if (err instanceof Error && err.message.includes('incrementalCache missing')) {
+      return await fetchProductBySlugInternal(slug);
+    }
+    throw err;
+  }
 }
 
 function filterFallback(options?: {

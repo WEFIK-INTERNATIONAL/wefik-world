@@ -8,22 +8,39 @@ import { CartProvider } from "@/lib/cart-context";
 import { WishlistProvider } from "@/lib/wishlist-context";
 import { CompareProvider } from "@/lib/compare-context";
 import { Header } from "@/components/layout/header";
-import { BackToTop } from "@/components/ui/back-to-top";
-import { Footer } from "@/components/layout/footer";
-import { CartDrawer } from "@/components/checkout/cart-drawer";
-import { CompareDock } from "@/components/marketplace/compare-dock";
-import { CompareModal } from "@/components/marketplace/compare-modal";
-import { CookieConsent } from "@/components/trust/cookie-consent";
-import { TawkToChat } from "@/components/trust/tawkto-chat";
 import { SmoothScrollProvider } from "@/components/providers/smooth-scroll-provider";
 import { TransitionProvider } from "@/components/transitions/transition-provider";
-import { UnboxingPreloader } from "@/components/preloader/unboxing-preloader";
 import dynamic from 'next/dynamic';
 import { Toaster } from "sonner";
 import "./globals.css";
 
+/* ── Below-fold components: lazy-loaded to cut initial JS bundle ── */
+const Footer = dynamic(
+  () => import('@/components/layout/footer').then((m) => m.Footer)
+);
+const BackToTop = dynamic(
+  () => import('@/components/ui/back-to-top').then((m) => m.BackToTop)
+);
+const CartDrawer = dynamic(
+  () => import('@/components/checkout/cart-drawer').then((m) => m.CartDrawer)
+);
+const CompareDock = dynamic(
+  () => import('@/components/marketplace/compare-dock').then((m) => m.CompareDock)
+);
+const CompareModal = dynamic(
+  () => import('@/components/marketplace/compare-modal').then((m) => m.CompareModal)
+);
+const CookieConsent = dynamic(
+  () => import('@/components/trust/cookie-consent').then((m) => m.CookieConsent)
+);
+const TawkToChat = dynamic(
+  () => import('@/components/trust/tawkto-chat').then((m) => m.TawkToChat)
+);
+const UnboxingPreloader = dynamic(
+  () => import('@/components/preloader/unboxing-preloader').then((m) => m.UnboxingPreloader)
+);
 const CommandPalette = dynamic(
-  () => import('@/components/search/command-palette').then((mod) => mod.CommandPalette)
+  () => import('@/components/search/command-palette').then((m) => m.CommandPalette)
 );
 
 const spaceGrotesk = Space_Grotesk({
