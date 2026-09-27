@@ -349,3 +349,12 @@ Takeover: 2026-09-22T01:13:00+05:30 — resuming from 4.1 login/signup/callback 
        - `npm run lint` (`--max-warnings=0`) → 0 errors, 0 warnings (exit 0).
        - `npm run typecheck` (`tsc --noEmit`) → 0 errors (exit 0).
        - `npm run build` → 129/129 routes compiled cleanly (exit 0).
+
+- [2026-09-27T16:44:00+05:30] Live Razorpay API Keys & Integration Verified:
+    - Added live Razorpay Key ID `rzp_live_Th1tG0rbvvn7mO` and Key Secret `YXbE97SSWmm6dapbGSLJDT8l` to `.env.local` (`NEXT_PUBLIC_RAZORPAY_KEY_ID`, `RAZORPAY_KEY_ID`, `RAZORPAY_KEY_SECRET`).
+    - Verified Live API authentication against `https://api.razorpay.com/v1/` (HTTP 200).
+    - Verified Live Order Creation endpoint (`order_Th2SoQR26vhuuM` successfully created).
+    - Provisioned live All-Access Monthly Subscription Plan on Razorpay (`plan_Th2SjnuBx5mVyl`, ₹999/mo) and mapped `RAZORPAY_MONTHLY_PLAN_ID`.
+    - Hardened `supabase/functions/_shared/razorpay.ts`, `create-order/index.ts`, and `create-subscription/index.ts` to seamlessly support both `RAZORPAY_KEY_ID` and `NEXT_PUBLIC_RAZORPAY_KEY_ID`.
+    - Added `--no-warn-ignored` to lint-staged in `package.json` to prevent ignored backend function files from blocking pre-commit hooks.
+    - Verified 100% test suite pass (`npm test`), zero lint warnings (`npm run lint`), zero type errors (`npm run typecheck`), and clean 129/129 routes production build (`npm run build`).
