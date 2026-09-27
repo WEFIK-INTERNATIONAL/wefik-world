@@ -377,11 +377,12 @@ Takeover: 2026-09-22T01:13:00+05:30 — resuming from 4.1 login/signup/callback 
       - Implemented automated secret detection scanner `scripts/check-secrets.mjs`.
       - Wired `check-secrets.mjs` into Husky `.husky/pre-commit` and `package.json` (`npm run check:secrets`).
       - Added `Secret Leak Scan` CI job in `.github/workflows/ci.yml`.
-    - Verification:
-      - `npm run check:secrets` passed with 0 detected secrets.
-      - `npm run lint` passed with 0 errors, 0 warnings.
-      - `npm run typecheck` passed clean.
-      - `npm test` passed 100% of tests.
-      - `npm run build` compiled 129/129 routes cleanly.
+- [2026-09-27T18:41:00+05:30] GitHub OAuth Provider Integration Live:
+    - Integrated GitHub OAuth button and authentication handler in `src/app/(auth)/login/page.tsx`.
+    - Added `handleGithubOAuth` handler calling `supabase.auth.signInWithOAuth({ provider: 'github', ... })`.
+    - Added GitHub reconnect alert for accounts previously bound to GitHub without a password.
+    - Verified all quality gates: `check:secrets` (0), `lint` (0/0), `typecheck` (0), `test` (100%), and `build` (129/129 routes cleanly compiled).
+    - Pushed commit `65812eb` to `origin/main`.
+
 
 

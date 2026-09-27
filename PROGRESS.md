@@ -222,6 +222,8 @@ The CI build job references GitHub Secrets (`secrets.NEXT_PUBLIC_SUPABASE_URL`, 
 - [x] `npm run typecheck`: clean.
 - [x] `npm test`: 100% pass across all 5 test files.
 - [x] `npm run build`: 129/129 routes compiled cleanly.
+- [x] GitHub OAuth: Added "Continue with GitHub" button and auth handler in unified `/login` flow with reconnect state handling.
+
 
 
 
