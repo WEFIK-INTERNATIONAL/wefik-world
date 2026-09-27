@@ -5,11 +5,15 @@
 > Wefik.world is a digital product marketplace for web professionals, agencies, and developers, created by Wefik Agency (https://wefik.in). It sells production-ready WordPress themes, WordPress plugins, modern HTML templates, and full-stack code snippets with single-site licenses, unlimited-site commercial licenses, curated bundles, and all-access memberships.
 
 ## Mission & Positioning
-- **Primary Domain**: https://wefik.world
+- **Name**: Wefik (company) / Wefik World (marketplace)
+- **Tagline**: "Real Life Genie of Your Idea"
+- **Primary Domain**: https://wefik.world (marketplace)
 - **Parent Agency**: Wefik Agency (https://wefik.in, operational since 2021)
+- **What**: Single-vendor marketplace for WordPress themes, plugins, HTML templates, code snippets, bundles, memberships.
+- **Positioning**: Developer-built, performance-focused, you-own-the-code, free + premium. Zero visual page builder drag; 95+ mobile Google PageSpeed scores; instant signed file downloads; no hidden annual renewal penalties.
 - **Target Audience**: Freelancers, digital agencies, indie software developers, and startup founders.
 - **Geography & Currency**: India-first with transparent INR pricing (integer paise math) and instant UPI / NetBanking / Card payments via Razorpay.
-- **Core Value Proposition**: Clean, bloat-free code with zero visual page builder drag; 95+ mobile Google PageSpeed scores; instant signed file downloads; no hidden annual renewal penalties.
+- **Contact & Support**: +91 96096 53522, Mon–Fri 09:00–18:00 IST.
 
 ## Products & Catalog Structure
 1. **WordPress Themes**:

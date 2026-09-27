@@ -45,3 +45,6 @@ next-env.d.ts
 /internal/
 .tmp*
 
+# content agent (separate repository)
+/wefik-content-agent/
+
