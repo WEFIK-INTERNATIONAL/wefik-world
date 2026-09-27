@@ -5,6 +5,8 @@ import { ProgrammaticPageView } from '@/components/seo/programmatic-page-view';
 
 const data = CATEGORY_HUBS['wordpress-plugins'];
 
+export const revalidate = 3600;
+
 export const metadata: Metadata = {
   title: data.title,
   description: data.metaDescription,

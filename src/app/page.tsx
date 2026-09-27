@@ -8,7 +8,7 @@ import { InfiniteMarquee } from '@/components/ui/infinite-marquee';
 import { Icon3DWordPress, Icon3DPlugin, Icon3DTemplate, Icon3DBundle } from '@/components/ui/three-d-icons';
 import { getProducts } from '@/lib/data/products';
 
-export const revalidate = 300;
+export const revalidate = 3600;
 
 export default async function HomePage() {
   // P0-4: Single fetch for listing data, deriving featured and freebies without duplicate roundtrips

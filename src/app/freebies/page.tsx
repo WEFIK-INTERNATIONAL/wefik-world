@@ -5,6 +5,8 @@ import { FreebieClaimCard } from '@/components/marketplace/freebie-claim-card';
 import { FreebieMagnetKit } from '@/components/freebies/freebie-magnet-kit';
 import { Gift } from 'lucide-react';
 
+export const revalidate = 3600;
+
 export const metadata = {
   title: 'Freebies & Lead Magnets — 100% Free Templates',
   description:

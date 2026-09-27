@@ -7,6 +7,8 @@ import { Sparkles, CheckCircle2, ShieldCheck } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { DEFAULT_BLUR_DATA_URL } from '@/lib/image-placeholder';
 
+export const revalidate = 3600;
+
 export const metadata = {
   title: 'Agency Product Bundles — Save up to 60%',
   description:

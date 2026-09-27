@@ -180,20 +180,26 @@ export default function RootLayout({
             __html: `(function(){try{var t=localStorage.getItem('theme');var s=window.matchMedia('(prefers-color-scheme: dark)').matches;if(t==='dark'||(!t&&s)){document.documentElement.classList.add('dark');}else{document.documentElement.classList.remove('dark');}}catch(e){}})();`,
           }}
         />
-        {/* Google tag (gtag.js) */}
+        {/* Google tag (gtag.js) — lazyOnload so analytics never competes with LCP */}
         <Script
-          strategy="afterInteractive"
+          strategy="lazyOnload"
           src="https://www.googletagmanager.com/gtag/js?id=G-CM63W67CQY"
         />
         <Script
           id="gtag-init"
-          strategy="afterInteractive"
+          strategy="lazyOnload"
           dangerouslySetInnerHTML={{
             __html: `
               window.dataLayer = window.dataLayer || [];
               function gtag(){dataLayer.push(arguments);}
+              gtag('consent', 'default', {
+                analytics_storage: 'denied',
+                ad_storage: 'denied',
+                personalization_storage: 'denied',
+                functionality_storage: 'denied',
+                wait_for_update: 500
+              });
               gtag('js', new Date());
-
               gtag('config', 'G-CM63W67CQY');
             `,
           }}

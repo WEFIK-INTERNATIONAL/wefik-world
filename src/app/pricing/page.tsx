@@ -1,9 +1,11 @@
 import React from 'react';
 import Link from 'next/link';
-import { createClient } from '@/lib/supabase/server';
+import { createStaticClient } from '@/lib/supabase/static';
 import { MembershipPricingCards } from '@/components/pricing/membership-pricing-cards';
 import { Zap } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+
+export const revalidate = 3600;
 
 export const metadata = {
   title: 'All-Access Memberships & Pricing — wefik.world',
@@ -12,7 +14,7 @@ export const metadata = {
 };
 
 export default async function PricingPage() {
-  const supabase = await createClient();
+  const supabase = createStaticClient();
 
   // Fetch plans from membership_plans DB table
   const { data: plansData } = await supabase

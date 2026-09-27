@@ -1,4 +1,5 @@
-import { createClient } from '@/lib/supabase/server';
+import { unstable_cache } from 'next/cache';
+import { createStaticClient } from '@/lib/supabase/static';
 import { type ProductData, FALLBACK_PRODUCTS } from './fallback-products';
 
 export type { ProductData };
@@ -90,19 +91,14 @@ function isPlaceholderConfig(): boolean {
 /**
  * Fetch products from Supabase with fallback to catalog
  */
-export async function getProducts(options?: {
-  featuredOnly?: boolean;
-  categorySlug?: string;
-  isFree?: boolean;
-  isBundle?: boolean;
-  limit?: number;
-}): Promise<ProductData[]> {
+async function fetchProductsInternal(optionsKey: string): Promise<ProductData[]> {
+  const options = optionsKey ? JSON.parse(optionsKey) : undefined;
   if (isPlaceholderConfig()) {
     return filterFallback(options);
   }
 
   try {
-    const supabase = await createClient();
+    const supabase = createStaticClient();
     let query = supabase
       .from('products')
       .select(`
@@ -152,16 +148,37 @@ export async function getProducts(options?: {
   }
 }
 
+const getCachedProducts = unstable_cache(
+  async (key: string) => fetchProductsInternal(key),
+  ['products-catalog-cache'],
+  { revalidate: 3600, tags: ['products'] }
+);
+
 /**
- * Fetch single product by slug
+ * Fetch products from Supabase with fallback to catalog (cached via ISR/unstable_cache)
  */
-export async function getProductBySlug(slug: string): Promise<ProductData | null> {
+export async function getProducts(options?: {
+  featuredOnly?: boolean;
+  categorySlug?: string;
+  isFree?: boolean;
+  isBundle?: boolean;
+  limit?: number;
+}): Promise<ProductData[]> {
+  const key = options ? JSON.stringify(options) : '';
+  const products = await getCachedProducts(key);
+  if (options?.categorySlug) {
+    return products.filter((p) => p.category?.slug === options.categorySlug);
+  }
+  return products;
+}
+
+async function fetchProductBySlugInternal(slug: string): Promise<ProductData | null> {
   if (isPlaceholderConfig()) {
     return FALLBACK_PRODUCTS.find((p) => p.slug === slug) || null;
   }
 
   try {
-    const supabase = await createClient();
+    const supabase = createStaticClient();
     const query = supabase
       .from('products')
       .select(`
@@ -199,6 +216,19 @@ export async function getProductBySlug(slug: string): Promise<ProductData | null
   } catch {
     return FALLBACK_PRODUCTS.find((p) => p.slug === slug) || null;
   }
+}
+
+const getCachedProductBySlug = unstable_cache(
+  async (slug: string) => fetchProductBySlugInternal(slug),
+  ['product-single-detail-cache'],
+  { revalidate: 3600, tags: ['products'] }
+);
+
+/**
+ * Fetch single product by slug (cached via ISR/unstable_cache)
+ */
+export async function getProductBySlug(slug: string): Promise<ProductData | null> {
+  return getCachedProductBySlug(slug);
 }
 
 function filterFallback(options?: {
