@@ -60,6 +60,17 @@ function LoginFormContent() {
   const [githubLoading, setGithubLoading] = useState(false);
   const [magicLinkLoading, setMagicLinkLoading] = useState(false);
   const getInitialErrorMessage = (param: string | null) => {
+    if (typeof window !== 'undefined' && window.location.hash) {
+      try {
+        const hashParams = new URLSearchParams(window.location.hash.substring(1));
+        const desc = hashParams.get('error_description') || hashParams.get('error');
+        if (desc) {
+          return decodeURIComponent(desc.replace(/\+/g, ' '));
+        }
+      } catch {
+        // Silently continue
+      }
+    }
     if (!param) return null;
     if (param === 'link_expired' || param === 'auth_callback_failed') {
       return 'This login link expired or is invalid — please request a new one.';
@@ -67,7 +78,11 @@ function LoginFormContent() {
     if (param === 'access_denied') {
       return 'Login request was cancelled or access denied. Please try again.';
     }
-    return 'Authentication failed. Please try again.';
+    try {
+      return decodeURIComponent(param.replace(/\+/g, ' '));
+    } catch {
+      return param;
+    }
   };
 
   const [errorMessage, setErrorMessage] = useState<string | null>(getInitialErrorMessage(errorParam));
