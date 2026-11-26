@@ -3,39 +3,95 @@
 import React, { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { Check, Copy } from 'lucide-react';
+import { Check, Copy, AlertCircle } from 'lucide-react';
 
 interface ProductMarkdownDocsProps {
   content: string;
 }
 
-function CodeBlock({ children, className }: { children: React.ReactNode; className?: string }) {
-  const [copied, setCopied] = useState(false);
-  const codeString = String(children).replace(/\n$/, '');
+function flattenText(node: React.ReactNode): string {
+  if (node === null || node === undefined || typeof node === 'boolean') return '';
+  if (typeof node === 'string' || typeof node === 'number') return String(node);
+  if (Array.isArray(node)) return node.map(flattenText).join('');
+  if (React.isValidElement<{ children?: React.ReactNode }>(node)) {
+    return flattenText(node.props.children);
+  }
+  return '';
+}
+
+function extractLanguage(children: React.ReactNode): string {
+  if (React.isValidElement<{ className?: string }>(children)) {
+    const cls = children.props.className || '';
+    const match = cls.match(/language-([\w-]+)/);
+    if (match?.[1]) return match[1];
+  }
+  return 'code';
+}
+
+function fallbackCopyText(text: string): boolean {
+  if (typeof document === 'undefined') return false;
+  try {
+    const textarea = document.createElement('textarea');
+    textarea.value = text;
+    textarea.setAttribute('readonly', '');
+    textarea.style.position = 'fixed';
+    textarea.style.opacity = '0';
+    document.body.appendChild(textarea);
+    textarea.select();
+    const ok = document.execCommand('copy');
+    document.body.removeChild(textarea);
+    return ok;
+  } catch {
+    return false;
+  }
+}
+
+function CodeBlock({ children }: { children: React.ReactNode }) {
+  const [copyStatus, setCopyStatus] = useState<'idle' | 'copied' | 'error'>('idle');
+  const language = extractLanguage(children);
+  const rawText = flattenText(children).replace(/\n$/, '');
 
   const handleCopy = async () => {
     try {
-      await navigator.clipboard.writeText(codeString);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
+      if (typeof navigator !== 'undefined' && navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(rawText);
+        setCopyStatus('copied');
+      } else if (fallbackCopyText(rawText)) {
+        setCopyStatus('copied');
+      } else {
+        setCopyStatus('error');
+      }
     } catch {
-      // fallback
+      setCopyStatus(fallbackCopyText(rawText) ? 'copied' : 'error');
     }
+    setTimeout(() => setCopyStatus('idle'), 2000);
   };
 
   return (
     <div className="relative group my-4 rounded-xl overflow-hidden border border-[var(--border)] bg-[var(--surface-2)]">
       <div className="flex items-center justify-between px-4 py-2 bg-[var(--surface)] border-b border-[var(--border)] text-xs text-[var(--text-secondary)] font-mono">
-        <span>code</span>
+        <span>{language}</span>
         <button
+          type="button"
           onClick={handleCopy}
-          aria-label={copied ? 'Code copied' : 'Copy code to clipboard'}
+          aria-label={
+            copyStatus === 'copied'
+              ? 'Code copied'
+              : copyStatus === 'error'
+              ? 'Failed to copy code'
+              : 'Copy code to clipboard'
+          }
           className="inline-flex items-center gap-1.5 px-2 py-1 rounded-md text-[11px] font-medium bg-[var(--surface-2)] hover:bg-[var(--border)] text-[var(--text-primary)] transition-colors cursor-pointer"
         >
-          {copied ? (
+          {copyStatus === 'copied' ? (
             <>
               <Check className="w-3.5 h-3.5 text-deep-green dark:text-lime" />
               <span>Copied</span>
+            </>
+          ) : copyStatus === 'error' ? (
+            <>
+              <AlertCircle className="w-3.5 h-3.5 text-error" />
+              <span>Failed</span>
             </>
           ) : (
             <>
@@ -45,8 +101,8 @@ function CodeBlock({ children, className }: { children: React.ReactNode; classNa
           )}
         </button>
       </div>
-      <pre className="p-4 overflow-x-auto text-xs font-mono text-[var(--text-primary)] leading-relaxed">
-        <code className={className}>{children}</code>
+      <pre className="p-4 overflow-x-auto text-xs font-mono text-[var(--text-primary)] leading-relaxed [&_code]:bg-transparent [&_code]:p-0 [&_code]:border-0 [&_code]:rounded-none [&_code]:text-xs">
+        {children}
       </pre>
     </div>
   );
@@ -110,24 +166,27 @@ export function ProductMarkdownDocs({ content }: ProductMarkdownDocsProps) {
               {children}
             </blockquote>
           ),
-          code: ({
-            inline,
-            className,
-            children,
-            ...props
-          }: React.ComponentPropsWithoutRef<'code'> & { inline?: boolean }) => {
-            if (inline) {
-              return (
-                <code
-                  className="px-1.5 py-0.5 rounded-md bg-[var(--surface-2)] text-[var(--text-primary)] font-mono text-[11px] border border-[var(--border)]"
-                  {...props}
-                >
-                  {children}
-                </code>
-              );
-            }
-            return <CodeBlock className={className}>{children}</CodeBlock>;
-          },
+          img: ({ src, alt, ...props }) => (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={src}
+              alt={alt || ''}
+              loading="lazy"
+              className="max-w-full h-auto rounded-xl border border-[var(--border)] my-2"
+              {...props}
+            />
+          ),
+          pre: ({ children }) => <CodeBlock>{children}</CodeBlock>,
+          code: ({ className, children, ...props }) => (
+            <code
+              className={`px-1.5 py-0.5 rounded-md bg-[var(--surface-2)] text-[var(--text-primary)] font-mono text-[11px] border border-[var(--border)] ${
+                className || ''
+              }`.trim()}
+              {...props}
+            >
+              {children}
+            </code>
+          ),
           table: ({ children }) => (
             <div className="overflow-x-auto my-4 rounded-xl border border-[var(--border)]">
               <table className="w-full text-left text-xs border-collapse">
