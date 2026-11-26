@@ -128,12 +128,13 @@ export function MarketplaceClientView({
     currentPage * itemsPerPage
   );
 
+  const activeCategorySlugs = new Set(initialProducts.map((p) => p.category?.slug).filter(Boolean));
   const categories = [
     { label: 'All Products', slug: 'all' },
     { label: 'WordPress Themes', slug: 'wordpress-themes' },
     { label: 'WordPress Plugins', slug: 'wordpress-plugins' },
     { label: 'HTML & Tailwind', slug: 'templates-starters' },
-  ];
+  ].filter((cat) => cat.slug === 'all' || activeCategorySlugs.has(cat.slug));
 
   const techOptions = ['Gutenberg', 'Tailwind', 'Next.js', 'React', 'PHP', 'TypeScript'];
 

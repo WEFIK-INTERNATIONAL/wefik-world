@@ -159,47 +159,49 @@ export default async function HomePage() {
       </section>
 
       {/* 4. MARKETPLACE PREVIEW: Featured Products (Plain prices, calm CTAs) */}
-      <section className="py-20 bg-[var(--surface)] border-b border-[var(--border)]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row md:items-end justify-between mb-12">
-            <div>
-              <span className="text-xs font-bold uppercase tracking-wider text-deep-green">
-                Curated Releases
-              </span>
-              <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-ink mt-1">
-                Featured digital products
-              </h2>
-              <p className="text-xs sm:text-sm text-slate mt-1 max-w-xl">
-                Ready-to-deploy digital assets tested on high-traffic client installations across India &amp; globally.
-              </p>
+      {featuredProducts.length > 0 && (
+        <section className="py-20 bg-[var(--surface)] border-b border-[var(--border)]">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex flex-col md:flex-row md:items-end justify-between mb-12">
+              <div>
+                <span className="text-xs font-bold uppercase tracking-wider text-deep-green">
+                  Curated Releases
+                </span>
+                <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-ink mt-1">
+                  Featured digital products
+                </h2>
+                <p className="text-xs sm:text-sm text-slate mt-1 max-w-xl">
+                  Ready-to-deploy digital assets tested on high-traffic client installations across India &amp; globally.
+                </p>
+              </div>
+              <Button asChild variant="outline" className="h-10 rounded-xl mt-4 md:mt-0 text-xs font-semibold">
+                <Link href="/marketplace">Explore All Products ({allProducts.length})</Link>
+              </Button>
             </div>
-            <Button asChild variant="outline" className="h-10 rounded-xl mt-4 md:mt-0 text-xs font-semibold">
-              <Link href="/marketplace">Explore All Products ({allProducts.length})</Link>
-            </Button>
-          </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {featuredProducts.map((product) => (
-              <ProductCard
-                key={product.id}
-                id={product.id}
-                title={product.title}
-                slug={product.slug}
-                tagline={product.tagline}
-                price_inr={product.price_inr}
-                is_free={product.is_free}
-                is_featured={product.is_featured}
-                is_bundle={product.is_bundle}
-                thumbnail_url={product.thumbnail_url}
-                category={product.category}
-                rating_avg={product.rating_avg}
-                rating_count={product.rating_count}
-                tech_stack={product.tech_stack}
-              />
-            ))}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {featuredProducts.map((product) => (
+                <ProductCard
+                  key={product.id}
+                  id={product.id}
+                  title={product.title}
+                  slug={product.slug}
+                  tagline={product.tagline}
+                  price_inr={product.price_inr}
+                  is_free={product.is_free}
+                  is_featured={product.is_featured}
+                  is_bundle={product.is_bundle}
+                  thumbnail_url={product.thumbnail_url}
+                  category={product.category}
+                  rating_avg={product.rating_avg}
+                  rating_count={product.rating_count}
+                  tech_stack={product.tech_stack}
+                />
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* 5. MISSION SECTION: Why We Exist (2-3 short lines, human, warm, no hype) */}
       <section className="py-16 bg-[var(--bg)] border-b border-[var(--border)] text-center">

@@ -16,8 +16,8 @@ interface BeforeAfterSliderProps {
 export function BeforeAfterSlider({
   beforeImage,
   afterImage,
-  beforeLabel = 'Default Theme',
-  afterLabel = 'AgencyPro FSE',
+  beforeLabel = 'Before',
+  afterLabel = 'After',
   aspectRatio = 'aspect-[16/10]',
 }: BeforeAfterSliderProps) {
   const [sliderPosition, setSliderPosition] = useState(50); // percentage

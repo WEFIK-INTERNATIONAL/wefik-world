@@ -38,7 +38,7 @@ export function HeroPoster() {
                 W
               </div>
               <div>
-                <span className="font-bold text-xs text-white block">AgencyPro FSE</span>
+                <span className="font-bold text-xs text-white block">Wefik FSE Starter</span>
                 <span className="text-[10px] text-slate-400 font-mono">v1.2.0 • Gutenberg Native</span>
               </div>
             </div>
