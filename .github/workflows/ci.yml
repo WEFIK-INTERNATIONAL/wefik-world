@@ -45,10 +45,22 @@ jobs:
           node-version-file: .nvmrc
       - run: node scripts/check-secrets.mjs
 
+  test:
+    name: Unit Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - run: npm test
+
   build:
     name: Next.js build
     runs-on: ubuntu-latest
-    needs: [lint, typecheck, secrets]
+    needs: [lint, typecheck, secrets, test]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
