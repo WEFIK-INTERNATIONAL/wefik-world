@@ -6,9 +6,13 @@ export async function GET() {
   let redisPing = null;
 
   try {
-    const ping = await redis.ping();
-    redisStatus = 'connected';
-    redisPing = ping;
+    if (!redis) {
+      redisStatus = 'unconfigured';
+    } else {
+      const ping = await redis.ping();
+      redisStatus = 'connected';
+      redisPing = ping;
+    }
   } catch (error) {
     redisStatus = `error: ${(error as Error).message}`;
   }
