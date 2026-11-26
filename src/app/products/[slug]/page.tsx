@@ -118,11 +118,16 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
   }));
 
   // JSON-LD Schemas
+  const images = [product.thumbnail_url, ...(product.gallery_urls || [])].filter(
+    (u): u is string => Boolean(u && typeof u === 'string' && u.trim() && !u.includes('placeholder'))
+  );
+  const hasRealReviews = initialReviews.length > 0 && product.rating_count > 0 && product.rating_avg > 0;
+
   const productJsonLd = {
     '@context': 'https://schema.org/',
     '@type': 'Product',
     name: product.title,
-    image: [product.thumbnail_url, ...(product.gallery_urls || [])],
+    ...(images.length > 0 ? { image: images } : {}),
     description: product.tagline,
     sku: product.id,
     brand: {
@@ -136,12 +141,12 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
       price: (product.price_inr / 100).toFixed(2),
       availability: 'https://schema.org/InStock',
     },
-    ...(product.rating_count > 0
+    ...(hasRealReviews
       ? {
           aggregateRating: {
             '@type': 'AggregateRating',
             ratingValue: product.rating_avg.toFixed(1),
-            reviewCount: product.rating_count,
+            reviewCount: initialReviews.length,
           },
         }
       : {}),

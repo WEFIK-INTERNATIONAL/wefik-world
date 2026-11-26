@@ -69,9 +69,10 @@ export function MarketplaceClientView({
         params.delete('page');
       }
       const qs = params.toString();
-      router.replace(`/marketplace${qs ? `?${qs}` : ''}`, { scroll: false });
+      const nextUrl = `/marketplace${qs ? `?${qs}` : ''}`;
+      window.history.replaceState(null, '', nextUrl);
     },
-    [router, searchParams]
+    [searchParams]
   );
 
   // Debounce search input -> URL `q`
