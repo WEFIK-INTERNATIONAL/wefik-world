@@ -68,7 +68,9 @@ export function MarketplaceClientView({
 
     // Tech stack filter
     if (tech !== 'all') {
-      const hasTech = Array.isArray(p.tech_stack) && p.tech_stack.some((t) => t.toLowerCase() === tech.toLowerCase());
+      const hasTech =
+        Array.isArray(p.tech_stack) &&
+        p.tech_stack.some((t) => t.toLowerCase().includes(tech.toLowerCase()));
       if (!hasTech) return false;
     }
 
