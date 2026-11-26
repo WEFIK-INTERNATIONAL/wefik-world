@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import * as Sentry from '@sentry/nextjs';
 import { AlertCircle, RefreshCw, ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
@@ -39,9 +39,7 @@ export default function MarketplaceError({
     }
   };
 
-  const [errorId] = useState(
-    () => error.digest || 'mkt_' + Math.random().toString(36).substring(2, 8)
-  );
+  const errorId = error.digest || 'ERR_MARKETPLACE';
 
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-20 min-h-[60vh] flex items-center justify-center">
