@@ -1,9 +1,22 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
+import { checkRateLimit } from '@/lib/redis';
 
 export async function POST(request: Request) {
   try {
-    const { email } = await request.json();
+    // Rate limit: 3 subscribe attempts per minute per IP
+    const forwarded = request.headers.get('x-forwarded-for');
+    const ip = forwarded?.split(',')[0]?.trim() || 'unknown';
+    const rl = await checkRateLimit(`newsletter:${ip}`, 3, 60);
+    if (!rl.success) {
+      return NextResponse.json(
+        { error: 'Too many requests. Please try again later.' },
+        { status: 429 }
+      );
+    }
+
+    const body = await request.json();
+    const email = typeof body?.email === 'string' ? body.email : null;
 
     if (!email || !email.includes('@')) {
       return NextResponse.json({ error: 'Valid email address is required.' }, { status: 400 });
