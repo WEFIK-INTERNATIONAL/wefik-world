@@ -14,18 +14,16 @@ export const revalidate = 0;
 
 interface OrderDetail {
   id: string;
-  order_number: string | null;
-  total_amount_inr: number;
-  subtotal_inr: number;
-  discount_inr: number;
-  tax_inr: number;
+  total_amount: number;
+  subtotal: number;
+  discount_amount: number;
   status: string;
   razorpay_payment_id: string | null;
   created_at: string;
   user_id: string;
   order_items: Array<{
     id: string;
-    price_inr: number;
+    price: number;
     license_type: string;
     product: {
       id: string;
@@ -57,18 +55,16 @@ export default async function OrderReceiptPage({ params }: OrderReceiptPageProps
     .from('orders')
     .select(`
       id,
-      order_number,
-      total_amount_inr,
-      subtotal_inr,
-      discount_inr,
-      tax_inr,
+      total_amount,
+      subtotal,
+      discount_amount,
       status,
       razorpay_payment_id,
       created_at,
       user_id,
       order_items (
         id,
-        price_inr,
+        price,
         license_type,
         product:products (
           id,
@@ -135,7 +131,7 @@ export default async function OrderReceiptPage({ params }: OrderReceiptPageProps
               <CheckCircle2 className="w-3.5 h-3.5" /> Official Receipt: Paid
             </span>
             <p className="font-mono text-xs text-slate print:text-gray-600">
-              Order: <strong className="text-[var(--text)] print:text-black">{order.order_number || order.id.slice(0, 12)}</strong>
+              Order: <strong className="text-[var(--text)] print:text-black">{order.id.slice(0, 12)}</strong>
             </p>
             <p className="text-xs text-slate print:text-gray-600 mt-0.5">
               Date: {new Date(order.created_at).toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' })}
@@ -183,7 +179,7 @@ export default async function OrderReceiptPage({ params }: OrderReceiptPageProps
                     {item.license_type || 'Single Site'}
                   </td>
                   <td className="py-3.5 text-right font-mono font-semibold text-[var(--text)] print:text-black tabular-nums">
-                    {item.price_inr === 0 ? '₹0.00' : `₹${(item.price_inr / 100).toLocaleString('en-IN')}`}
+                    {item.price === 0 ? '₹0.00' : `₹${(item.price / 100).toLocaleString('en-IN')}`}
                   </td>
                 </tr>
               ))}
@@ -197,25 +193,25 @@ export default async function OrderReceiptPage({ params }: OrderReceiptPageProps
             <div className="flex justify-between text-slate print:text-gray-600">
               <span>Subtotal:</span>
               <span className="font-mono font-medium text-[var(--text)] print:text-black tabular-nums">
-                ₹{((order.subtotal_inr || order.total_amount_inr) / 100).toLocaleString('en-IN')}
+                ₹{((order.subtotal || order.total_amount) / 100).toLocaleString('en-IN')}
               </span>
             </div>
-            {Boolean(order.discount_inr && order.discount_inr > 0) && (
+            {Boolean(order.discount_amount && order.discount_amount > 0) && (
               <div className="flex justify-between text-deep-green font-medium">
                 <span>Coupon Discount:</span>
-                <span className="font-mono tabular-nums">-₹{(order.discount_inr / 100).toLocaleString('en-IN')}</span>
+                <span className="font-mono tabular-nums">-₹{(order.discount_amount / 100).toLocaleString('en-IN')}</span>
               </div>
             )}
             <div className="flex justify-between text-slate print:text-gray-600">
               <span>GST / Taxes:</span>
               <span className="font-mono font-medium text-[var(--text)] print:text-black tabular-nums">
-                {order.tax_inr ? `₹${(order.tax_inr / 100).toLocaleString('en-IN')}` : 'Included'}
+                Included
               </span>
             </div>
             <div className="flex justify-between pt-2 border-t border-[var(--border)] text-sm font-bold text-[var(--text)] print:text-black">
               <span>Total Paid:</span>
               <span className="font-mono text-base tabular-nums">
-                ₹{(order.total_amount_inr / 100).toLocaleString('en-IN')}
+                ₹{(order.total_amount / 100).toLocaleString('en-IN')}
               </span>
             </div>
           </div>

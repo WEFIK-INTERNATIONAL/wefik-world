@@ -60,7 +60,7 @@ export function CouponAdminManager({ initialCoupons }: { initialCoupons: CouponI
               id: data.id,
               code: data.code,
               discount_percent: data.discount_percent,
-              used_count: data.uses_count,
+              used_count: data.used_count,
               max_uses: data.max_uses,
               is_active: true,
               valid_until: data.valid_until,

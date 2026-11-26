@@ -43,16 +43,16 @@ export default async function AccountOverviewPage() {
   // 3. Fetch active licenses & products owned count
   const { data: licenses } = await supabase
     .from('licenses')
-    .select('id, product_id, is_active')
+    .select('id, product_id, status')
     .eq('user_id', user.id);
 
-  const activeLicensesCount = licenses?.filter((l) => l.is_active).length || 0;
+  const activeLicensesCount = licenses?.filter((l) => l.status === 'active').length || 0;
   const uniqueProductsCount = new Set(licenses?.map((l) => l.product_id) || []).size;
 
   // 4. Fetch recent orders (last 5)
   const { data: orders } = await supabase
     .from('orders')
-    .select('id, order_number, total_amount_inr, status, created_at')
+    .select('id, total_amount, status, created_at')
     .eq('user_id', user.id)
     .order('created_at', { ascending: false })
     .limit(5);
@@ -200,13 +200,13 @@ export default async function AccountOverviewPage() {
                 {orders.map((order) => (
                   <tr key={order.id} className="hover:bg-[var(--surface-2)] transition-colors">
                     <td className="py-3 font-mono font-medium text-[var(--text)]">
-                      {order.order_number || order.id.slice(0, 8)}
+                      {order.id.slice(0, 8)}
                     </td>
                     <td className="py-3 text-slate">
                       {new Date(order.created_at).toLocaleDateString()}
                     </td>
                     <td className="py-3 font-mono font-semibold text-[var(--text)] tabular-nums">
-                      {order.total_amount_inr === 0 ? 'FREE' : `₹${(order.total_amount_inr / 100).toLocaleString('en-IN')}`}
+                      {order.total_amount === 0 ? 'FREE' : `₹${(order.total_amount / 100).toLocaleString('en-IN')}`}
                     </td>
                     <td className="py-3">
                       <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-deep-green/10 text-deep-green capitalize">

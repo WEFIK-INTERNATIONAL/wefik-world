@@ -9,7 +9,7 @@ export const metadata = {
 
 interface AdminOrderRow {
   id: string;
-  amount_inr: number;
+  total_amount: number;
   status: string;
   razorpay_order_id: string | null;
   razorpay_payment_id: string | null;
@@ -26,7 +26,7 @@ export default async function AdminOrdersPage() {
     .from('orders')
     .select(`
       id,
-      amount_inr,
+      total_amount,
       status,
       razorpay_order_id,
       razorpay_payment_id,
@@ -81,7 +81,7 @@ export default async function AdminOrdersPage() {
                     {(order.order_items || []).map((i) => i.product?.title).filter(Boolean).join(', ') || 'Item'}
                   </td>
                   <td className="py-3.5 px-4 font-extrabold text-ink">
-                    ₹{((order.amount_inr || 0) / 100).toLocaleString('en-IN')}
+                    ₹{((order.total_amount || 0) / 100).toLocaleString('en-IN')}
                   </td>
                   <td className="py-3.5 px-4 font-mono text-[11px] text-slate">
                     {order.razorpay_payment_id || '—'}

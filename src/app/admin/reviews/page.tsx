@@ -11,8 +11,7 @@ export const metadata = {
 interface DbReviewItem {
   id: string;
   rating: number;
-  title: string | null;
-  comment: string;
+  review_text: string | null;
   created_at: string;
   product: { title: string } | null;
   user: { email: string } | null;
@@ -27,8 +26,7 @@ export default async function AdminReviewsPage() {
     .select(`
       id,
       rating,
-      title,
-      comment,
+      review_text,
       created_at,
       product:products(title),
       user:profiles(email)
@@ -39,8 +37,7 @@ export default async function AdminReviewsPage() {
   const formattedReviews = (reviews || []).map((r) => ({
     id: r.id,
     rating: r.rating,
-    title: r.title || 'Review',
-    comment: r.comment,
+    review_text: r.review_text,
     created_at: r.created_at,
     product_title: r.product?.title || 'Product',
     user_email: r.user?.email || 'Anonymous Buyer',
