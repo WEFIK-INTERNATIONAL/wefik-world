@@ -57,3 +57,17 @@ This release consolidates critical security, schema, motion, fake-content, and U
    - Bundles `"Save 60%"` / `"Save 40% to 60%"` marketing claim on `/bundles` could not be verified against live bundle pricing.
    - Confirm live Supabase `categories` table slugs match `wordpress-themes`, `wordpress-plugins`, `html-templates`, and `nextjs-templates`.
 
+
+### 9. Markdown Hydration Fix
+- **Product docs renderer (`src/components/marketplace/product-markdown-docs.tsx`):** Moved `CodeBlock` rendering from `code` to `pre` override (since `react-markdown@10` has no `inline` prop), keeping inline `code` as a bare `<code>` element and eliminating `<div>`/`<pre>` inside `<p>` hydration errors.
+
+### 10. Demo Content Removal & Real Product Preparation
+- **Audit & checklists (`docs/audit/15-demo-inventory.md`, `16-owner-questions.md`, `17-real-products.md`, `18-apply-checklist.md`):** Inventoried all demo references, documented verified public sources for **Site Checkup** and **KuraCode Extension** (noting **weclip** is blocked pending owner source), and listed blocking owner questions.
+- **Unapplied migrations (`supabase/migrations/005_remove_demo_products.sql`, `006_seed_real_products.sql`):** Added idempotent demo archive/cleanup migration and draft (`status = 'draft'`) real-product seed for owner review.
+- **Code cleanup (`fallback-products.ts`, `page.tsx`, `bundles/page.tsx`, `cart-drawer.tsx`, `live-demo-viewer.tsx`, `programmatic-data.ts`, `product-admin-manager.tsx`, `before-after-slider.tsx`):** Emptied `FALLBACK_PRODUCTS`, added empty states, and removed Unsplash/demo product fallbacks.
+
+### 11. Marketplace Page Redesign
+- **Header & page sync (`src/components/layout/header.tsx`, `src/components/search/command-palette.tsx`, `src/components/marketplace/marketplace-client-view.tsx`):**
+  - Tightened top spacing to `calc(var(--header-height) + 1.5rem)`, simplified H1 to `"Marketplace"`, and added factual product count + `"Licence details"` link to `/license`.
+  - Bound page search (`#marketplace-search`) and header search to URL `?q=` as single source of truth; collapsed header search on `/marketplace` to an icon focusing the page input.
+  - Built categories and platforms strictly from real product data, gated advanced filters behind `ADVANCED_FILTER_THRESHOLD = 8`, added `"Filters"` mobile drawer with focus trap and Escape handling, removable active filter chips, and clean empty results state.
