@@ -5,9 +5,10 @@ import gsap from 'gsap';
 import { useReducedMotion } from '@/hooks/use-reduced-motion';
 import { useLenis } from '@/components/providers/smooth-scroll-provider';
 import { Logo } from '@/components/brand/logo';
+import { MOTION_EASE } from '@/lib/motion';
 
 const SESSION_KEY = 'wfk_intro_seen';
-const EASE_PRIMARY = 'power3.out';
+const EASE_PRIMARY = MOTION_EASE.out;
 
 /**
  * First-visit unboxing preloader.

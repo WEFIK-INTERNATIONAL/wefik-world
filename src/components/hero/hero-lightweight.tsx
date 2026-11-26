@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { TransitionLink } from '@/components/transitions/transition-link';
 import { MagneticButton } from '@/components/ui/magnetic-button';
 import { useMotionGates } from '@/hooks/use-reduced-motion';
+import { MOTION_DURATION, MOTION_EASE } from '@/lib/motion';
 
 export function HeroLightweight() {
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -30,17 +31,23 @@ export function HeroLightweight() {
       return;
     }
 
-    const rotX = gsap.quickTo(cardStack, 'rotationX', { duration: 0.6, ease: 'power2.out' });
-    const rotY = gsap.quickTo(cardStack, 'rotationY', { duration: 0.6, ease: 'power2.out' });
+    const rotX = gsap.quickTo(cardStack, 'rotationX', { duration: MOTION_DURATION.slow, ease: MOTION_EASE.out });
+    const rotY = gsap.quickTo(cardStack, 'rotationY', { duration: MOTION_DURATION.slow, ease: MOTION_EASE.out });
     const c1Z = card1
-      ? gsap.quickTo(card1, 'z', { duration: 0.6, ease: 'power2.out' })
+      ? gsap.quickTo(card1, 'z', { duration: MOTION_DURATION.slow, ease: MOTION_EASE.out })
       : null;
     const c2Z = card2
-      ? gsap.quickTo(card2, 'z', { duration: 0.6, ease: 'power2.out' })
+      ? gsap.quickTo(card2, 'z', { duration: MOTION_DURATION.slow, ease: MOTION_EASE.out })
       : null;
 
+    let cachedRect: DOMRect | null = null;
+    const handleMouseEnter = () => {
+      cachedRect = container.getBoundingClientRect();
+    };
+
     const handleMouseMove = (e: MouseEvent) => {
-      const rect = container.getBoundingClientRect();
+      const rect = cachedRect || container.getBoundingClientRect();
+      cachedRect = rect;
       const x = (e.clientX - rect.left) / rect.width - 0.5; // -0.5 to 0.5
       const y = (e.clientY - rect.top) / rect.height - 0.5;
 
@@ -51,16 +58,19 @@ export function HeroLightweight() {
     };
 
     const handleMouseLeave = () => {
+      cachedRect = null;
       rotX(0);
       rotY(0);
       if (c1Z) c1Z(0);
       if (c2Z) c2Z(0);
     };
 
+    container.addEventListener('mouseenter', handleMouseEnter);
     container.addEventListener('mousemove', handleMouseMove);
     container.addEventListener('mouseleave', handleMouseLeave);
 
     return () => {
+      container.removeEventListener('mouseenter', handleMouseEnter);
       container.removeEventListener('mousemove', handleMouseMove);
       container.removeEventListener('mouseleave', handleMouseLeave);
       gsap.killTweensOf(cardStack);

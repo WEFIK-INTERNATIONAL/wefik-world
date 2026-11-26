@@ -35,7 +35,10 @@ The preloader was intended to represent a 3D shipping/gift box whose lid hinges 
 
 ---
 
-## 3. Summary of Key Recommendations
-- **Preloader:** Rebuilt in Step 3 to use true 3D `perspective` + `preserve-3d` + `rotateX` back-top hinge with `backface-visibility: hidden`, responsive ground shadow, `~1.55s` total duration with a single consistent `power3.out` curve, immediate skip for same-session return visitors, early exit when page is ready, `prefers-reduced-motion` simple fade, and `transform`/`opacity`-only properties.
-- **CSS Transitions:** Gradually replace `transition-all` with explicit `transition-transform` / `transition-colors` / `transition-opacity` across interactive cards and buttons.
-- **Consistent Easing:** Standardize GSAP transitions on `power3.out` / `expo.out` and CSS transitions on `cubic-bezier(0.16, 1, 0.3, 1)`.
+## 3. Before & After Summary (Task 4 Fixes)
+
+- **Shared Motion Tokens (`src/lib/motion.ts`):** Created `MOTION_DURATION` (`fast: 0.18`, `base: 0.3`, `slow: 0.55`, `ambient: 2.4`) and `MOTION_EASE` (`out: 'power3.out'`, `inOut: 'expo.inOut'`, `in: 'power3.in'`, `ambient: 'sine.inOut'`, `cssOut: 'cubic-bezier(0.22, 1, 0.36, 1)'`). Wired `UnboxingPreloader`, `TransitionProvider`, `FullscreenMenu`, `MagneticButton`, `HeroLightweight`, `StatCounter`, and `NotFound` to use these shared tokens.
+- **Layout Reads in Pointer Loops:** `MagneticButton` and `HeroLightweight` previously called `getBoundingClientRect()` on every `mousemove` event. Both now cache the bounding rect on `mouseenter` and clear on `mouseleave`.
+- **Lenis + ScrollTrigger:** Verified `SmoothScrollProvider` uses a single `Lenis` instance driven by `gsap.ticker` with `ScrollTrigger.update` synced, no competing `requestAnimationFrame` loops, and no global CSS `scroll-behavior: smooth`.
+- **Preloader:** Rebuilt to use true 3D `perspective` + `preserve-3d` + `rotateX` back-top hinge with `backface-visibility: hidden`, responsive ground shadow, `~1.55s` total duration with `power3.out`, immediate skip for same-session return visitors via pre-paint `data-preloader="skip"`, early exit when page is ready, `prefers-reduced-motion` simple fade, keyboard (`Escape`/`Enter`/`Space`) skip without focus trap, and `transform`/`opacity`-only properties.
+

@@ -3,6 +3,7 @@
 import React, { useRef, useEffect } from 'react';
 import gsap from 'gsap';
 import { useMotionGates } from '@/hooks/use-reduced-motion';
+import { MOTION_DURATION, MOTION_EASE } from '@/lib/motion';
 
 interface MagneticButtonProps extends React.ButtonHTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
@@ -28,28 +29,36 @@ export function MagneticButton({
     // Only enable magnetic pull on desktop devices with hover support
     if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
 
-    const xTo = gsap.quickTo(el, 'x', { duration: 0.4, ease: 'power3.out' });
-    const yTo = gsap.quickTo(el, 'y', { duration: 0.4, ease: 'power3.out' });
+    const xTo = gsap.quickTo(el, 'x', { duration: MOTION_DURATION.base, ease: MOTION_EASE.out });
+    const yTo = gsap.quickTo(el, 'y', { duration: MOTION_DURATION.base, ease: MOTION_EASE.out });
+
+    let cachedRect: DOMRect | null = null;
+    const handleMouseEnter = () => {
+      cachedRect = el.getBoundingClientRect();
+    };
 
     const handleMouseMove = (e: MouseEvent) => {
-      const { clientX, clientY } = e;
-      const { left, top, width, height } = el.getBoundingClientRect();
-      const x = (clientX - (left + width / 2)) * strength;
-      const y = (clientY - (top + height / 2)) * strength;
+      const rect = cachedRect || el.getBoundingClientRect();
+      cachedRect = rect;
+      const x = (e.clientX - (rect.left + rect.width / 2)) * strength;
+      const y = (e.clientY - (rect.top + rect.height / 2)) * strength;
 
       xTo(x);
       yTo(y);
     };
 
     const handleMouseLeave = () => {
+      cachedRect = null;
       xTo(0);
       yTo(0);
     };
 
+    el.addEventListener('mouseenter', handleMouseEnter);
     el.addEventListener('mousemove', handleMouseMove);
     el.addEventListener('mouseleave', handleMouseLeave);
 
     return () => {
+      el.removeEventListener('mouseenter', handleMouseEnter);
       el.removeEventListener('mousemove', handleMouseMove);
       el.removeEventListener('mouseleave', handleMouseLeave);
       gsap.killTweensOf(el);

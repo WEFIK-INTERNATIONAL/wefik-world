@@ -6,6 +6,7 @@ import { Search, ArrowUpRight, X, Sparkles, Mail } from 'lucide-react';
 import { useLenis } from '@/components/providers/smooth-scroll-provider';
 import { usePageTransition } from '@/components/transitions/transition-provider';
 import { useMotionGates } from '@/hooks/use-reduced-motion';
+import { MOTION_DURATION, MOTION_EASE } from '@/lib/motion';
 import { Logo } from '@/components/brand/logo';
 import { ThemeToggle } from '@/components/ui/theme-toggle';
 import { Input } from '@/components/ui/input';
@@ -92,8 +93,8 @@ export function FullscreenMenu({ isOpen, onClose }: FullscreenMenuProps) {
       tl.set(overlayRef.current, { display: 'flex', yPercent: -100, opacity: 1 })
         .to(overlayRef.current, {
           yPercent: 0,
-          duration: 0.45,
-          ease: 'power3.out',
+          duration: MOTION_DURATION.slow,
+          ease: MOTION_EASE.out,
         })
         .fromTo(
           '.fs-menu-item',
@@ -101,9 +102,9 @@ export function FullscreenMenu({ isOpen, onClose }: FullscreenMenuProps) {
           {
             y: 0,
             opacity: 1,
-            duration: 0.35,
+            duration: MOTION_DURATION.base,
             stagger: 0.035,
-            ease: 'power2.out',
+            ease: MOTION_EASE.out,
           },
           '-=0.2'
         );
@@ -121,8 +122,8 @@ export function FullscreenMenu({ isOpen, onClose }: FullscreenMenuProps) {
 
       gsap.to(overlayRef.current, {
         yPercent: -100,
-        duration: 0.3,
-        ease: 'power3.in',
+        duration: MOTION_DURATION.base,
+        ease: MOTION_EASE.in,
         onComplete: () => {
           if (overlayRef.current) overlayRef.current.style.display = 'none';
         },

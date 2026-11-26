@@ -4,6 +4,7 @@ import React, { useRef, useEffect, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useReducedMotion } from '@/hooks/use-reduced-motion';
+import { MOTION_EASE } from '@/lib/motion';
 
 interface StatCounterProps {
   end: number;
@@ -36,7 +37,7 @@ export function StatCounter({
     const tween = gsap.to(obj, {
       val: end,
       duration,
-      ease: 'power2.out',
+      ease: MOTION_EASE.out,
       scrollTrigger: {
         trigger: el,
         start: 'top 85%',
