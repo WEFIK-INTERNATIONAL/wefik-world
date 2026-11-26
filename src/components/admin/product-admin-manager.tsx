@@ -71,7 +71,7 @@ export function ProductAdminManager({ initialProducts }: { initialProducts: Admi
           .upload(storagePath, file, { upsert: true });
 
         if (uploadError) {
-          console.warn('Private storage upload warning:', uploadError);
+          throw new Error(`File upload failed: ${uploadError.message}`);
         }
       }
 
