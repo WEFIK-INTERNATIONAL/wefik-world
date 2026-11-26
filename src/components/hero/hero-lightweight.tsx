@@ -1,242 +1,235 @@
 'use client';
 
 import React, { useRef, useEffect } from 'react';
+import Link from 'next/link';
 import gsap from 'gsap';
-import { ArrowRight, Zap, Shield } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { TransitionLink } from '@/components/transitions/transition-link';
-import { MagneticButton } from '@/components/ui/magnetic-button';
+import { SafeImage } from '@/components/ui/safe-image';
 import { useMotionGates } from '@/hooks/use-reduced-motion';
 import { MOTION_DURATION, MOTION_EASE } from '@/lib/motion';
+import { DEFAULT_BLUR_DATA_URL } from '@/lib/image-placeholder';
+import type { ProductData } from '@/lib/data/products';
 
-export function HeroLightweight() {
-  const containerRef = useRef<HTMLDivElement | null>(null);
-  const cardStackRef = useRef<HTMLDivElement | null>(null);
-  const card1Ref = useRef<HTMLDivElement | null>(null);
-  const card2Ref = useRef<HTMLDivElement | null>(null);
-  const card3Ref = useRef<HTMLDivElement | null>(null);
+interface HeroLightweightProps {
+  products?: ProductData[];
+}
+
+const MARKETPLACE_CATEGORIES = [
+  { name: 'WordPress themes', slug: 'wordpress-themes', description: 'Block themes & FSE layouts' },
+  { name: 'WordPress plugins', slug: 'wordpress-plugins', description: 'Caching, SEO & utilities' },
+  { name: 'HTML templates', slug: 'html-templates', description: 'Responsive Tailwind starters' },
+  { name: 'Next.js starters', slug: 'nextjs-templates', description: 'App Router & TypeScript kits' },
+];
+
+function formatPrice(product: ProductData): string {
+  if (product.is_free || product.price_inr <= 0) return 'Free';
+  return `₹${Math.round(product.price_inr / 100).toLocaleString('en-IN')}`;
+}
+
+export function HeroLightweight({ products = [] }: HeroLightweightProps) {
+  const showcaseRef = useRef<HTMLDivElement | null>(null);
   const { disableHeavyMotion } = useMotionGates();
 
+  // Pick up to 4 real products with valid images (featured first)
+  const featuredWithImages = [...products]
+    .filter((p) => Boolean(p.thumbnail_url && p.thumbnail_url.trim().length > 0))
+    .sort((a, b) => Number(b.is_featured) - Number(a.is_featured))
+    .slice(0, 4);
+
+  const hasEnoughProducts = featuredWithImages.length >= 3;
+
+  // Subtle entrance for showcase cards (transform & opacity only, shared tokens)
   useEffect(() => {
-    const container = containerRef.current;
-    const cardStack = cardStackRef.current;
-    const card1 = card1Ref.current;
-    const card2 = card2Ref.current;
-    if (!container || !cardStack || disableHeavyMotion || typeof window === 'undefined') {
-      return;
-    }
+    const el = showcaseRef.current;
+    if (!el || disableHeavyMotion || typeof window === 'undefined') return;
 
-    // Only enable interactive 3D tilt on desktop with fine mouse pointer
-    if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
-      return;
-    }
+    const cards = el.querySelectorAll('.hero-showcase-card');
+    if (cards.length === 0) return;
 
-    const rotX = gsap.quickTo(cardStack, 'rotationX', { duration: MOTION_DURATION.slow, ease: MOTION_EASE.out });
-    const rotY = gsap.quickTo(cardStack, 'rotationY', { duration: MOTION_DURATION.slow, ease: MOTION_EASE.out });
-    const c1Z = card1
-      ? gsap.quickTo(card1, 'z', { duration: MOTION_DURATION.slow, ease: MOTION_EASE.out })
-      : null;
-    const c2Z = card2
-      ? gsap.quickTo(card2, 'z', { duration: MOTION_DURATION.slow, ease: MOTION_EASE.out })
-      : null;
+    const ctx = gsap.context(() => {
+      gsap.fromTo(
+        cards,
+        { y: 12, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: MOTION_DURATION.base,
+          stagger: 0.06,
+          ease: MOTION_EASE.out,
+        }
+      );
+    }, el);
 
-    let cachedRect: DOMRect | null = null;
-    const handleMouseEnter = () => {
-      cachedRect = container.getBoundingClientRect();
-    };
-
-    const handleMouseMove = (e: MouseEvent) => {
-      const rect = cachedRect || container.getBoundingClientRect();
-      cachedRect = rect;
-      const x = (e.clientX - rect.left) / rect.width - 0.5; // -0.5 to 0.5
-      const y = (e.clientY - rect.top) / rect.height - 0.5;
-
-      rotY(x * 16);
-      rotX(-y * 14);
-      if (c1Z) c1Z(35 + Math.abs(x) * 20);
-      if (c2Z) c2Z(15 + Math.abs(y) * 15);
-    };
-
-    const handleMouseLeave = () => {
-      cachedRect = null;
-      rotX(0);
-      rotY(0);
-      if (c1Z) c1Z(0);
-      if (c2Z) c2Z(0);
-    };
-
-    container.addEventListener('mouseenter', handleMouseEnter);
-    container.addEventListener('mousemove', handleMouseMove);
-    container.addEventListener('mouseleave', handleMouseLeave);
-
-    return () => {
-      container.removeEventListener('mouseenter', handleMouseEnter);
-      container.removeEventListener('mousemove', handleMouseMove);
-      container.removeEventListener('mouseleave', handleMouseLeave);
-      gsap.killTweensOf(cardStack);
-      if (card1) gsap.killTweensOf(card1);
-      if (card2) gsap.killTweensOf(card2);
-    };
-  }, [disableHeavyMotion]);
+    return () => ctx.revert();
+  }, [disableHeavyMotion, hasEnoughProducts]);
 
   return (
-    <div
-      ref={containerRef}
-      style={{ paddingTop: 'calc(var(--header-height) + 3rem)' }}
-      className="relative w-full overflow-hidden pb-16 lg:pb-20 select-none"
-    >
-      {/* 1. Layered Radial Gradients & Subtle Grid */}
-      <div className="absolute inset-0 pointer-events-none">
-        {/* Top Lime Wash Glow */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[380px] bg-radial from-lime/25 via-lime/5 to-transparent blur-3xl" />
-        {/* Deep Green Ambient Glow */}
-        <div className="absolute top-32 left-1/4 w-[500px] h-[300px] bg-radial from-[var(--accent)]/15 via-transparent to-transparent blur-3xl" />
-        {/* Fine Grid Lines */}
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,var(--border)_1px,transparent_1px),linear-gradient(to_bottom,var(--border)_1px,transparent_1px)] bg-[size:40px_40px] opacity-40 dark:opacity-20" />
-        {/* SVG Grain Noise Overlay (<1.5KB) */}
-        <div
-          className="absolute inset-0 opacity-[0.035] dark:opacity-[0.06] mix-blend-overlay pointer-events-none"
-          style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
-          }}
-        />
-      </div>
+    <div className="relative w-full pt-8 sm:pt-10 lg:pt-12 pb-12 lg:pb-16">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+          {/* Left Column: Headline, Copy, Categories & CTAs */}
+          <div className="lg:col-span-5 space-y-5 text-left">
+            <p className="text-sm font-medium text-[var(--brand)]">
+              WordPress &amp; Next.js marketplace
+            </p>
 
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center flex flex-col items-center">
-        {/* Headline & CTAs with guaranteed z-index isolation */}
-        <div className="relative z-20 w-full flex flex-col items-center">
-          {/* Eyebrow Label */}
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[var(--surface)] border border-[var(--border)] shadow-xs mb-6 animate-in fade-in slide-in-from-bottom-2 duration-500">
-            <span className="flex h-2 w-2 rounded-full bg-lime animate-pulse" />
-            <span className="eyebrow text-[var(--accent)]">
-              Official Marketplace of Wefik Agency
-            </span>
-            <span className="text-[var(--muted)]">•</span>
-            <span className="eyebrow text-[var(--muted)]">Single-Vendor Engineering</span>
-          </div>
+            <h1 className="text-[clamp(2.25rem,4.2vw,3.75rem)] font-display font-semibold tracking-tight leading-[1.08] text-[var(--text-primary)] [text-wrap:balance]">
+              Themes, plugins, and starters built to ship.
+            </h1>
 
-          {/* Display-XL Headline per Part C & D Spec */}
-          <h1 className="display-xl max-w-5xl mx-auto mb-6 text-[var(--text)]">
-            Tools for developers, by developers — built and supported by Wefik
-          </h1>
+            <p className="text-lg sm:text-[19px] leading-relaxed text-[var(--text-secondary)] max-w-[56ch] [text-wrap:pretty]">
+              Production WordPress themes, plugins, HTML templates, and Next.js starters. Modify the source code freely, deploy on client sites, and get lifetime updates.
+            </p>
 
-          {/* Subtitle */}
-          <p className="body-lg max-w-2xl mx-auto mb-8 text-[var(--muted)] font-normal">
-            WordPress themes, plugins, and web templates built for client work. No page-builder bloat. You own the code.
-          </p>
+            {/* Category Links */}
+            <div className="flex flex-wrap items-center gap-2 pt-1">
+              {MARKETPLACE_CATEGORIES.map((cat) => (
+                <TransitionLink
+                  key={cat.slug}
+                  href={`/marketplace?category=${cat.slug}`}
+                  className="px-2.5 py-1 rounded-md bg-[var(--surface)] hover:bg-[var(--surface-2)] border border-[var(--border)] text-xs font-medium text-[var(--text-primary)] transition-colors"
+                >
+                  {cat.name}
+                </TransitionLink>
+              ))}
+            </div>
 
-          {/* Hero CTAs: Destination Named (Generosity First) */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 mb-10 sm:mb-14">
-            <MagneticButton strength={0.25} className="w-full sm:w-auto">
+            {/* Primary CTA + Quiet Secondary Link */}
+            <div className="flex flex-wrap items-center gap-5 pt-2">
               <Button
                 asChild
                 variant="primary"
-                size="lg"
-                className="w-full sm:w-auto h-12 px-8 rounded-xl font-semibold text-sm shadow-md transition-shadow hover:shadow-lime/20 hover:shadow-lg"
+                className="h-11 px-6 rounded-full font-semibold text-sm"
               >
-                <TransitionLink href="/freebies" className="flex items-center gap-2">
-                  <span>Explore free products</span>
-                  <ArrowRight className="w-4 h-4" />
-                </TransitionLink>
+                <TransitionLink href="/marketplace">Browse the marketplace</TransitionLink>
               </Button>
-            </MagneticButton>
-            <MagneticButton strength={0.15} className="w-full sm:w-auto">
-              <Button
-                asChild
-                variant="outline"
-                size="lg"
-                className="w-full sm:w-auto h-12 px-8 rounded-xl border-[var(--border)] bg-[var(--surface)] text-[var(--text)] hover:bg-[var(--surface-2)] font-semibold text-sm"
+
+              <TransitionLink
+                href="/freebies"
+                className="text-sm font-medium text-[var(--text-primary)] hover:text-[var(--brand)] underline underline-offset-4 transition-colors"
               >
-                <TransitionLink href="/marketplace">
-                  <span>Browse marketplace</span>
-                </TransitionLink>
-              </Button>
-            </MagneticButton>
+                Free products
+              </TransitionLink>
+            </div>
+
+            {/* Verified License & Support Summary */}
+            <p className="text-xs text-[var(--text-secondary)] pt-1 leading-relaxed">
+              Full source code modification · Lifetime product updates ·{' '}
+              <Link href="/license" className="underline hover:text-[var(--text-primary)] transition-colors">
+                Commercial license
+              </Link>{' '}
+              &amp;{' '}
+              <Link href="/terms" className="underline hover:text-[var(--text-primary)] transition-colors">
+                support terms
+              </Link>
+              .
+            </p>
           </div>
-        </div>
 
-        {/* 2. Interactive CSS 3D Tilting Product Cards (Section 6) */}
-        <div
-          className="relative z-10 isolate w-full max-w-5xl mx-auto h-[380px] sm:h-[440px] mt-2 sm:mt-4 flex items-center justify-center pointer-events-auto px-4 overflow-hidden"
-          style={{ perspective: '1200px' }}
-        >
-          <div
-            ref={cardStackRef}
-            className="relative w-full h-full flex items-center justify-center transition-transform duration-200"
-            style={{ transformStyle: 'preserve-3d' }}
-          >
-            {/* Card 3: Left Back Tilt (Tailwind HTML Starter) */}
+          {/* Right Column: Real Product Showcase (or Category Grid Fallback) */}
+          <div ref={showcaseRef} className="lg:col-span-7 relative">
+            {/* Subtle local wash behind showcase only */}
             <div
-              ref={card3Ref}
-              className="absolute left-2 sm:left-6 lg:left-10 top-12 sm:top-14 w-56 sm:w-68 p-4 sm:p-5 rounded-2xl bg-[var(--surface)] border border-[var(--border)] shadow-xl backdrop-blur-md -rotate-6 transition-transform hidden md:block select-none"
-              style={{ transform: 'translateZ(-30px)' }}
-            >
-              <div className="flex items-center justify-between pb-2 mb-2 border-b border-[var(--border)]">
-                <span className="eyebrow text-sky-500 font-bold">HTML5 / Tailwind</span>
-                <span className="font-mono text-xs font-bold text-sky-500">Starter</span>
-              </div>
-              <h4 className="heading-3 text-sm text-[var(--text)] mb-1">DevStarter Kit Pro</h4>
-              <p className="body-small text-xs text-[var(--muted)] line-clamp-2">
-                Semantic HTML, responsive grid, zero jQuery, 100/100 Core Web Vitals.
-              </p>
-              <div className="mt-3 flex items-center gap-1.5 text-[10px] font-mono text-[var(--muted)]">
-                <span className="px-1.5 py-0.5 rounded bg-[var(--surface-2)] border border-[var(--border)]">Single &amp; Unlimited</span>
-              </div>
-            </div>
+              aria-hidden="true"
+              className="absolute -inset-4 rounded-3xl bg-[var(--brand)]/5 blur-2xl pointer-events-none"
+            />
 
-            {/* Card 2: Right Back Tilt (SuperCache Plugin) */}
-            <div
-              ref={card2Ref}
-              className="absolute right-2 sm:right-6 lg:right-10 bottom-8 sm:bottom-12 w-56 sm:w-68 p-4 sm:p-5 rounded-2xl bg-[var(--surface)] border border-[var(--border)] shadow-xl backdrop-blur-md rotate-6 transition-transform hidden md:block select-none"
-              style={{ transform: 'translateZ(-15px)' }}
-            >
-              <div className="flex items-center justify-between pb-2 mb-2 border-b border-[var(--border)]">
-                <span className="eyebrow text-[#2d5208] dark:text-lime font-bold">WordPress Plugin</span>
-                <span className="font-mono text-xs font-bold text-[#2d5208] dark:text-lime">Freebie</span>
-              </div>
-              <h4 className="heading-3 text-sm text-[var(--text)] mb-1">SuperCache Turbo</h4>
-              <p className="body-small text-xs text-[var(--muted)] line-clamp-2">
-                Lightweight object cache &amp; CSS minification for instant TTFB.
-              </p>
-              <div className="mt-3 flex items-center gap-2 text-[10px] font-mono text-deep-green-light">
-                <Zap className="w-3 h-3 text-lime" />
-                <span>Instant PageSpeed 100</span>
-              </div>
-            </div>
+            {hasEnoughProducts ? (
+              <div className="relative grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {/* Primary Featured Card (spans 2 cols on sm+) */}
+                {featuredWithImages.slice(0, 1).map((product) => (
+                  <TransitionLink
+                    key={product.id}
+                    href={`/products/${product.slug}`}
+                    className="hero-showcase-card sm:col-span-2 group rounded-2xl bg-[var(--surface)] border border-[var(--border)] hover:border-[var(--brand)]/60 overflow-hidden transition-colors"
+                  >
+                    <div className="grid grid-cols-1 sm:grid-cols-12 items-center">
+                      <div className="sm:col-span-7 relative aspect-[16/10] w-full bg-[var(--surface-2)] overflow-hidden">
+                        <SafeImage
+                          src={product.thumbnail_url}
+                          alt={product.title}
+                          fill
+                          priority
+                          placeholder="blur"
+                          blurDataURL={DEFAULT_BLUR_DATA_URL}
+                          sizes="(max-width: 1024px) 100vw, 40vw"
+                          className="object-cover group-hover:scale-[1.03] transition-transform duration-300"
+                        />
+                      </div>
+                      <div className="sm:col-span-5 p-5 space-y-2">
+                        <div className="flex items-center justify-between gap-2">
+                          <span className="text-xs font-medium text-[var(--brand)]">
+                            {product.category?.name || 'Featured'}
+                          </span>
+                          <span className="text-sm font-display font-semibold text-[var(--text-primary)] tabular-nums">
+                            {formatPrice(product)}
+                          </span>
+                        </div>
+                        <h2 className="text-base font-display font-semibold text-[var(--text-primary)] group-hover:text-[var(--brand)] transition-colors line-clamp-2">
+                          {product.title}
+                        </h2>
+                        <p className="text-xs text-[var(--text-secondary)] line-clamp-2 leading-relaxed">
+                          {product.tagline}
+                        </p>
+                      </div>
+                    </div>
+                  </TransitionLink>
+                ))}
 
-            {/* Card 1: Foreground Center Hero Card (AgencyPro FSE) */}
-            <div
-              ref={card1Ref}
-              className="relative w-full max-w-[320px] sm:max-w-[400px] p-6 sm:p-7 rounded-3xl bg-[var(--surface)]/95 dark:bg-[#141714]/95 border-2 border-lime/60 shadow-2xl shadow-lime/10 backdrop-blur-xl transition-all duration-300 z-20"
-              style={{ transform: 'translateZ(40px)' }}
-            >
-              <div className="flex items-center justify-between pb-3 mb-3 border-b border-[var(--border)]">
-                <div className="flex items-center gap-2.5">
-                  <div className="w-8 h-8 rounded-xl bg-lime flex items-center justify-center font-black text-[#0a0f0a] shadow-xs">
-                    W
-                  </div>
-                  <div className="text-left">
-                    <span className="eyebrow text-xs text-[var(--text)] block font-bold">AgencyPro FSE</span>
-                    <span className="text-[10px] font-mono text-[var(--muted)]">v1.2.0 • Gutenberg Native</span>
-                  </div>
-                </div>
-                <div className="text-right">
-                  <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-lime/20 text-[#2d5208] dark:text-lime">Block Theme</span>
-                </div>
+                {/* Secondary Product Cards (2 or 3 items) */}
+                {featuredWithImages.slice(1, 3).map((product) => (
+                  <TransitionLink
+                    key={product.id}
+                    href={`/products/${product.slug}`}
+                    className="hero-showcase-card group rounded-2xl bg-[var(--surface)] border border-[var(--border)] hover:border-[var(--brand)]/60 overflow-hidden transition-colors flex flex-col"
+                  >
+                    <div className="relative aspect-[16/10] w-full bg-[var(--surface-2)] overflow-hidden">
+                      <SafeImage
+                        src={product.thumbnail_url}
+                        alt={product.title}
+                        fill
+                        placeholder="blur"
+                        blurDataURL={DEFAULT_BLUR_DATA_URL}
+                        sizes="(max-width: 640px) 100vw, 25vw"
+                        className="object-cover group-hover:scale-[1.03] transition-transform duration-300"
+                      />
+                    </div>
+                    <div className="p-4 flex items-center justify-between gap-3">
+                      <div className="min-w-0">
+                        <span className="text-[11px] font-medium text-[var(--text-secondary)] block truncate">
+                          {product.category?.name || 'Digital Product'}
+                        </span>
+                        <h3 className="text-sm font-display font-semibold text-[var(--text-primary)] group-hover:text-[var(--brand)] transition-colors truncate">
+                          {product.title}
+                        </h3>
+                      </div>
+                      <span className="text-sm font-display font-semibold text-[var(--text-primary)] tabular-nums shrink-0">
+                        {formatPrice(product)}
+                      </span>
+                    </div>
+                  </TransitionLink>
+                ))}
               </div>
-
-              <p className="body-base text-xs sm:text-sm text-[var(--muted)] text-left mb-4">
-                Engineered with zero page builder bloat. Achieves sub-second LCP, perfect typography scale, and flawless mobile interactivity.
-              </p>
-
-              <div className="flex items-center justify-between pt-2 border-t border-[var(--border)] text-xs">
-                <div className="flex items-center gap-1.5 text-[var(--text)] font-semibold text-xs">
-                  <Shield className="w-3.5 h-3.5 text-lime" />
-                  <span className="text-[var(--text)]">Verified Gutenberg FSE</span>
-                </div>
-                <span className="eyebrow text-[10px] text-lime font-bold">Commercial License</span>
+            ) : (
+              /* Fallback Category Grid when fewer than 3 real products have images */
+              <div className="relative grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {MARKETPLACE_CATEGORIES.map((cat) => (
+                  <TransitionLink
+                    key={cat.slug}
+                    href={`/marketplace?category=${cat.slug}`}
+                    className="hero-showcase-card group p-6 rounded-2xl bg-[var(--surface)] border border-[var(--border)] hover:border-[var(--brand)]/60 transition-colors space-y-1.5"
+                  >
+                    <h2 className="text-base font-display font-semibold text-[var(--text-primary)] group-hover:text-[var(--brand)] transition-colors">
+                      {cat.name}
+                    </h2>
+                    <p className="text-sm text-[var(--text-secondary)]">
+                      {cat.description}
+                    </p>
+                  </TransitionLink>
+                ))}
               </div>
-            </div>
+            )}
           </div>
         </div>
       </div>
