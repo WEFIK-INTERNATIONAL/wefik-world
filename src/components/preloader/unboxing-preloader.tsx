@@ -20,15 +20,8 @@ export function UnboxingPreloader() {
   const prefersReducedMotion = useReducedMotion();
   const { stopScroll, startScroll } = useLenis();
 
-  // Skip immediately on the client for returning visitors in the same session
-  const [mounted, setMounted] = useState<boolean>(() => {
-    if (typeof window === 'undefined') return false;
-    try {
-      return sessionStorage.getItem(SESSION_KEY) !== 'true';
-    } catch {
-      return false;
-    }
-  });
+  // Server and initial client render MUST match identically (no window/sessionStorage branching here)
+  const [mounted, setMounted] = useState<boolean>(true);
 
   const containerRef = useRef<HTMLDivElement | null>(null);
   const boxRef = useRef<HTMLDivElement | null>(null);
@@ -50,9 +43,23 @@ export function UnboxingPreloader() {
   useEffect(() => {
     if (!mounted || typeof window === 'undefined') return;
 
+    // Same-session returners are already hidden by CSS via data-preloader="skip"; unmount immediately
+    try {
+      if (
+        sessionStorage.getItem(SESSION_KEY) === 'true' ||
+        document.documentElement.getAttribute('data-preloader') === 'skip'
+      ) {
+        queueMicrotask(() => setMounted(false));
+        return;
+      }
+    } catch {
+      // Ignore storage errors
+    }
+
     const markSeenAndUnmount = () => {
       try {
         sessionStorage.setItem(SESSION_KEY, 'true');
+        document.documentElement.setAttribute('data-preloader', 'skip');
       } catch {
         // Ignore storage errors in restricted contexts
       }
@@ -218,6 +225,7 @@ export function UnboxingPreloader() {
     }
     try {
       sessionStorage.setItem(SESSION_KEY, 'true');
+      document.documentElement.setAttribute('data-preloader', 'skip');
     } catch {
       // Ignore storage errors
     }
@@ -233,12 +241,26 @@ export function UnboxingPreloader() {
     }
   };
 
+  // Allow Escape / Enter / Space to skip without trapping focus
+  useEffect(() => {
+    if (!mounted || typeof window === 'undefined') return;
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' || e.key === 'Enter' || e.key === ' ') {
+        handleSkip();
+      }
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+     
+  }, [mounted]);
+
   if (!mounted) return null;
 
   if (prefersReducedMotion) {
     return (
       <div
         ref={containerRef}
+        data-wefik-preloader="true"
         aria-hidden="true"
         onClick={handleSkip}
         className="fixed inset-0 z-[9999] bg-[var(--bg)] flex items-center justify-center pointer-events-none"
@@ -251,6 +273,7 @@ export function UnboxingPreloader() {
   return (
     <div
       ref={containerRef}
+      data-wefik-preloader="true"
       aria-hidden="true"
       onClick={handleSkip}
       className="fixed inset-0 z-[9999] bg-[var(--bg)] text-[var(--text)] flex flex-col items-center justify-center cursor-pointer select-none"
