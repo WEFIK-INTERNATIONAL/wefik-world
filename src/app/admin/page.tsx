@@ -103,7 +103,7 @@ export default async function AdminOverviewPage() {
             <span className="text-xs font-semibold">Live Products</span>
             <Package className="w-4 h-4 text-deep-green" />
           </div>
-          <p className="text-2xl font-black text-ink">{productCount ?? 6}</p>
+          <p className="text-2xl font-black text-ink">{productCount ?? 0}</p>
           <Link href="/admin/products" className="text-[11px] text-deep-green font-semibold hover:underline block">
             Manage catalog →
           </Link>

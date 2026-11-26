@@ -373,7 +373,15 @@ export function ProductDetailView({ product, initialReviews = [] }: ProductDetai
 
               <div className="flex items-center gap-1.5 text-[11px] text-[var(--muted)] font-medium">
                 <Clock className="w-3.5 h-3.5 text-lime" />
-                <span>Updated 6 days ago</span>
+                <span>
+                  {product.updated_at
+                    ? `Updated ${new Date(product.updated_at).toLocaleDateString('en-IN', {
+                        day: 'numeric',
+                        month: 'short',
+                        year: 'numeric',
+                      })}`
+                    : 'Latest release'}
+                </span>
               </div>
             </div>
 
