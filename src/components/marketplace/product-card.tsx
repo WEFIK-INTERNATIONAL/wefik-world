@@ -14,6 +14,7 @@ import { Button } from '@/components/ui/button';
 import { QuickViewModal } from './quick-view-modal';
 import { DEFAULT_BLUR_DATA_URL } from '@/lib/image-placeholder';
 import { ProductData } from '@/lib/data/products';
+import { UNLIMITED_LICENSE_MULTIPLIER } from '@/lib/pricing';
 
 export interface ProductCardProps {
   id: string;
@@ -106,7 +107,7 @@ export function ProductCard({
       thumbnailUrl: thumbnail_url,
       licenseType: 'single',
       singlePricePaise: price_inr,
-      unlimitedPricePaise: Math.round((price_inr * 2.5) / 100) * 100,
+      unlimitedPricePaise: Math.round((price_inr * UNLIMITED_LICENSE_MULTIPLIER) / 100) * 100,
       isFree: is_free,
     });
 

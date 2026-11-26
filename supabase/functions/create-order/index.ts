@@ -141,7 +141,8 @@ serve(async (req: Request) => {
           );
         }
 
-        // Unlimited license is 2x price or standard 1x
+        // Unlimited license price uses shared multiplier (see src/lib/pricing.ts)
+        // Currently 2.0× — awaiting business decision (may become 2.5×)
         let itemPrice = prod.price_inr;
         if (item.license_type === "unlimited") {
           itemPrice = Math.round(prod.price_inr * 2);
