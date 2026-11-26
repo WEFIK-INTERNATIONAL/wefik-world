@@ -104,7 +104,16 @@ export async function verifyWebhookSignature(
 
   const signatureBuffer = await crypto.subtle.sign("HMAC", key, encoder.encode(rawBody));
   const hashArray = Array.from(new Uint8Array(signatureBuffer));
-  const expectedSignature = hashArray.map((b) => b.toString(16).padStart(2, "0")).join("");
+  const expectedSignature = hashArray.map((b) => b.toString(16).padStart(2, "0")).join("").toLowerCase();
+  const providedSignature = signature.trim().toLowerCase();
 
-  return expectedSignature.toLowerCase() === signature.toLowerCase();
+  if (expectedSignature.length !== providedSignature.length) {
+    return false;
+  }
+
+  let diff = 0;
+  for (let i = 0; i < expectedSignature.length; i++) {
+    diff |= expectedSignature.charCodeAt(i) ^ providedSignature.charCodeAt(i);
+  }
+  return diff === 0;
 }

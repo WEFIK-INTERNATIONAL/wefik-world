@@ -14,9 +14,17 @@ serve(async (req: Request) => {
   const signature = req.headers.get("x-razorpay-signature") ?? "";
   const secret = Deno.env.get("RAZORPAY_WEBHOOK_SECRET") ?? "";
 
-  // Verify webhook signature (Fix 8 & Global Acceptance)
+  // Fail closed: reject if webhook secret is unset or signature is invalid
+  if (!secret) {
+    console.error("RAZORPAY_WEBHOOK_SECRET is not configured");
+    return new Response(JSON.stringify({ error: "Webhook verification not configured" }), {
+      status: 401,
+      headers: { "Content-Type": "application/json" },
+    });
+  }
+
   const isValid = await verifyWebhookSignature(rawBody, signature, secret);
-  if (!isValid && secret) {
+  if (!isValid) {
     console.error("Razorpay webhook signature mismatch");
     return new Response(JSON.stringify({ error: "Invalid signature" }), {
       status: 401,
@@ -31,12 +39,25 @@ serve(async (req: Request) => {
     return new Response("Invalid JSON payload", { status: 400 });
   }
 
-  const eventId = event.event_id || event.id || `${event.event}_${Date.now()}`;
+  const eventId = event.event_id || event.id;
+  if (!eventId) {
+    return new Response(JSON.stringify({ error: "Missing webhook event ID" }), {
+      status: 400,
+      headers: { "Content-Type": "application/json" },
+    });
+  }
   const supabase = createAdminClient();
 
-  // Redis idempotency key check (Fix 8)
-  const isNewEvent = await redis.acquireIdempotency(eventId, 86400); // 24hr TTL
-  if (!isNewEvent) {
+  // Fail-closed Redis idempotency key check
+  const idempotencyState = await redis.acquireIdempotency(eventId, 86400); // 24hr TTL
+  if (idempotencyState === "error") {
+    console.error(`Idempotency store unavailable for event ${eventId}`);
+    return new Response(JSON.stringify({ error: "Idempotency store unavailable" }), {
+      status: 503,
+      headers: { "Content-Type": "application/json" },
+    });
+  }
+  if (idempotencyState === "duplicate") {
     console.log(`Duplicate webhook event ${eventId} ignored`);
     return new Response(JSON.stringify({ received: true, duplicate: true }), {
       status: 200,
