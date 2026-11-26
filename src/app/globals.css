@@ -11,7 +11,7 @@
    ============================================ */
 
 :root {
-  --header-height: 4rem;
+  --header-height: 64px;
   --bg: #FFFFFF;
   --surface: #F8F9FA;
   --surface-elevated: #FFFFFF;
@@ -34,7 +34,7 @@
 }
 
 .dark {
-  --header-height: 4rem;
+  --header-height: 64px;
   --bg: #0B0D0B;
   --surface: #141714;
   --surface-elevated: #1C211C;
