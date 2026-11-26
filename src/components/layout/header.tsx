@@ -30,6 +30,7 @@ import {
   LogOut,
   Heart,
   Menu,
+  SlidersHorizontal,
 } from 'lucide-react';
 import type { User } from '@supabase/supabase-js';
 
@@ -287,12 +288,12 @@ export function Header() {
                   </DropdownMenuItem>
 
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem className="text-xs font-medium cursor-pointer px-2 py-1.5">
-                    <div className="flex items-center justify-between w-full">
-                      <span className="text-[var(--text-secondary)]">Theme</span>
-                      <ThemeToggle />
-                    </div>
-                  </DropdownMenuItem>
+                  <div className="px-2 py-2 space-y-1.5">
+                    <span className="text-[11px] font-medium text-[var(--text-secondary)] block">
+                      Theme
+                    </span>
+                    <ThemeToggle variant="segmented" className="w-full justify-between" />
+                  </div>
 
                   {isAdmin && (
                     <>
@@ -317,22 +318,47 @@ export function Header() {
                 </DropdownMenuContent>
               </DropdownMenu>
             ) : (
-              /* ── Logged-out: Sign in text + quiet wishlist icon ── */
+              /* ── Logged-out: preferences menu (Wishlist + Theme) + Sign in text ── */
               <div className="hidden sm:flex items-center gap-1">
-                {/* Wishlist for logged-out users */}
-                <TransitionLink
-                  href="/dashboard/wishlist"
-                  aria-label="Wishlist"
-                  title="Wishlist"
-                  className={iconBtnClass}
-                >
-                  <Heart className="w-5 h-5" />
-                  {wishlistCount > 0 && (
-                    <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 bg-[var(--surface-inverted)] text-[var(--text-inverted)] text-[10px] font-bold rounded-full flex items-center justify-center ring-2 ring-[var(--bg)]">
-                      {wishlistCount}
-                    </span>
-                  )}
-                </TransitionLink>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <button
+                      type="button"
+                      aria-label="Wishlist and theme"
+                      title="Wishlist and theme"
+                      className={iconBtnClass}
+                    >
+                      <SlidersHorizontal className="w-4 h-4" />
+                      {wishlistCount > 0 && (
+                        <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 bg-[var(--surface-inverted)] text-[var(--text-inverted)] text-[10px] font-bold rounded-full flex items-center justify-center ring-2 ring-[var(--bg)]">
+                          {wishlistCount}
+                        </span>
+                      )}
+                    </button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-60 p-1.5 bg-[var(--surface)] border-[var(--border)] shadow-xl">
+                    <DropdownMenuItem asChild className="text-xs font-medium cursor-pointer">
+                      <TransitionLink href="/dashboard/wishlist" className="flex items-center justify-between gap-2">
+                        <span className="flex items-center gap-2">
+                          <Heart className="w-3.5 h-3.5 text-[var(--text-secondary)]" />
+                          <span>Wishlist</span>
+                        </span>
+                        {wishlistCount > 0 && (
+                          <span className="px-1.5 py-0.5 text-[10px] font-semibold rounded-full bg-[var(--surface-2)] text-[var(--text-primary)] tabular-nums">
+                            {wishlistCount}
+                          </span>
+                        )}
+                      </TransitionLink>
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <div className="px-2 py-1.5 space-y-1.5">
+                      <span className="text-[11px] font-medium text-[var(--text-secondary)] block">
+                        Theme
+                      </span>
+                      <ThemeToggle variant="segmented" className="w-full justify-between" />
+                    </div>
+                  </DropdownMenuContent>
+                </DropdownMenu>
                 <TransitionLink
                   href="/login"
                   className="px-3 py-2 text-sm font-medium text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors whitespace-nowrap"

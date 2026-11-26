@@ -227,7 +227,7 @@ export function FullscreenMenu({ isOpen, onClose, user, onSignOut }: FullscreenM
 
         <div className="flex items-center justify-between pt-2">
           <span className="text-sm font-medium text-[var(--text-secondary)]">Theme</span>
-          <ThemeToggle />
+          <ThemeToggle variant="segmented" />
         </div>
       </div>
     </div>
