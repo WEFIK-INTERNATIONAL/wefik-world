@@ -61,3 +61,4 @@
 1. **Bundles `"Save 60%"` / `"Save 40% to 60%"`** on `/bundles` and footer `"Curated Bundles (-60%)"` — could not be verified against live bundle pricing (`agency-growth-bundle` is ₹3,999 vs ₹5,997 individual = ~33% savings, though its description says `"Save 40%"`).
 2. **Sanity `/blog`** — `NEXT_PUBLIC_SANITY_PROJECT_ID` defaults to placeholder; `/blog` falls back to `SEED_POSTS`.
 3. **Unlimited license multiplier** — `2.0x` vs `2.5x` decision (`src/lib/pricing.ts`).
+
