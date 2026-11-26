@@ -49,7 +49,7 @@ export function Logo({
         strokeLinecap="round"
         strokeLinejoin="round"
       />
-      <circle cx="12" cy="5" r="1.5" fill="#A3E635" />
+      <circle cx="12" cy="5" r="1.5" fill="currentColor" />
     </svg>
   );
 
@@ -60,7 +60,7 @@ export function Logo({
   return (
     <div className={`inline-flex items-center gap-2.5 group select-none ${className}`}>
       <div
-        className={`${config.box} bg-ink dark:bg-[#141714] border border-[var(--border)] flex items-center justify-center shadow-xs group-hover:border-lime/40 transition-all duration-300`}
+        className={`${config.box} bg-[var(--surface-inverted)] border border-[var(--border)] flex items-center justify-center shadow-xs group-hover:border-[var(--brand)] transition-colors duration-200`}
       >
         {svgMark}
       </div>
