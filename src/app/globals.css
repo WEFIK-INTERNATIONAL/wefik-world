@@ -305,6 +305,11 @@ a:active,
 }
 
 /* --- Reduced Motion (Section 1.2 & 13) --- */
+/* --- Preloader Skip (set before paint for same-session returners) --- */
+html[data-preloader="skip"] [data-wefik-preloader] {
+  display: none !important;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
