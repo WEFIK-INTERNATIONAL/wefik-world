@@ -50,3 +50,13 @@ Digital products marketplace built with Next.js App Router, Supabase (Postgres, 
 
 - **Web app:** Deployed on Vercel (`next build`). Set all required `NEXT_PUBLIC_*` and server environment variables in Vercel before deploying.
 - **Database & Edge Functions:** Hosted on Supabase. Review and apply SQL files in `supabase/migrations/` in numeric order via Supabase SQL Editor (see `docs/audit/18-apply-checklist.md` for pending cleanup/seed migrations).
+
+## Testing & CI Gates
+
+- `npm test` — Runs unit and critical-flow tests (`edge-functions`, `auth-middleware`, `authz-matrix`, `checkout-e2e`, `auth-rls`, `launch-critical-flows`).
+- `npm run test:e2e` — Runs Playwright E2E and `@axe-core/playwright` WCAG 2.0/2.1 AA accessibility checks against `next start`.
+- **CI (`.github/workflows/ci.yml`):** Blocks PRs on `lint`, `typecheck`, `secrets` (`scripts/check-secrets.mjs`), `test`, `build`, and `test:e2e`.
+
+## Security Headers
+
+Configured in `next.config.ts` (`headers()`). See `docs/SECURITY_HEADERS.md` for the `Content-Security-Policy-Report-Only` policy, allowed origins, and non-CSP hardening headers (`X-Frame-Options`, `X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy`, `Strict-Transport-Security`).

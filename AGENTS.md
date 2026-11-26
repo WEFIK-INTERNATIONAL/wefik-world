@@ -17,3 +17,5 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 - **SSR & Hydration:** Server HTML and first client render must match. Never branch on `window`, `navigator`, or `localStorage` during render.
 - **No Fake Content:** Never invent products, prices, ratings, download counts, testimonials, or stock/Unsplash placeholder images.
 - **Safety:** Never commit secrets, never apply migrations or write to live Supabase/Redis/Storage without explicit owner approval, and keep `scripts/check-secrets.mjs` passing.
+- **CI & Tests:** Keep `npm run lint`, `npm run typecheck`, `npm test`, `npm run test:e2e`, and `node scripts/check-secrets.mjs` passing before pushing.
+- **Security Headers:** Keep `next.config.ts` security headers and `docs/SECURITY_HEADERS.md` in sync whenever adding external script/image/connect origins.

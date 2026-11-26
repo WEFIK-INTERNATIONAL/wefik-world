@@ -71,3 +71,11 @@ This release consolidates critical security, schema, motion, fake-content, and U
   - Tightened top spacing to `calc(var(--header-height) + 1.5rem)`, simplified H1 to `"Marketplace"`, and added factual product count + `"Licence details"` link to `/license`.
   - Bound page search (`#marketplace-search`) and header search to URL `?q=` as single source of truth; collapsed header search on `/marketplace` to an icon focusing the page input.
   - Built categories and platforms strictly from real product data, gated advanced filters behind `ADVANCED_FILTER_THRESHOLD = 8`, added `"Filters"` mobile drawer with focus trap and Escape handling, removable active filter chips, and clean empty results state.
+
+### 12. Launch-Readiness Pass (`chore/launch-readiness`)
+- **Critical Flow & E2E Tests (`tests/launch-critical-flows.test.mjs`, `tests/e2e/launch-readiness.spec.mjs`, `playwright.config.mjs`, `.github/workflows/ci.yml`):** Added deterministic tests for Razorpay webhook fail-closed & replay protection, server-side checkout pricing + `UNLIMITED_LICENSE_MULTIPLIER`, RLS/download-url auth & rate limits, and Playwright E2E + `@axe-core/playwright` WCAG AA audits wired into CI.
+- **Security Headers (`next.config.ts`, `docs/SECURITY_HEADERS.md`):** Added `Content-Security-Policy-Report-Only`, `Permissions-Policy`, `Strict-Transport-Security`, `X-Frame-Options`, `X-Content-Type-Options`, and `Referrer-Policy`.
+- **Performance (`src/components/providers/posthog-provider.tsx`):** Deferred PostHog initialization until first user interaction or idle timeout.
+- **Error Handling & Observability (`src/app/global-error.tsx`, `src/app/api/health/route.ts`, `sentry.*.config.ts`):** Added branded `global-error.tsx`, stripped sensitive config details from `/api/health`, and guarded Sentry init as a no-op when `NEXT_PUBLIC_SENTRY_DSN` / `SENTRY_DSN` is missing (with dev-only warning).
+- **Structured Data (`src/app/products/[slug]/page.tsx`):** Guarded `aggregateRating` JSON-LD on real `initialReviews.length > 0`.
+- **Dependencies (`package.json`):** Removed unused packages (`es-abstract`, `styled-components`, `@types/styled-components`, `@gsap/react`, `gray-matter`, `next-mdx-remote`, `zod`).
