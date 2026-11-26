@@ -188,32 +188,55 @@ export function Header() {
 
           {/* ═══ RIGHT: Search · Cart · Account ═══ */}
           <div className="flex items-center gap-2 shrink-0">
-            {/* Desktop search field (xl+) */}
-            <button
-              type="button"
-              onClick={openCommandPalette}
-              aria-label="Search products"
-              className="hidden xl:flex items-center justify-between gap-3 min-w-[280px] max-w-[320px] px-3 py-2 text-sm bg-[var(--surface)] hover:bg-[var(--surface-2)] border border-[var(--border)] rounded-[var(--radius-sm)] text-[var(--text-secondary)] transition-colors group cursor-pointer"
-            >
-              <span className="flex items-center gap-2.5 min-w-0">
-                <Search className="w-[18px] h-[18px] shrink-0" />
-                <span className="truncate">Search products</span>
-              </span>
-              <kbd className="hidden [@media(hover:hover)_and_(pointer:fine)]:inline-flex items-center shrink-0 px-1.5 py-0.5 text-[11px] font-mono font-medium bg-[var(--surface-2)] text-[var(--text-primary)] rounded border border-[var(--border)]">
-                {shortcutLabel}
-              </kbd>
-            </button>
+            {pathname === '/marketplace' ? (
+              /* On /marketplace, collapse to an icon that focuses the page search (single search scope) */
+              <button
+                type="button"
+                onClick={() => {
+                  const input = document.getElementById('marketplace-search') as HTMLInputElement | null;
+                  if (input) {
+                    input.focus();
+                    input.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                  } else {
+                    openCommandPalette();
+                  }
+                }}
+                aria-label="Focus marketplace search"
+                title="Search products"
+                className={iconBtnClass}
+              >
+                <Search className="w-5 h-5" />
+              </button>
+            ) : (
+              <>
+                {/* Desktop search field (xl+) */}
+                <button
+                  type="button"
+                  onClick={openCommandPalette}
+                  aria-label="Search products"
+                  className="hidden xl:flex items-center justify-between gap-3 min-w-[280px] max-w-[320px] px-3 py-2 text-sm bg-[var(--surface)] hover:bg-[var(--surface-2)] border border-[var(--border)] rounded-[var(--radius-sm)] text-[var(--text-secondary)] transition-colors group cursor-pointer"
+                >
+                  <span className="flex items-center gap-2.5 min-w-0">
+                    <Search className="w-[18px] h-[18px] shrink-0" />
+                    <span className="truncate">Search products</span>
+                  </span>
+                  <kbd className="hidden [@media(hover:hover)_and_(pointer:fine)]:inline-flex items-center shrink-0 px-1.5 py-0.5 text-[11px] font-mono font-medium bg-[var(--surface-2)] text-[var(--text-primary)] rounded border border-[var(--border)]">
+                    {shortcutLabel}
+                  </kbd>
+                </button>
 
-            {/* Search icon (< xl) */}
-            <button
-              type="button"
-              onClick={openCommandPalette}
-              aria-label="Search products"
-              title="Search"
-              className={`xl:hidden ${iconBtnClass}`}
-            >
-              <Search className="w-5 h-5" />
-            </button>
+                {/* Search icon (< xl) */}
+                <button
+                  type="button"
+                  onClick={openCommandPalette}
+                  aria-label="Search products"
+                  title="Search"
+                  className={`xl:hidden ${iconBtnClass}`}
+                >
+                  <Search className="w-5 h-5" />
+                </button>
+              </>
+            )}
 
             {/* Cart (the one emphasized icon) */}
             <button

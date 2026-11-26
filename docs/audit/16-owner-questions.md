@@ -47,3 +47,11 @@
 | 21 | The `hero-poster.tsx` component (the decorative glassmorphic card stack) hardcodes "AgencyPro FSE" and is not used by the current hero. Delete it? | Cleanup |
 | 22 | The `before-after-slider.tsx` defaults to "AgencyPro FSE" label. Should it remain as a reusable component with neutral defaults, or be removed? | Cleanup |
 
+
+## Marketplace Copy Removed (Part 1)
+
+| Removed string | Reason / question |
+|---|---|
+| `"Digital Products Marketplace"` | Replaced with plain `"Marketplace"` H1. |
+| `"Single-vendor engineering by Wefik"` | Removed from marketplace subtitle; confirm if any ownership tagline is needed. |
+| `"Verified commercial rights"` | Replaced with factual product count and `"Licence details"` link to `/license`. |

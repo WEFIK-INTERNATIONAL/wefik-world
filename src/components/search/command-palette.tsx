@@ -171,6 +171,18 @@ export function CommandPalette() {
 
             {/* Group 1: Products (uses debounced filter) */}
             <Command.Group heading="Digital Products" className="py-2 text-[10px] font-mono font-bold uppercase tracking-wider text-[var(--muted)] px-2">
+              {search.trim() && (
+                <Command.Item
+                  value={`search-marketplace-${search.trim()}`}
+                  onSelect={() => handleSelect(() => navigate(`/marketplace?q=${encodeURIComponent(search.trim())}`))}
+                  className="flex items-center justify-between p-2.5 rounded-xl cursor-pointer hover:bg-[var(--surface-2)] transition-colors aria-selected:bg-[var(--surface-2)] text-[var(--text)] font-semibold"
+                >
+                  <div className="flex items-center gap-2.5">
+                    <Search className="w-4 h-4 text-[var(--brand)]" />
+                    <span>Search marketplace for &ldquo;{search.trim()}&rdquo;</span>
+                  </div>
+                </Command.Item>
+              )}
               {filteredProducts.map((p) => (
                 <Command.Item
                   key={p.id}
