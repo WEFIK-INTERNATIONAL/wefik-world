@@ -100,7 +100,7 @@ export function LicenseList({ initialLicenses }: { initialLicenses: LicenseItem[
     return (
       <div className="py-12 text-center text-xs text-slate space-y-3">
         <p>No license keys found. Purchase a theme or claim a free template to generate keys.</p>
-        <Button asChild className="bg-ink hover:bg-black text-white text-xs rounded-xl h-10">
+        <Button asChild className="bg-[var(--surface-inverted)] hover:opacity-90 text-[var(--text-inverted)] text-xs rounded-xl h-10">
           <Link href="/marketplace">Browse Products</Link>
         </Button>
       </div>
@@ -214,7 +214,7 @@ export function LicenseList({ initialLicenses }: { initialLicenses: LicenseItem[
               <Button
                 onClick={() => handleAddDomain(lic.id)}
                 size="sm"
-                className="h-8 px-3 text-xs rounded-lg bg-ink hover:bg-black text-white font-semibold"
+                className="h-8 px-3 text-xs rounded-lg bg-[var(--surface-inverted)] hover:opacity-90 text-[var(--text-inverted)] font-semibold"
               >
                 <Plus className="w-3 h-3 mr-1" />
                 Add

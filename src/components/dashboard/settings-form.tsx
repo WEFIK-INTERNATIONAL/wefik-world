@@ -189,7 +189,7 @@ export function SettingsForm({ user }: SettingsFormProps) {
         <Button
           type="submit"
           disabled={saving}
-          className="bg-ink hover:bg-black text-white text-xs h-10 px-5 rounded-xl font-semibold"
+          className="bg-[var(--surface-inverted)] hover:opacity-90 text-[var(--text-inverted)] text-xs h-10 px-5 rounded-xl font-semibold"
         >
           {saving ? <Loader2 className="w-3.5 h-3.5 animate-spin mr-1.5" /> : null}
           Save Changes

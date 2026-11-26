@@ -86,7 +86,7 @@ export default async function DashboardOverviewPage() {
           </p>
         </div>
 
-        <Button asChild className="bg-ink hover:bg-black text-white text-xs h-10 px-4 rounded-xl font-semibold">
+        <Button asChild className="bg-[var(--surface-inverted)] hover:opacity-90 text-[var(--text-inverted)] text-xs h-10 px-4 rounded-xl font-semibold">
           <Link href="/marketplace">Browse Catalog</Link>
         </Button>
       </div>

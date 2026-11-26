@@ -4,7 +4,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-[12px] text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lime focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg)] disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 cursor-pointer select-none",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-[12px] text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brand)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg)] disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 cursor-pointer select-none",
   {
     variants: {
       variant: {
@@ -13,13 +13,13 @@ const buttonVariants = cva(
         primary:
           "bg-[var(--surface-inverted)] text-[var(--text-inverted)] shadow hover:opacity-90 active:scale-[0.98]",
         lime:
-          "bg-lime text-[#0a0f0a] font-semibold shadow hover:bg-[#8fd32b] hover:text-[#0a0f0a] active:scale-[0.98]",
+          "bg-lime text-[var(--on-primary)] font-semibold shadow hover:bg-[var(--primary)]/90 hover:text-[var(--on-primary)] active:scale-[0.98]",
         accent:
-          "bg-lime text-[#0a0f0a] font-semibold shadow hover:bg-[#8fd32b] hover:text-[#0a0f0a] active:scale-[0.98]",
+          "bg-lime text-[var(--on-primary)] font-semibold shadow hover:bg-[var(--primary)]/90 hover:text-[var(--on-primary)] active:scale-[0.98]",
         green:
-          "bg-deep-green text-white shadow hover:bg-[#3d5a15] active:scale-[0.98]",
+          "bg-deep-green text-white shadow hover:bg-deep-green-dark active:scale-[0.98]",
         destructive:
-          "bg-error text-white shadow-sm hover:bg-red-600 active:scale-[0.98]",
+          "bg-error text-white shadow-sm hover:bg-error/90 active:scale-[0.98]",
         outline:
           "border border-[var(--border)] bg-transparent text-[var(--text-primary)] hover:bg-[var(--surface-2)] hover:text-[var(--text-primary)] active:scale-[0.98]",
         secondary:

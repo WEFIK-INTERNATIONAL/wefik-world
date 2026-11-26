@@ -122,17 +122,17 @@ Includes commercial usage rights on client sites under Single or Unlimited licen
   },
   {
     id: 'p0000000-0000-0000-0000-000000000003',
-    title: 'SaaSPulse — Modern Next.js 15 SaaS Starter',
+    title: 'SaaSPulse — Modern Next.js 16 SaaS Starter',
     slug: 'saaspulse-nextjs-template',
     tagline: 'Complete SaaS marketing template with pricing tables, feature grids, and dashboard mockups.',
-    description: `### SaaSPulse Next.js 15 SaaS Template
+    description: `### SaaSPulse Next.js 16 SaaS Template
 
-SaaSPulse is a production-ready marketing and dashboard starter kit designed for indie hackers, software founders, and digital agencies building high-converting web applications. Built on modern Next.js 15 App Router architecture with React 19, SaaSPulse eliminates weeks of boilerplate frontend development.
+SaaSPulse is a production-ready marketing and dashboard starter kit designed for indie hackers, software founders, and digital agencies building high-converting web applications. Built on modern Next.js 16 App Router architecture with React 19, SaaSPulse eliminates weeks of boilerplate frontend development.
 
 The template includes 12 modular landing page sections: high-impact hero variations, feature grids, interactive comparison tables, multi-tier pricing toggles, customer testimonial cards, and an integrated blog shell. Styled with Tailwind CSS and accessible shadcn/ui component primitives, every component supports built-in dark and light theme switching.
 
 #### Technical Specifications & System Requirements
-- **Framework:** Next.js 15 (App Router, Server Components & Suspense boundaries)
+- **Framework:** Next.js 16 (App Router, Server Components & Suspense boundaries)
 - **Language & Runtime:** TypeScript strict mode, Node.js 18.18+ or Node 20+
 - **Styling:** Tailwind CSS v3/v4 with CSS variables and shadcn/ui primitives
 - **SEO & Performance:** Pre-configured JSON-LD structured data, dynamic OpenGraph metadata, and 100/100 Core Web Vitals
@@ -147,7 +147,7 @@ Deploy on client deliverables or your own SaaS startups with full commercial rig
     thumbnail_url: '/images/products/saaskit-nextjs-starter.webp',
     gallery_urls: ['https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?w=1200&auto=format&fit=crop&q=80'],
     demo_url: 'https://demo.wefik.in/saaspulse',
-    tech_stack: ['Next.js 15', 'TypeScript', 'Tailwind CSS', 'shadcn/ui'],
+    tech_stack: ['Next.js 16', 'TypeScript', 'Tailwind CSS', 'shadcn/ui'],
     rating_avg: 0,
     rating_count: 0,
     download_count: 0,
@@ -155,7 +155,7 @@ Deploy on client deliverables or your own SaaS startups with full commercial rig
     versions: [
       {
         version: '1.0.0',
-        changelog: 'Initial release with Next.js 15 App Router, TypeScript strict mode, and 12 pre-built marketing sections.',
+        changelog: 'Initial release with Next.js 16 App Router, TypeScript strict mode, and 12 pre-built marketing sections.',
         is_latest: true,
         created_at: '2026-09-20T00:00:00Z',
       },
@@ -213,7 +213,7 @@ The Complete Agency Growth Bundle is our flagship 3-in-1 digital product suite, 
 #### What’s Included in This Bundle:
 1. **AgencyPro WordPress Theme (₹2,499 value):** High-speed Gutenberg Full Site Editing theme with 20+ agency block patterns and sub-second loading speeds.
 2. **SuperFast Cache & WebP Optimizer (₹1,499 value):** Lightweight caching and automatic WebP image converter utility for WordPress.
-3. **SaaSPulse Next.js 15 SaaS Template (₹1,999 value):** Complete React 19 / Next.js 15 marketing landing page and dashboard shell.
+3. **SaaSPulse Next.js 16 SaaS Template (₹1,999 value):** Complete React 19 / Next.js 16 marketing landing page and dashboard shell.
 
 *Total individual item value: ₹5,997. Bundle price: ₹3,999.*
 
@@ -231,7 +231,7 @@ Every item in this bundle is engineered in-house by Wefik Agency (wefik.in). Unl
     thumbnail_url: '/images/products/agency-complete-bundle.webp',
     gallery_urls: ['https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1200&auto=format&fit=crop&q=80'],
     demo_url: 'https://demo.wefik.in/agencypro',
-    tech_stack: ['WordPress 6.4+', 'Next.js 15', 'Tailwind CSS', 'PHP 8.2'],
+    tech_stack: ['WordPress 6.4+', 'Next.js 16', 'Tailwind CSS', 'PHP 8.2'],
     rating_avg: 0,
     rating_count: 0,
     download_count: 0,

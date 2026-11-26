@@ -134,7 +134,7 @@ export function CouponAdminManager({ initialCoupons }: { initialCoupons: CouponI
           <Button
             type="submit"
             disabled={loading}
-            className="h-10 px-5 bg-ink hover:bg-black text-white text-xs font-bold rounded-xl"
+            className="h-10 px-5 bg-[var(--surface-inverted)] hover:opacity-90 text-[var(--text-inverted)] text-xs font-bold rounded-xl"
           >
             {loading ? <Loader2 className="w-3.5 h-3.5 animate-spin mr-1.5" /> : null}
             Create Coupon

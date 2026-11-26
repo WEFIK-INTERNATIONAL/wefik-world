@@ -121,7 +121,7 @@ export function FreebieMagnetKit({ productTitle, productSlug }: FreebieMagnetKit
           <Button
             size="sm"
             onClick={copyBadgeSnippet}
-            className="h-7 px-2.5 rounded-lg text-[11px] bg-ink hover:bg-black text-white font-semibold gap-1"
+            className="h-7 px-2.5 rounded-lg text-[11px] bg-[var(--surface-inverted)] hover:opacity-90 text-[var(--text-inverted)] font-semibold gap-1"
           >
             {copiedBadge ? <Check className="w-3 h-3 text-lime" /> : <Copy className="w-3 h-3" />}
             <span>{copiedBadge ? 'Copied HTML' : 'Copy Embed Code'}</span>

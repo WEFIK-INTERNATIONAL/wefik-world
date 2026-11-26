@@ -713,7 +713,7 @@ export function ProductDetailView({ product, initialReviews = [] }: ProductDetai
             <Button
               type="submit"
               disabled={reviewSubmitting}
-              className="bg-ink hover:bg-black text-white text-xs h-9 px-4 rounded-xl font-semibold"
+              className="bg-[var(--surface-inverted)] hover:opacity-90 text-[var(--text-inverted)] text-xs h-9 px-4 rounded-xl font-semibold"
             >
               {reviewSubmitting ? <Loader2 className="w-3.5 h-3.5 animate-spin mr-1.5" /> : null}
               Submit Review

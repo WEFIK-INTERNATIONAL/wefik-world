@@ -58,7 +58,7 @@ export default async function PurchasesPage() {
       {!orders || orders.length === 0 ? (
         <div className="py-12 text-center text-xs text-slate space-y-3">
           <p>No orders found in your account.</p>
-          <Button asChild className="bg-ink hover:bg-black text-white text-xs rounded-xl h-10">
+          <Button asChild className="bg-[var(--surface-inverted)] hover:opacity-90 text-[var(--text-inverted)] text-xs rounded-xl h-10">
             <Link href="/marketplace">Browse Marketplace</Link>
           </Button>
         </div>

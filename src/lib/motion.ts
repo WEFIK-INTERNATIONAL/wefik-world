@@ -28,3 +28,4 @@ export const MOTION_EASE = {
   /** CSS cubic-bezier equivalent of power3.out */
   cssOut: 'cubic-bezier(0.22, 1, 0.36, 1)',
 } as const;
+

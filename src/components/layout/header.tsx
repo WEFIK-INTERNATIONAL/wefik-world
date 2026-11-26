@@ -259,7 +259,7 @@ export function Header() {
                   <button className="flex items-center gap-2 p-1 rounded-full hover:ring-2 hover:ring-lime transition-all">
                     <Avatar className="w-8 h-8 border border-border">
                       <AvatarImage src={user.user_metadata?.avatar_url} />
-                      <AvatarFallback className="bg-ink text-white text-xs font-semibold">
+                      <AvatarFallback className="bg-[var(--surface-inverted)] text-[var(--text-inverted)] text-xs font-semibold">
                         {user.email?.charAt(0).toUpperCase() || 'U'}
                       </AvatarFallback>
                     </Avatar>

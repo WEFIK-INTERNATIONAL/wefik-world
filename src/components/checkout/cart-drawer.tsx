@@ -66,7 +66,7 @@ export function CartDrawer() {
             <Button
               onClick={() => setIsOpen(false)}
               asChild
-              className="bg-ink hover:bg-black text-white text-xs h-10 px-5 rounded-xl font-medium"
+              className="bg-[var(--surface-inverted)] hover:opacity-90 text-[var(--text-inverted)] text-xs h-10 px-5 rounded-xl font-medium"
             >
               <Link href="/marketplace">Browse Products</Link>
             </Button>

@@ -254,7 +254,7 @@ export function MarketplaceClientView({
                 href={href}
                 className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-colors ${
                   isActive
-                    ? 'bg-ink text-white'
+                    ? 'bg-[var(--surface-inverted)] text-[var(--text-inverted)]'
                     : 'bg-[var(--surface)] text-[var(--muted)] hover:text-[var(--text)] border border-border'
                 }`}
               >

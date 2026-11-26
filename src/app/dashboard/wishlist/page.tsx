@@ -79,7 +79,7 @@ export default async function WishlistPage() {
       {wishlistProducts.length === 0 ? (
         <div className="py-12 text-center text-xs text-slate space-y-3">
           <p>Your wishlist is currently empty.</p>
-          <Button asChild className="bg-ink hover:bg-black text-white text-xs rounded-xl h-10">
+          <Button asChild className="bg-[var(--surface-inverted)] hover:opacity-90 text-[var(--text-inverted)] text-xs rounded-xl h-10">
             <Link href="/marketplace">Explore Products</Link>
           </Button>
         </div>

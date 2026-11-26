@@ -199,7 +199,7 @@ export default async function BlogPostDetailPage({ params }: BlogPostPageProps) 
           <p className="text-xs text-slate max-w-md mx-auto leading-relaxed">
             Explore our Gutenberg block themes and performance plugins engineered for high-traffic agency projects.
           </p>
-          <Button asChild className="bg-ink hover:bg-black text-white text-xs h-10 px-5 rounded-xl font-bold">
+          <Button asChild className="bg-[var(--surface-inverted)] hover:opacity-90 text-[var(--text-inverted)] text-xs h-10 px-5 rounded-xl font-bold">
             <Link href="/marketplace">Explore Marketplace Catalog</Link>
           </Button>
         </div>

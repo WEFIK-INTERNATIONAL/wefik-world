@@ -95,7 +95,7 @@ export const metadata: Metadata = {
   creator: "Wefik",
   openGraph: {
     type: "website",
-    locale: "en_IE",
+    locale: "en_IN",
     url: "https://www.wefik.world",
     title: "wefik.world — Premium Digital Products for Agencies & Developers",
     description:

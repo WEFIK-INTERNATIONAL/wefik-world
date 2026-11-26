@@ -29,7 +29,7 @@ export default async function AdminLayout({
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
       <div className="flex flex-col lg:flex-row gap-8 items-start">
         {/* Admin Navigation Sidebar */}
-        <aside className="w-full lg:w-64 bg-ink text-white p-5 rounded-3xl border border-ink shadow-xl flex-shrink-0 space-y-6">
+        <aside className="w-full lg:w-64 bg-[var(--surface-inverted)] text-[var(--text-inverted)] p-5 rounded-3xl border border-ink shadow-xl flex-shrink-0 space-y-6">
           <div className="px-2">
             <div className="flex items-center gap-2 mb-1">
               <span className="w-2 h-2 rounded-full bg-lime animate-pulse" />

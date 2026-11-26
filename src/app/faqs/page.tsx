@@ -181,7 +181,7 @@ export default function FAQsPage() {
             Our engineering team is ready to answer any custom licensing or technical questions.
           </p>
           <div className="flex justify-center gap-3">
-            <Button asChild className="bg-ink hover:bg-black text-white rounded-xl text-xs h-10 px-6 font-semibold">
+            <Button asChild className="bg-[var(--surface-inverted)] hover:opacity-90 text-[var(--text-inverted)] rounded-xl text-xs h-10 px-6 font-semibold">
               <a href="mailto:support@wefik.world">Contact Engineering Support</a>
             </Button>
             <Button asChild variant="outline" className="border-border rounded-xl text-xs h-10 px-6 font-semibold">

@@ -129,7 +129,7 @@ export function MembershipManager({ membership }: MembershipProps) {
           </div>
           <div className="flex items-center gap-2">
             <CheckCircle2 className="w-4 h-4 text-deep-green flex-shrink-0" />
-            <span>Next.js 15 and HTML5 Tailwind starters</span>
+            <span>Next.js 16 and HTML5 Tailwind starters</span>
           </div>
           <div className="flex items-center gap-2">
             <CheckCircle2 className="w-4 h-4 text-deep-green flex-shrink-0" />

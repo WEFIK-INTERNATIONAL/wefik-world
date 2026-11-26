@@ -46,7 +46,7 @@ export default async function HomePage() {
               </div>
               <div className="flex items-center gap-1.5">
                 <CheckCircle className="w-3.5 h-3.5 text-deep-green flex-shrink-0" />
-                <span><strong>Tech Stack:</strong> WordPress 6.4+, PHP 8.1–8.3, Next.js 15</span>
+                <span><strong>Tech Stack:</strong> WordPress 6.4+, PHP 8.1–8.3, Next.js 16</span>
               </div>
               <div className="flex items-center gap-1.5">
                 <CheckCircle className="w-3.5 h-3.5 text-deep-green flex-shrink-0" />
@@ -215,7 +215,7 @@ export default async function HomePage() {
                 HTML &amp; Tailwind Starters
               </h3>
               <p className="text-xs text-slate mt-1.5 leading-relaxed">
-                Clean Next.js 15 and responsive HTML5 boilerplates with authentic modern typography.
+                Clean Next.js 16 and responsive HTML5 boilerplates with authentic modern typography.
               </p>
             </Link>
 
