@@ -18,9 +18,9 @@ export default async function HomePage() {
 
   return (
     <div className="flex flex-col w-full min-h-screen">
-      {/* 1. HERO SECTION (Lightweight Edition - Section 6) */}
+      {/* 1. HERO SECTION */}
       <section className="relative overflow-hidden bg-[var(--bg)] border-b border-[var(--border)]">
-        <HeroLightweight />
+        <HeroLightweight products={allProducts} />
 
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
           {/* Engineering Standards & Principles (No prices in hero) */}
