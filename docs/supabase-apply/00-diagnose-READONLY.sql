@@ -8,22 +8,35 @@
 -- SAFETY:
 --   - Contains ONLY SELECT statements. Modifies NOTHING.
 --   - Returns NO personal data (no emails, tokens, keys, or auth.users rows).
+--   - Safe even if migrations or some app tables have not been created yet.
 --
 -- HOW TO RUN & SHARE RESULTS:
 --   1. Open Supabase Dashboard -> SQL Editor -> New Query.
 --   2. Paste this entire file and click "Run".
---   3. Copy each result grid (or Export as CSV) and paste them back in order,
---      labelled by section (1 through 10). Never include personal data.
+--   3. Copy each result grid (or Export as CSV) and paste them back in order.
 -- ==============================================================================
 
 -- ------------------------------------------------------------------------------
--- 1. APPLIED MIGRATIONS & INSTALLED EXTENSIONS
+-- 1. EXISTING PUBLIC TABLES & INSTALLED EXTENSIONS
 -- ------------------------------------------------------------------------------
-SELECT '1a_applied_migrations' AS section,
-       version,
-       name
-FROM supabase_migrations.schema_migrations
-ORDER BY version;
+WITH expected_tables(table_name) AS (
+  VALUES
+    ('profiles'),('categories'),('products'),('product_versions'),
+    ('membership_plans'),('memberships'),('orders'),('order_items'),
+    ('licenses'),('reviews'),('wishlists'),('downloads'),
+    ('coupons'),('newsletter_subscribers'),('push_subscriptions'),('blocked_email_domains')
+)
+SELECT '1a_table_inventory' AS section,
+       coalesce(e.table_name, t.tablename) AS table_name,
+       CASE
+         WHEN t.tablename IS NULL THEN 'MISSING_IN_DB'
+         WHEN e.table_name IS NULL THEN 'EXTRA_TABLE_IN_DB'
+         ELSE 'EXISTS'
+       END AS table_status
+FROM expected_tables e
+FULL OUTER JOIN pg_tables t
+  ON t.schemaname = 'public' AND t.tablename = e.table_name
+ORDER BY table_status, table_name;
 
 SELECT '1b_installed_extensions' AS section,
        extname AS extension_name,
@@ -32,6 +45,13 @@ SELECT '1b_installed_extensions' AS section,
 FROM pg_extension
 WHERE extname IN ('uuid-ossp', 'pg_trgm', 'unaccent', 'pg_cron', 'pg_net', 'pgcrypto')
 ORDER BY extname;
+
+SELECT '1c_supabase_migrations_tables' AS section,
+       schemaname,
+       tablename
+FROM pg_tables
+WHERE schemaname = 'supabase_migrations'
+ORDER BY tablename;
 
 -- ------------------------------------------------------------------------------
 -- 2. SCHEMA DRIFT: MISSING & UNEXPECTED COLUMNS vs INTENDED-STATE.md
@@ -215,18 +235,14 @@ WHERE schemaname = 'storage' AND tablename = 'objects'
 ORDER BY policyname;
 
 -- ------------------------------------------------------------------------------
--- 8. DEMO & REAL PRODUCTS INVENTORY (AGGREGATED COUNTS ONLY)
+-- 8. APPROXIMATE ROW COUNTS PER PUBLIC TABLE (SAFE EVEN IF TABLES MISSING)
 -- ------------------------------------------------------------------------------
-SELECT '8_products_inventory' AS section,
-       p.slug,
-       p.status,
-       (p.status = 'published') AS is_active,
-       (SELECT count(*) FROM public.order_items oi WHERE oi.product_id = p.id) AS order_item_refs,
-       (SELECT count(*) FROM public.licenses l WHERE l.product_id = p.id) AS license_refs,
-       (SELECT count(*) FROM public.reviews r WHERE r.product_id = p.id) AS review_refs,
-       (SELECT count(*) FROM public.wishlists w WHERE w.product_id = p.id) AS wishlist_refs
-FROM public.products p
-ORDER BY p.created_at, p.slug;
+SELECT '8_table_row_counts' AS section,
+       relname AS table_name,
+       n_live_tup AS approx_rows
+FROM pg_stat_user_tables
+WHERE schemaname = 'public'
+ORDER BY relname;
 
 -- ------------------------------------------------------------------------------
 -- 9. INDEX CHECK (MISSING OR DUPLICATE INDEXES)
@@ -275,8 +291,7 @@ SELECT 'SUMMARY' AS section, finding, severity FROM (
   WHERE n.nspname = 'public' AND p.prosecdef
     AND NOT EXISTS (SELECT 1 FROM unnest(coalesce(p.proconfig, array[]::text[])) c WHERE c LIKE 'search_path=%')
   UNION ALL
-  SELECT 'Missing required storage buckets (expected 3): ' ||
-         (3 - count(*))::text,
+  SELECT 'Missing required storage buckets (expected 3): ' || (3 - count(*))::text,
          CASE WHEN count(*) < 3 THEN 'HIGH' ELSE 'OK' END
   FROM storage.buckets WHERE id IN ('product-images', 'avatars', 'product-files')
 ) s;
