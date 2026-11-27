@@ -3,17 +3,11 @@
 -- ==============================================================================
 -- PURPOSE:
 --   Creates any missing app tables (all 16 tables in INTENDED-STATE.md), adds
---   any missing columns to existing tables BEFORE running backfills/updates,
+--   every missing column to ALL 16 tables BEFORE running backfills/views,
 --   enforces product integrity constraints, and refreshes products_public view.
 --
 -- PRECONDITIONS:
 --   Run 00-diagnose-READONLY.sql first.
---
--- WHAT IT CHANGES:
---   - Ensures all 16 public tables exist (CREATE TABLE IF NOT EXISTS).
---   - Adds every expected column with ADD COLUMN IF NOT EXISTS before updates.
---   - Backfills null defaults and products_price_inr_round_rupees_check.
---   - Drops and recreates public.products_public view cleanly.
 --
 -- VERIFICATION QUERY:
 --   SELECT count(*) AS table_count FROM pg_tables
@@ -23,9 +17,6 @@
 --     'downloads','coupons','newsletter_subscribers','push_subscriptions','blocked_email_domains'
 --   );
 --   -- Expected: 16
---
--- ROLLBACK:
---   Additive columns/tables are safe to keep; drop products_public view if needed.
 -- ==============================================================================
 
 BEGIN;
@@ -79,9 +70,9 @@ CREATE TABLE IF NOT EXISTS public.products (
 CREATE TABLE IF NOT EXISTS public.product_versions (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   product_id uuid NOT NULL REFERENCES public.products(id) ON DELETE CASCADE,
-  version text NOT NULL,
+  version text NOT NULL DEFAULT '1.0.0',
   changelog text,
-  file_path text NOT NULL,
+  file_path text NOT NULL DEFAULT '',
   is_latest boolean NOT NULL DEFAULT true,
   created_at timestamptz NOT NULL DEFAULT now()
 );
@@ -101,7 +92,7 @@ CREATE TABLE IF NOT EXISTS public.membership_plans (
 CREATE TABLE IF NOT EXISTS public.memberships (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id uuid NOT NULL REFERENCES public.profiles(id) ON DELETE CASCADE,
-  plan text NOT NULL REFERENCES public.membership_plans(plan),
+  plan text NOT NULL,
   status text NOT NULL CHECK (status IN ('active', 'cancelled', 'expired')) DEFAULT 'active',
   razorpay_subscription_id text,
   current_period_start timestamptz,
@@ -209,8 +200,9 @@ CREATE TABLE IF NOT EXISTS public.blocked_email_domains (
   added_at timestamptz NOT NULL DEFAULT now()
 );
 
--- 2. Add any missing columns to existing tables BEFORE running updates
+-- 2. Add any missing columns on ALL 16 tables BEFORE running updates/views
 ALTER TABLE public.profiles
+  ADD COLUMN IF NOT EXISTS email text,
   ADD COLUMN IF NOT EXISTS full_name text,
   ADD COLUMN IF NOT EXISTS display_name text,
   ADD COLUMN IF NOT EXISTS avatar_url text,
@@ -220,7 +212,17 @@ ALTER TABLE public.profiles
   ADD COLUMN IF NOT EXISTS created_at timestamptz NOT NULL DEFAULT now(),
   ADD COLUMN IF NOT EXISTS updated_at timestamptz NOT NULL DEFAULT now();
 
+ALTER TABLE public.categories
+  ADD COLUMN IF NOT EXISTS id uuid DEFAULT gen_random_uuid(),
+  ADD COLUMN IF NOT EXISTS name text,
+  ADD COLUMN IF NOT EXISTS slug text,
+  ADD COLUMN IF NOT EXISTS description text,
+  ADD COLUMN IF NOT EXISTS created_at timestamptz NOT NULL DEFAULT now();
+
 ALTER TABLE public.products
+  ADD COLUMN IF NOT EXISTS id uuid DEFAULT gen_random_uuid(),
+  ADD COLUMN IF NOT EXISTS title text,
+  ADD COLUMN IF NOT EXISTS slug text,
   ADD COLUMN IF NOT EXISTS tagline text NOT NULL DEFAULT 'Digital product by wefik.world',
   ADD COLUMN IF NOT EXISTS description text NOT NULL DEFAULT '',
   ADD COLUMN IF NOT EXISTS category_id uuid REFERENCES public.categories(id) ON DELETE SET NULL,
@@ -240,7 +242,40 @@ ALTER TABLE public.products
   ADD COLUMN IF NOT EXISTS created_at timestamptz NOT NULL DEFAULT now(),
   ADD COLUMN IF NOT EXISTS updated_at timestamptz NOT NULL DEFAULT now();
 
+ALTER TABLE public.product_versions
+  ADD COLUMN IF NOT EXISTS id uuid DEFAULT gen_random_uuid(),
+  ADD COLUMN IF NOT EXISTS product_id uuid REFERENCES public.products(id) ON DELETE CASCADE,
+  ADD COLUMN IF NOT EXISTS version text NOT NULL DEFAULT '1.0.0',
+  ADD COLUMN IF NOT EXISTS changelog text,
+  ADD COLUMN IF NOT EXISTS file_path text NOT NULL DEFAULT '',
+  ADD COLUMN IF NOT EXISTS is_latest boolean NOT NULL DEFAULT true,
+  ADD COLUMN IF NOT EXISTS created_at timestamptz NOT NULL DEFAULT now();
+
+ALTER TABLE public.membership_plans
+  ADD COLUMN IF NOT EXISTS id uuid DEFAULT gen_random_uuid(),
+  ADD COLUMN IF NOT EXISTS plan text,
+  ADD COLUMN IF NOT EXISTS name text,
+  ADD COLUMN IF NOT EXISTS price_inr integer NOT NULL DEFAULT 0,
+  ADD COLUMN IF NOT EXISTS interval text NOT NULL DEFAULT 'month',
+  ADD COLUMN IF NOT EXISTS description text,
+  ADD COLUMN IF NOT EXISTS features text[] NOT NULL DEFAULT '{}',
+  ADD COLUMN IF NOT EXISTS is_active boolean NOT NULL DEFAULT true,
+  ADD COLUMN IF NOT EXISTS created_at timestamptz NOT NULL DEFAULT now();
+
+ALTER TABLE public.memberships
+  ADD COLUMN IF NOT EXISTS id uuid DEFAULT gen_random_uuid(),
+  ADD COLUMN IF NOT EXISTS user_id uuid REFERENCES public.profiles(id) ON DELETE CASCADE,
+  ADD COLUMN IF NOT EXISTS plan text,
+  ADD COLUMN IF NOT EXISTS status text NOT NULL DEFAULT 'active',
+  ADD COLUMN IF NOT EXISTS razorpay_subscription_id text,
+  ADD COLUMN IF NOT EXISTS current_period_start timestamptz,
+  ADD COLUMN IF NOT EXISTS current_period_end timestamptz,
+  ADD COLUMN IF NOT EXISTS created_at timestamptz NOT NULL DEFAULT now(),
+  ADD COLUMN IF NOT EXISTS updated_at timestamptz NOT NULL DEFAULT now();
+
 ALTER TABLE public.orders
+  ADD COLUMN IF NOT EXISTS id uuid DEFAULT gen_random_uuid(),
+  ADD COLUMN IF NOT EXISTS user_id uuid REFERENCES public.profiles(id) ON DELETE CASCADE,
   ADD COLUMN IF NOT EXISTS razorpay_order_id text,
   ADD COLUMN IF NOT EXISTS razorpay_payment_id text,
   ADD COLUMN IF NOT EXISTS status text NOT NULL DEFAULT 'pending',
@@ -252,6 +287,8 @@ ALTER TABLE public.orders
   ADD COLUMN IF NOT EXISTS created_at timestamptz NOT NULL DEFAULT now();
 
 ALTER TABLE public.order_items
+  ADD COLUMN IF NOT EXISTS id uuid DEFAULT gen_random_uuid(),
+  ADD COLUMN IF NOT EXISTS order_id uuid REFERENCES public.orders(id) ON DELETE CASCADE,
   ADD COLUMN IF NOT EXISTS product_id uuid REFERENCES public.products(id) ON DELETE SET NULL,
   ADD COLUMN IF NOT EXISTS item_type text NOT NULL DEFAULT 'product',
   ADD COLUMN IF NOT EXISTS price integer NOT NULL DEFAULT 0,
@@ -259,6 +296,10 @@ ALTER TABLE public.order_items
   ADD COLUMN IF NOT EXISTS created_at timestamptz NOT NULL DEFAULT now();
 
 ALTER TABLE public.licenses
+  ADD COLUMN IF NOT EXISTS id uuid DEFAULT gen_random_uuid(),
+  ADD COLUMN IF NOT EXISTS license_key text,
+  ADD COLUMN IF NOT EXISTS user_id uuid REFERENCES public.profiles(id) ON DELETE CASCADE,
+  ADD COLUMN IF NOT EXISTS product_id uuid REFERENCES public.products(id) ON DELETE CASCADE,
   ADD COLUMN IF NOT EXISTS order_id uuid REFERENCES public.orders(id) ON DELETE SET NULL,
   ADD COLUMN IF NOT EXISTS license_type text NOT NULL DEFAULT 'single',
   ADD COLUMN IF NOT EXISTS status text NOT NULL DEFAULT 'active',
@@ -267,11 +308,59 @@ ALTER TABLE public.licenses
   ADD COLUMN IF NOT EXISTS created_at timestamptz NOT NULL DEFAULT now();
 
 ALTER TABLE public.reviews
+  ADD COLUMN IF NOT EXISTS id uuid DEFAULT gen_random_uuid(),
+  ADD COLUMN IF NOT EXISTS user_id uuid REFERENCES public.profiles(id) ON DELETE CASCADE,
+  ADD COLUMN IF NOT EXISTS product_id uuid REFERENCES public.products(id) ON DELETE CASCADE,
+  ADD COLUMN IF NOT EXISTS rating integer NOT NULL DEFAULT 5,
   ADD COLUMN IF NOT EXISTS review_text text,
   ADD COLUMN IF NOT EXISTS is_approved boolean NOT NULL DEFAULT false,
   ADD COLUMN IF NOT EXISTS created_at timestamptz NOT NULL DEFAULT now();
 
--- 3. Safe backfills & constraints (columns are guaranteed to exist now)
+ALTER TABLE public.wishlists
+  ADD COLUMN IF NOT EXISTS id uuid DEFAULT gen_random_uuid(),
+  ADD COLUMN IF NOT EXISTS user_id uuid REFERENCES public.profiles(id) ON DELETE CASCADE,
+  ADD COLUMN IF NOT EXISTS product_id uuid REFERENCES public.products(id) ON DELETE CASCADE,
+  ADD COLUMN IF NOT EXISTS created_at timestamptz NOT NULL DEFAULT now();
+
+ALTER TABLE public.downloads
+  ADD COLUMN IF NOT EXISTS id uuid DEFAULT gen_random_uuid(),
+  ADD COLUMN IF NOT EXISTS user_id uuid REFERENCES public.profiles(id) ON DELETE CASCADE,
+  ADD COLUMN IF NOT EXISTS product_id uuid REFERENCES public.products(id) ON DELETE CASCADE,
+  ADD COLUMN IF NOT EXISTS version_id uuid REFERENCES public.product_versions(id) ON DELETE SET NULL,
+  ADD COLUMN IF NOT EXISTS ip_address text,
+  ADD COLUMN IF NOT EXISTS user_agent text,
+  ADD COLUMN IF NOT EXISTS downloaded_at timestamptz NOT NULL DEFAULT now();
+
+ALTER TABLE public.coupons
+  ADD COLUMN IF NOT EXISTS id uuid DEFAULT gen_random_uuid(),
+  ADD COLUMN IF NOT EXISTS code text,
+  ADD COLUMN IF NOT EXISTS discount_percent integer NOT NULL DEFAULT 10,
+  ADD COLUMN IF NOT EXISTS discount_fixed_inr integer,
+  ADD COLUMN IF NOT EXISTS valid_from timestamptz NOT NULL DEFAULT now(),
+  ADD COLUMN IF NOT EXISTS valid_until timestamptz,
+  ADD COLUMN IF NOT EXISTS max_uses integer,
+  ADD COLUMN IF NOT EXISTS used_count integer NOT NULL DEFAULT 0,
+  ADD COLUMN IF NOT EXISTS is_active boolean NOT NULL DEFAULT true,
+  ADD COLUMN IF NOT EXISTS created_at timestamptz NOT NULL DEFAULT now();
+
+ALTER TABLE public.newsletter_subscribers
+  ADD COLUMN IF NOT EXISTS id uuid DEFAULT gen_random_uuid(),
+  ADD COLUMN IF NOT EXISTS email text,
+  ADD COLUMN IF NOT EXISTS subscribed_at timestamptz NOT NULL DEFAULT now();
+
+ALTER TABLE public.push_subscriptions
+  ADD COLUMN IF NOT EXISTS id uuid DEFAULT gen_random_uuid(),
+  ADD COLUMN IF NOT EXISTS user_id uuid REFERENCES public.profiles(id) ON DELETE CASCADE,
+  ADD COLUMN IF NOT EXISTS token text,
+  ADD COLUMN IF NOT EXISTS user_agent text,
+  ADD COLUMN IF NOT EXISTS created_at timestamptz NOT NULL DEFAULT now();
+
+ALTER TABLE public.blocked_email_domains
+  ADD COLUMN IF NOT EXISTS domain text,
+  ADD COLUMN IF NOT EXISTS source text NOT NULL DEFAULT 'disposable-domain-list',
+  ADD COLUMN IF NOT EXISTS added_at timestamptz NOT NULL DEFAULT now();
+
+-- 3. Safe backfills & constraints
 UPDATE public.products
 SET tagline = 'Digital product by wefik.world'
 WHERE tagline IS NULL OR trim(tagline) = '';
@@ -303,33 +392,16 @@ BEGIN
   END IF;
 END $$;
 
--- 4. Recreate products_public view cleanly (avoids 42P16 column-mismatch errors)
+-- 4. Recreate products_public view cleanly
 DROP VIEW IF EXISTS public.products_public;
 CREATE VIEW public.products_public AS
 SELECT
-  p.id,
-  p.title,
-  p.slug,
-  p.tagline,
-  p.description,
-  p.category_id,
-  c.name AS category_name,
-  c.slug AS category_slug,
-  p.price_inr,
-  p.is_free,
-  p.is_featured,
-  p.is_bundle,
-  p.bundle_product_ids,
-  p.thumbnail_url,
-  p.gallery_urls,
-  p.demo_url,
-  p.tech_stack,
-  p.rating_avg,
-  p.rating_count,
-  p.download_count,
-  pv.version AS latest_version,
-  p.created_at,
-  p.updated_at
+  p.id, p.title, p.slug, p.tagline, p.description, p.category_id,
+  c.name AS category_name, c.slug AS category_slug,
+  p.price_inr, p.is_free, p.is_featured, p.is_bundle, p.bundle_product_ids,
+  p.thumbnail_url, p.gallery_urls, p.demo_url, p.tech_stack,
+  p.rating_avg, p.rating_count, p.download_count,
+  pv.version AS latest_version, p.created_at, p.updated_at
 FROM public.products p
 LEFT JOIN public.categories c ON p.category_id = c.id
 LEFT JOIN public.product_versions pv ON pv.product_id = p.id AND pv.is_latest = true
