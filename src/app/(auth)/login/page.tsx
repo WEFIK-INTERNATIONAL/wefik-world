@@ -18,6 +18,8 @@ import {
   EmailCheckResult,
 } from '@/lib/api-edge';
 import { Logo } from '@/components/brand/logo';
+import { buildAuthCallbackUrl } from '@/lib/auth/redirects';
+import { mapAuthError, type MappedAuthError } from '@/lib/auth/error-mapper';
 import {
   Loader2,
   Mail,
@@ -36,6 +38,7 @@ function LoginFormContent() {
   const searchParams = useSearchParams();
   const redirectUrl = searchParams.get('next') || searchParams.get('redirect') || '/account';
   const errorParam = searchParams.get('error');
+  const cidParam = searchParams.get('cid');
 
   const supabase = createClient();
 
@@ -59,33 +62,30 @@ function LoginFormContent() {
   const [googleLoading, setGoogleLoading] = useState(false);
   const [githubLoading, setGithubLoading] = useState(false);
   const [magicLinkLoading, setMagicLinkLoading] = useState(false);
-  const getInitialErrorMessage = (param: string | null) => {
+  const [mappedCallbackError, setMappedCallbackError] = useState<MappedAuthError | null>(() =>
+    errorParam ? mapAuthError({ error: errorParam }) : null
+  );
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  // Inspect any OAuth error in URL hash on mount (client-only to preserve SSR hydration)
+  useEffect(() => {
     if (typeof window !== 'undefined' && window.location.hash) {
       try {
         const hashParams = new URLSearchParams(window.location.hash.substring(1));
-        const desc = hashParams.get('error_description') || hashParams.get('error');
-        if (desc) {
-          return decodeURIComponent(desc.replace(/\+/g, ' '));
+        const hashErr = hashParams.get('error');
+        const hashCode = hashParams.get('error_code');
+        const hashDesc = hashParams.get('error_description');
+        if (hashErr || hashCode || hashDesc) {
+          setMappedCallbackError(
+            mapAuthError({ error: hashErr, errorCode: hashCode, errorDescription: hashDesc })
+          );
+          window.history.replaceState(null, '', window.location.pathname + window.location.search);
         }
       } catch {
-        // Silently continue
+        // Ignore malformed hash
       }
     }
-    if (!param) return null;
-    if (param === 'link_expired' || param === 'auth_callback_failed') {
-      return 'This login link expired or is invalid — please request a new one.';
-    }
-    if (param === 'access_denied') {
-      return 'Login request was cancelled or access denied. Please try again.';
-    }
-    try {
-      return decodeURIComponent(param.replace(/\+/g, ' '));
-    } catch {
-      return param;
-    }
-  };
-
-  const [errorMessage, setErrorMessage] = useState<string | null>(getInitialErrorMessage(errorParam));
+  }, []);
 
   // Check if user is already logged in
   useEffect(() => {
@@ -288,7 +288,7 @@ function LoginFormContent() {
       type: 'signup',
       email: email.trim().toLowerCase(),
       options: {
-        emailRedirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(redirectUrl)}`,
+        emailRedirectTo: buildAuthCallbackUrl(redirectUrl, window.location.origin),
       },
     });
 
@@ -314,7 +314,7 @@ function LoginFormContent() {
     const { error } = await supabase.auth.signInWithOtp({
       email: email.trim().toLowerCase(),
       options: {
-        emailRedirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(redirectUrl)}`,
+        emailRedirectTo: buildAuthCallbackUrl(redirectUrl, window.location.origin),
       },
     });
 
@@ -331,18 +331,18 @@ function LoginFormContent() {
   async function handleGoogleOAuth() {
     setGoogleLoading(true);
     setErrorMessage(null);
+    setMappedCallbackError(null);
 
-    const siteOrigin = process.env.NEXT_PUBLIC_SITE_URL || window.location.origin;
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: `${siteOrigin}/auth/callback?next=${encodeURIComponent(redirectUrl)}`,
+        redirectTo: buildAuthCallbackUrl(redirectUrl, window.location.origin),
       },
     });
 
     if (error) {
       setGoogleLoading(false);
-      setErrorMessage(error.message);
+      setMappedCallbackError(mapAuthError({ error: error.name, errorCode: error.code, errorDescription: error.message }));
     }
   }
 
@@ -350,18 +350,18 @@ function LoginFormContent() {
   async function handleGithubOAuth() {
     setGithubLoading(true);
     setErrorMessage(null);
+    setMappedCallbackError(null);
 
-    const siteOrigin = process.env.NEXT_PUBLIC_SITE_URL || window.location.origin;
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'github',
       options: {
-        redirectTo: `${siteOrigin}/auth/callback?next=${encodeURIComponent(redirectUrl)}`,
+        redirectTo: buildAuthCallbackUrl(redirectUrl, window.location.origin),
       },
     });
 
     if (error) {
       setGithubLoading(false);
-      setErrorMessage(error.message);
+      setMappedCallbackError(mapAuthError({ error: error.name, errorCode: error.code, errorDescription: error.message }));
     }
   }
 
@@ -560,6 +560,39 @@ function LoginFormContent() {
       </CardHeader>
 
       <CardContent className="space-y-4">
+        {mappedCallbackError && (
+          <div
+            role="alert"
+            className="p-3.5 text-xs bg-red-500/10 border border-red-500/20 text-red-500 rounded-lg space-y-2"
+          >
+            <div className="flex items-start gap-2">
+              <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
+              <div className="space-y-1">
+                <p className="font-semibold">{mappedCallbackError.title}</p>
+                <p>{mappedCallbackError.message}</p>
+                <p className="text-[var(--text-secondary)]">{mappedCallbackError.nextAction}</p>
+                {cidParam && (
+                  <p className="text-[11px] opacity-80 font-mono">Request ID: {cidParam}</p>
+                )}
+              </div>
+            </div>
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={() => {
+                setMappedCallbackError(null);
+                setErrorMessage(null);
+                setStep('email');
+                router.replace('/login');
+              }}
+              className="w-full border-red-500/30 hover:bg-red-500/10"
+            >
+              <RefreshCw className="w-3.5 h-3.5 mr-1.5" />
+              Try again
+            </Button>
+          </div>
+        )}
         {errorMessage && (
           <div className="p-3 text-xs bg-red-500/10 border border-red-500/20 text-red-500 rounded-lg flex items-center gap-2">
             <AlertCircle className="w-4 h-4 shrink-0" />
