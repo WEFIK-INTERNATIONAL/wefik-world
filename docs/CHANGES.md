@@ -79,3 +79,24 @@ This release consolidates critical security, schema, motion, fake-content, and U
 - **Error Handling & Observability (`src/app/global-error.tsx`, `src/app/api/health/route.ts`, `sentry.*.config.ts`):** Added branded `global-error.tsx`, stripped sensitive config details from `/api/health`, and guarded Sentry init as a no-op when `NEXT_PUBLIC_SENTRY_DSN` / `SENTRY_DSN` is missing (with dev-only warning).
 - **Structured Data (`src/app/products/[slug]/page.tsx`):** Guarded `aggregateRating` JSON-LD on real `initialReviews.length > 0`.
 - **Dependencies (`package.json`):** Removed unused packages (`es-abstract`, `styled-components`, `@types/styled-components`, `@gsap/react`, `gray-matter`, `next-mdx-remote`, `zod`).
+
+---
+
+## Deploy Notes
+
+### 1. Required Environment Variable Names (by Environment)
+- **Public (`NEXT_PUBLIC_*`) — Production, Preview, Development:**
+  `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `NEXT_PUBLIC_APP_URL` (`https://www.wefik.world` in Production; `http://localhost:3000` in Development), `NEXT_PUBLIC_RAZORPAY_KEY_ID` (test key outside Production), `NEXT_PUBLIC_SANITY_PROJECT_ID`, `NEXT_PUBLIC_SANITY_DATASET`, `NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME`, `NEXT_PUBLIC_POSTHOG_KEY`, `NEXT_PUBLIC_POSTHOG_HOST`, `NEXT_PUBLIC_FIREBASE_PROJECT_ID`, `NEXT_PUBLIC_FIREBASE_VAPID_KEY`, `NEXT_PUBLIC_GA_ID`, `NEXT_PUBLIC_GSC_VERIFICATION`, `NEXT_PUBLIC_BING_VERIFICATION`.
+- **Server-Only (Vercel + Supabase Edge Functions — never prefix `NEXT_PUBLIC_`):**
+  `SUPABASE_SERVICE_ROLE_KEY`, `RAZORPAY_KEY_ID`, `RAZORPAY_KEY_SECRET`, `RAZORPAY_WEBHOOK_SECRET`, `RAZORPAY_MONTHLY_PLAN_ID`, `UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN`, `REDIS_URL`, `RESEND_API_KEY`, `RESEND_FROM_EMAIL` (optional), `REVALIDATION_SECRET`, `CRON_SECRET`, `SANITY_API_TOKEN`, `SANITY_WEBHOOK_SECRET`, `CLOUDINARY_API_KEY`, `CLOUDINARY_API_SECRET`, `CLOUDINARY_URL`, `FCM_SERVICE_ACCOUNT_JSON`, `SENTRY_DSN`, `SENTRY_ORG`, `SENTRY_PROJECT`, `SENTRY_AUTH_TOKEN`, `POSTHOG_PROJECT_ID`, `GEMINI_API_KEY`, `GROQ_API_KEY`.
+
+### 2. Supabase Apply Order (Manual — Never Automated)
+1. Back up the live database (`pg_dump` or Table Editor CSV export).
+2. Run `docs/supabase-apply/00-diagnose-READONLY.sql` and review output.
+3. Run `01-schema-alignment.sql`, `02-auth-profiles-and-rls.sql`, `03-storage-buckets-and-policies.sql`, `04-cleanup-and-seed-products.sql`, `05-extras-indexes-and-cron.sql` (and `06-google-oauth-handle-new-user.sql` if needed) in order.
+4. Complete `docs/supabase-apply/MANUAL-CHECKLIST.md` and `docs/supabase-apply/AUTH-LOGIN-CHECKLIST.md`.
+
+### 3. Rollback Instructions
+- **Git rollback tag:** `rollback/pre-release-20261128-0253` at commit `75b6fc4`.
+- **Code rollback (Vercel):** In **Vercel Dashboard -> Deployments**, promote the previous production deployment to roll back application code immediately (note: this rolls back code only, not database changes).
+- **Git revert (if already pushed):** `git revert -m 1 <merge-commit-hash>` (creates a new revert commit without rewriting shared history).
