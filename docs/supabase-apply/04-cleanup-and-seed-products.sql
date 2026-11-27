@@ -5,36 +5,21 @@
 --   Consolidates 005_remove_demo_products.sql and 006_seed_real_products.sql:
 --   safely archives demo products (deleting only those with zero dependants)
 --   and seeds real products (Site Checkup, KuraCode Extension) as 'draft'.
---
--- PRECONDITIONS:
---   01-schema-alignment.sql through 03-storage-buckets-and-policies.sql applied.
---   Review section 8 of 00-diagnose-READONLY.sql first so you know which demo
---   products have orders/licenses/reviews attached.
---
--- WHAT IT CHANGES:
---   - Sets status = 'archived', is_featured = false on all 6 demo slugs.
---   - Deletes demo products ONLY if they have zero order_items, licenses,
---     reviews, wishlists, and downloads.
---   - Ensures core categories ('wordpress-plugins', 'browser-extensions', etc.)
---     exist and seeds 'site-checkup' and 'kuracode-extension' with status='draft'.
---
--- VERIFICATION QUERY:
---   SELECT slug, status, is_featured FROM public.products
---   WHERE slug IN (
---     'agencypro-theme','superfast-cache-plugin','saaspulse-nextjs-template',
---     'minimal-portfolio-free','agency-growth-bundle','wp-licensing-sdk-snippet',
---     'site-checkup','kuracode-extension'
---   ) ORDER BY slug;
---   -- Expected: any remaining demo slugs have status='archived'; real slugs have status='draft'.
---
--- ROLLBACK:
---   To un-archive a demo product temporarily:
---   UPDATE public.products SET status = 'published' WHERE slug = '<slug>';
---   To remove draft real products:
---   DELETE FROM public.products WHERE slug IN ('site-checkup','kuracode-extension') AND status = 'draft';
 -- ==============================================================================
 
 BEGIN;
+
+-- 0. Relax NOT NULL on legacy 'type' column if present on live products table
+DO $$
+BEGIN
+  IF EXISTS (
+    SELECT 1 FROM information_schema.columns
+    WHERE table_schema = 'public' AND table_name = 'products'
+      AND column_name = 'type' AND is_nullable = 'NO'
+  ) THEN
+    ALTER TABLE public.products ALTER COLUMN type DROP NOT NULL;
+  END IF;
+END $$;
 
 -- 1. Archive all 6 demo products first (safe even with active customers)
 UPDATE public.products
