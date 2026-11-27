@@ -5,8 +5,8 @@ console.log('Running End-to-End Checkout, Pricing, and Webhook Verification Test
 
 // 1. Verify Price Math & Coupon Calculations in Paise
 {
-  const item1Price = 249900; // AgencyPro ₹2,499
-  const item2Price = 149900; // SuperFast Cache ₹1,499
+  const item1Price = 249900; // Item 1 ₹2,499
+  const item2Price = 149900; // Item 2 ₹1,499
   const subtotalPaise = item1Price + item2Price; // 399800 (₹3,998)
 
   assert.strictEqual(subtotalPaise, 399800, 'Subtotal paise math incorrect');

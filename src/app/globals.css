@@ -11,7 +11,7 @@
    ============================================ */
 
 :root {
-  --header-height: 4rem;
+  --header-height: 64px;
   --bg: #FFFFFF;
   --surface: #F8F9FA;
   --surface-elevated: #FFFFFF;
@@ -34,7 +34,7 @@
 }
 
 .dark {
-  --header-height: 4rem;
+  --header-height: 64px;
   --bg: #0B0D0B;
   --surface: #141714;
   --surface-elevated: #1C211C;
@@ -137,9 +137,9 @@ p {
   text-wrap: pretty;
 }
 
-/* --- Focus styles for accessibility --- */
+/* --- Focus styles for accessibility (WCAG AA >= 3:1 on light & dark) --- */
 *:focus-visible {
-  outline: 2px solid var(--primary);
+  outline: 2px solid var(--brand);
   outline-offset: 2px;
 }
 
@@ -305,6 +305,11 @@ a:active,
 }
 
 /* --- Reduced Motion (Section 1.2 & 13) --- */
+/* --- Preloader Skip (set before paint for same-session returners) --- */
+html[data-preloader="skip"] [data-wefik-preloader] {
+  display: none !important;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

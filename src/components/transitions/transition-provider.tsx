@@ -5,6 +5,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import gsap from 'gsap';
 import { useMotionGates } from '@/hooks/use-reduced-motion';
 import { useLenis } from '@/components/providers/smooth-scroll-provider';
+import { MOTION_DURATION, MOTION_EASE } from '@/lib/motion';
 
 interface TransitionContextType {
   navigate: (href: string) => void;
@@ -52,7 +53,7 @@ export function TransitionProvider({ children }: { children: React.ReactNode }) 
       // Quick 250ms fade per Section 3
       const main = document.querySelector('main');
       if (main) {
-        gsap.fromTo(main, { opacity: 0.4 }, { opacity: 1, duration: 0.25, ease: 'power2.out' });
+        gsap.fromTo(main, { opacity: 0.4 }, { opacity: 1, duration: MOTION_DURATION.base, ease: MOTION_EASE.out });
       }
     };
 
@@ -79,9 +80,9 @@ export function TransitionProvider({ children }: { children: React.ReactNode }) 
     // Wipe out panels upward: yPercent: 0 -> -100
     tl.to([limePanelRef.current, inkPanelRef.current], {
       yPercent: -100,
-      duration: 0.55,
+      duration: MOTION_DURATION.slow,
       stagger: 0.1,
-      ease: 'expo.out',
+      ease: MOTION_EASE.out,
     });
 
     // Animate in new page content (y: 35 -> 0, opacity: 0 -> 1)
@@ -90,7 +91,7 @@ export function TransitionProvider({ children }: { children: React.ReactNode }) 
       tl.fromTo(
         main,
         { y: 35, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.6, ease: 'expo.out' },
+        { y: 0, opacity: 1, duration: MOTION_DURATION.slow, ease: MOTION_EASE.out },
         '-=0.45'
       );
     }
@@ -126,12 +127,12 @@ export function TransitionProvider({ children }: { children: React.ReactNode }) 
       gsap.to(main, {
         scale: 0.98,
         opacity: 0.6,
-        duration: 0.35,
-        ease: 'power2.in',
+        duration: MOTION_DURATION.base,
+        ease: MOTION_EASE.in,
       });
     }
 
-    // Cover Phase: two panels (Ink, then Lime) wipe in from bottom with expo.inOut stagger (700ms)
+    // Cover Phase: two panels (Ink, then Lime) wipe in from bottom with expo.inOut stagger
     const tl = gsap.timeline({
       onComplete: () => {
         clearTimeout(progressTimer);
@@ -146,9 +147,9 @@ export function TransitionProvider({ children }: { children: React.ReactNode }) 
 
     tl.to([inkPanelRef.current, limePanelRef.current], {
       yPercent: 0,
-      duration: 0.65,
+      duration: MOTION_DURATION.slow,
       stagger: 0.08,
-      ease: 'expo.inOut',
+      ease: MOTION_EASE.inOut,
     });
   };
 

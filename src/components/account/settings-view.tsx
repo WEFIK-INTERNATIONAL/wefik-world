@@ -515,7 +515,7 @@ export function SettingsView({ initialProfile }: SettingsViewProps) {
             <div className="flex flex-col sm:flex-row sm:items-center gap-5 pb-6 border-b border-[var(--border)]">
               <Avatar className="w-20 h-20 border-2 border-[var(--border)]">
                 <AvatarImage src={avatarUrl} className="object-cover" />
-                <AvatarFallback className="bg-ink text-white text-lg font-bold">
+                <AvatarFallback className="bg-[var(--surface-inverted)] text-[var(--text-inverted)] text-lg font-bold">
                   {displayName.charAt(0).toUpperCase() || initialProfile.email.charAt(0).toUpperCase()}
                 </AvatarFallback>
               </Avatar>

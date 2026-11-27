@@ -301,7 +301,7 @@ export default function CheckoutPage() {
             <p className="text-xs text-slate">
               Please add products from our marketplace before proceeding to checkout.
             </p>
-            <Button asChild className="bg-ink hover:bg-black text-white text-xs rounded-xl h-10">
+            <Button asChild className="bg-[var(--surface-inverted)] hover:opacity-90 text-[var(--text-inverted)] text-xs rounded-xl h-10">
               <Link href="/marketplace">Browse Products</Link>
             </Button>
           </div>
@@ -399,7 +399,7 @@ export default function CheckoutPage() {
                       <Button
                         type="submit"
                         disabled={couponLoading || !couponCode.trim()}
-                        className="bg-ink hover:bg-black text-white text-xs h-10 px-4 rounded-xl font-semibold"
+                        className="bg-[var(--surface-inverted)] hover:opacity-90 text-[var(--text-inverted)] text-xs h-10 px-4 rounded-xl font-semibold"
                       >
                         {couponLoading ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : 'Apply'}
                       </Button>

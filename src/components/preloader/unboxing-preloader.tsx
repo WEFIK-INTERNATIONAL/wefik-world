@@ -2,318 +2,271 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
-import { usePreloaderProgress } from '@/hooks/use-preloader-progress';
-import { useMotionGates } from '@/hooks/use-reduced-motion';
+import { useReducedMotion } from '@/hooks/use-reduced-motion';
 import { useLenis } from '@/components/providers/smooth-scroll-provider';
 import { Logo } from '@/components/brand/logo';
-import { Zap, Palette, Code, Cpu } from 'lucide-react';
+import { MOTION_EASE } from '@/lib/motion';
 
+const SESSION_KEY = 'wfk_intro_seen';
+const EASE_PRIMARY = MOTION_EASE.out;
+
+/**
+ * First-visit unboxing preloader.
+ * - Plays once per browser session (skipped immediately for same-session returners).
+ * - Uses CSS 3D perspective + preserve-3d so the lid hinges on its back top edge.
+ * - Animates transform and opacity only; exits early once page assets are ready.
+ * - Respects prefers-reduced-motion with a simple opacity fade.
+ */
 export function UnboxingPreloader() {
-  const { progress, isLoaded } = usePreloaderProgress();
-  const { disableHeavyMotion } = useMotionGates();
+  const prefersReducedMotion = useReducedMotion();
   const { stopScroll, startScroll } = useLenis();
-  const [mounted, setMounted] = useState(true);
-  const [isReturnVisitor] = useState(() => {
-    if (typeof window === 'undefined') return false;
-    try {
-      return sessionStorage.getItem('wfk_intro_seen') === 'true';
-    } catch {
-      return false;
-    }
-  });
 
-  // Lock scroll while preloader is mounted; restore on completion / unmount
+  // Server and initial client render MUST match identically (no window/sessionStorage branching here)
+  const [mounted, setMounted] = useState<boolean>(true);
+
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const boxRef = useRef<HTMLDivElement | null>(null);
+  const lidRef = useRef<HTMLDivElement | null>(null);
+  const shadowRef = useRef<HTMLDivElement | null>(null);
+  const badgeRef = useRef<HTMLDivElement | null>(null);
+  const timelineRef = useRef<gsap.core.Timeline | null>(null);
+  const isExitingRef = useRef(false);
+
+  // Lock smooth scroll while preloader is visible; always restore on unmount
   useEffect(() => {
-    if (mounted) {
-      stopScroll('unboxing-preloader');
-    }
+    if (!mounted) return;
+    stopScroll('unboxing-preloader');
     return () => {
       startScroll('unboxing-preloader');
     };
   }, [mounted, stopScroll, startScroll]);
 
-  const containerRef = useRef<HTMLDivElement | null>(null);
-  const boxRef = useRef<HTMLDivElement | null>(null);
-  const lidRef = useRef<HTMLDivElement | null>(null);
-  const itemsRef = useRef<HTMLDivElement | null>(null);
-  const heroCardRef = useRef<HTMLDivElement | null>(null);
-  const dustRef = useRef<HTMLDivElement | null>(null);
-  const timelineRef = useRef<gsap.core.Timeline | null>(null);
-
-  // Failsafe timer: ensure preloader unmounts even if GSAP or window event stalls
-  useEffect(() => {
-    const failsafe = setTimeout(() => {
-      setMounted(false);
-    }, 3800);
-    return () => clearTimeout(failsafe);
-  }, []);
-
-  // Animate preloader once mounted
   useEffect(() => {
     if (!mounted || typeof window === 'undefined') return;
 
-    // Return visitors get a rapid 600ms logo pulse per Section 3
-    if (isReturnVisitor) {
-      const timer = setTimeout(() => {
-        if (containerRef.current) {
-          gsap.to(containerRef.current, {
-            opacity: 0,
-            duration: 0.35,
-            ease: 'power2.out',
-            onComplete: () => setMounted(false),
-          });
-        } else {
-          setMounted(false);
-        }
-      }, 600);
+    // Same-session returners are already hidden by CSS via data-preloader="skip"; unmount immediately
+    try {
+      if (
+        sessionStorage.getItem(SESSION_KEY) === 'true' ||
+        document.documentElement.getAttribute('data-preloader') === 'skip'
+      ) {
+        queueMicrotask(() => setMounted(false));
+        return;
+      }
+    } catch {
+      // Ignore storage errors
+    }
+
+    const markSeenAndUnmount = () => {
+      try {
+        sessionStorage.setItem(SESSION_KEY, 'true');
+        document.documentElement.setAttribute('data-preloader', 'skip');
+      } catch {
+        // Ignore storage errors in restricted contexts
+      }
+      setMounted(false);
+    };
+
+    const fadeOut = (duration = 0.3) => {
+      if (isExitingRef.current) return;
+      isExitingRef.current = true;
+      if (timelineRef.current) {
+        timelineRef.current.kill();
+      }
+      if (!containerRef.current) {
+        markSeenAndUnmount();
+        return;
+      }
+      gsap.to(containerRef.current, {
+        opacity: 0,
+        duration,
+        ease: EASE_PRIMARY,
+        onComplete: markSeenAndUnmount,
+      });
+    };
+
+    // Reduced motion: simple fade out as soon as document is interactive/ready
+    if (prefersReducedMotion) {
+      const timer = setTimeout(() => fadeOut(0.25), 180);
       return () => clearTimeout(timer);
     }
 
-    // Reduced motion or low-end gate fallback: Clean static centered logo + thin progress bar
-    if (disableHeavyMotion) {
-      if (isLoaded) {
-        gsap.to(containerRef.current, {
-          opacity: 0,
-          duration: 0.3,
-          ease: 'power2.out',
-          onComplete: () => {
-            sessionStorage.setItem('wfk_intro_seen', 'true');
-            setMounted(false);
-          },
-        });
-      }
-      return;
+    // Track real page readiness so we can exit early if the page is already loaded
+    let pageReady = document.readyState === 'complete';
+    const onLoad = () => {
+      pageReady = true;
+    };
+    if (!pageReady) {
+      window.addEventListener('load', onLoad, { once: true });
     }
 
-    // Full 4-Phase Cinematic Unboxing via GSAP Timeline
+    // Hard failsafe at 1.9s so LCP/content is never blocked
+    const failsafeTimer = setTimeout(() => fadeOut(0.25), 1900);
+
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({
-        paused: true,
-        onComplete: () => {
-          sessionStorage.setItem('wfk_intro_seen', 'true');
-          setMounted(false);
-        },
+        onComplete: markSeenAndUnmount,
       });
-
       timelineRef.current = tl;
 
-      // Initial positions
-      gsap.set(boxRef.current, { y: -350, scaleY: 1.1, scaleX: 0.9, opacity: 0 });
-      gsap.set(lidRef.current, { transformOrigin: 'top right' });
-      gsap.set('.unboxing-item', { scale: 0, opacity: 0, x: 0, y: 0 });
-      gsap.set('.dust-particle', { scale: 0, opacity: 0 });
+      // Initial states (transform & opacity only)
+      gsap.set(boxRef.current, { y: -48, scale: 0.94, opacity: 0 });
+      gsap.set(shadowRef.current, { scaleX: 0.65, scaleY: 0.8, opacity: 0 });
+      gsap.set(lidRef.current, {
+        transformOrigin: '50% 0% -48px',
+        rotationX: 0,
+      });
+      gsap.set(badgeRef.current, { y: 12, scale: 0.85, opacity: 0 });
 
-      // PHASE 1: The Drop (0 -> 0.6s)
-      tl.to(boxRef.current, {
-        y: 0,
-        opacity: 1,
-        duration: 0.55,
-        ease: 'bounce.out',
-      })
+      // 1. Box settles onto surface with weight (0.00s -> 0.42s)
+      tl.to(
+        boxRef.current,
+        {
+          y: 0,
+          scale: 1,
+          opacity: 1,
+          duration: 0.42,
+          ease: EASE_PRIMARY,
+        },
+        0
+      )
         .to(
-          boxRef.current,
+          shadowRef.current,
           {
-            scaleX: 1.15,
-            scaleY: 0.85,
-            duration: 0.1,
-            ease: 'power2.out',
+            scaleX: 1,
+            scaleY: 1,
+            opacity: 0.35,
+            duration: 0.42,
+            ease: EASE_PRIMARY,
           },
-          '-=0.15'
+          0
         )
-        .to(boxRef.current, {
-          scaleX: 1,
-          scaleY: 1,
-          duration: 0.15,
-          ease: 'elastic.out(1, 0.4)',
+        // 2. Lid hinges on back top edge and rotates up & away with subtle overshoot + settle (0.36s -> 1.00s)
+        .to(
+          lidRef.current,
+          {
+            rotationX: 122,
+            duration: 0.42,
+            ease: EASE_PRIMARY,
+          },
+          0.36
+        )
+        .to(
+          lidRef.current,
+          {
+            rotationX: 110,
+            duration: 0.22,
+            ease: EASE_PRIMARY,
+          },
+          0.78
+        )
+        // Shadow responds to lid opening (widens & softens slightly)
+        .to(
+          shadowRef.current,
+          {
+            scaleX: 1.18,
+            opacity: 0.22,
+            duration: 0.45,
+            ease: EASE_PRIMARY,
+          },
+          0.36
+        )
+        // 3. Brand mark rises gently from inside the open box (0.52s -> 0.98s)
+        .to(
+          badgeRef.current,
+          {
+            y: -26,
+            scale: 1,
+            opacity: 1,
+            duration: 0.46,
+            ease: EASE_PRIMARY,
+          },
+          0.52
+        )
+        // Early-exit check: if page is already ready after lid opens, proceed directly to reveal
+        .call(() => {
+          if (pageReady && tl.time() < 1.1) {
+            tl.seek(1.1);
+          }
         })
-        // Dust kick on impact
+        // 4. Clean fade-out reveal (1.15s -> 1.55s, total ~1.55s)
         .to(
-          '.dust-particle',
+          [boxRef.current, shadowRef.current, badgeRef.current],
           {
-            scale: 1,
-            opacity: 1,
-            x: (i) => (i % 2 === 0 ? -40 - i * 10 : 40 + i * 10),
-            y: (i) => -15 - (i % 3) * 10,
-            duration: 0.35,
-            stagger: 0.02,
-            ease: 'power2.out',
+            y: -10,
+            opacity: 0,
+            duration: 0.3,
+            ease: EASE_PRIMARY,
           },
-          '-=0.2'
+          1.15
         )
         .to(
-          '.dust-particle',
+          containerRef.current,
           {
             opacity: 0,
-            scale: 0.5,
-            duration: 0.25,
-            ease: 'power2.in',
+            duration: 0.32,
+            ease: EASE_PRIMARY,
           },
-          '-=0.1'
+          1.23
         );
-
-      // PHASE 2: The Burst (0.6s -> 1.4s)
-      // Lid snaps open
-      tl.to(
-        lidRef.current,
-        {
-          rotateZ: -110,
-          x: -25,
-          y: -15,
-          duration: 0.35,
-          ease: 'back.out(2)',
-        },
-        '+=0.05'
-      )
-        // Box shakes with energy
-        .to(
-          boxRef.current,
-          {
-            rotateZ: 3,
-            duration: 0.06,
-            yoyo: true,
-            repeat: 3,
-            ease: 'sine.inOut',
-          },
-          '-=0.3'
-        )
-        // 5 Category items fly out radially
-        .to(
-          '.unboxing-item',
-          {
-            scale: 1,
-            opacity: 1,
-            duration: 0.55,
-            stagger: 0.05,
-            ease: 'back.out(1.8)',
-            x: (i) => {
-              const offsets = [0, -110, 110, -85, 85];
-              return offsets[i] || 0;
-            },
-            y: (i) => {
-              const offsets = [-80, -120, -110, 50, 60];
-              return offsets[i] || 0;
-            },
-          },
-          '-=0.25'
-        );
-
-      // PHASE 3: The Dive (1.4s -> 2.2s)
-      // Non-hero items fade and drift outward
-      tl.to(
-        '.unboxing-item:not(.hero-item)',
-        {
-          opacity: 0,
-          scale: 0.7,
-          x: (i) => (i % 2 === 0 ? -160 : 160),
-          duration: 0.4,
-          ease: 'power2.in',
-        },
-        '+=0.1'
-      )
-        // Box drops away
-        .to(
-          boxRef.current,
-          {
-            scale: 0.5,
-            opacity: 0,
-            y: 80,
-            duration: 0.35,
-            ease: 'power2.in',
-          },
-          '-=0.35'
-        )
-        // Hero Card moves to exact center and expands
-        .to(
-          heroCardRef.current,
-          {
-            x: 0,
-            y: 0,
-            scale: 1.35,
-            boxShadow: '0 0 60px rgba(163, 230, 53, 0.4)',
-            duration: 0.5,
-            ease: 'power3.out',
-          },
-          '-=0.3'
-        );
-
-      // PHASE 4: Smooth Reveal (2.2s -> 2.8s)
-      tl.to(heroCardRef.current, {
-        scale: 4,
-        opacity: 0,
-        duration: 0.45,
-        ease: 'power3.in',
-      }).to(
-        containerRef.current,
-        {
-          opacity: 0,
-          duration: 0.35,
-          ease: 'power2.out',
-        },
-        '-=0.25'
-      );
     }, containerRef);
 
-    return () => ctx.revert();
-  }, [mounted, isReturnVisitor, disableHeavyMotion, isLoaded]);
+    return () => {
+      clearTimeout(failsafeTimer);
+      window.removeEventListener('load', onLoad);
+      ctx.revert();
+    };
+  }, [mounted, prefersReducedMotion]);
 
-  // Trigger timeline play when progress reaches ready or asset loaded
-  useEffect(() => {
-    if (timelineRef.current && !isReturnVisitor && !disableHeavyMotion) {
-      if (timelineRef.current.progress() === 0) {
-        timelineRef.current.play();
-      }
-    }
-  }, [isReturnVisitor, disableHeavyMotion]);
-
-  // Click / tap instantly skips to reveal
   const handleSkip = () => {
+    if (isExitingRef.current) return;
+    isExitingRef.current = true;
     if (timelineRef.current) {
-      timelineRef.current.seek(timelineRef.current.duration() - 0.35);
+      timelineRef.current.kill();
+    }
+    try {
+      sessionStorage.setItem(SESSION_KEY, 'true');
+      document.documentElement.setAttribute('data-preloader', 'skip');
+    } catch {
+      // Ignore storage errors
+    }
+    if (containerRef.current) {
+      gsap.to(containerRef.current, {
+        opacity: 0,
+        duration: 0.2,
+        ease: EASE_PRIMARY,
+        onComplete: () => setMounted(false),
+      });
     } else {
-      sessionStorage.setItem('wfk_intro_seen', 'true');
       setMounted(false);
     }
   };
 
+  // Allow Escape / Enter / Space to skip without trapping focus
+  useEffect(() => {
+    if (!mounted || typeof window === 'undefined') return;
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' || e.key === 'Enter' || e.key === ' ') {
+        handleSkip();
+      }
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+     
+  }, [mounted]);
+
   if (!mounted) return null;
 
-  // Return visitor quick pulse
-  if (isReturnVisitor) {
+  if (prefersReducedMotion) {
     return (
       <div
         ref={containerRef}
-        aria-hidden="true"
-        className="fixed inset-0 z-[9999] bg-[var(--bg)] flex items-center justify-center pointer-events-none transition-colors duration-200"
-      >
-        <div className="flex items-center gap-2.5 animate-pulse">
-          <Logo size="sm" showWordmark={true} />
-        </div>
-      </div>
-    );
-  }
-
-  // Reduced motion or low-end gate view: static centered logo + thin progress bar
-  if (disableHeavyMotion) {
-    return (
-      <div
-        ref={containerRef}
+        data-wefik-preloader="true"
         aria-hidden="true"
         onClick={handleSkip}
-        className="fixed inset-0 z-[9999] bg-[var(--bg)] text-[var(--text)] flex flex-col items-center justify-center p-6 text-center cursor-pointer transition-colors duration-200"
+        className="fixed inset-0 z-[9999] bg-[var(--bg)] flex items-center justify-center pointer-events-none"
       >
-        <div className="space-y-4 max-w-xs w-full flex flex-col items-center">
-          <Logo size="lg" showWordmark={true} />
-          <p className="text-xs text-[var(--muted)]">Loading marketplace assets...</p>
-          <div className="w-full h-1 bg-[var(--surface-2)] rounded-full overflow-hidden border border-[var(--border)]">
-            <div
-              className="h-full bg-lime transition-all duration-200"
-              style={{ width: `${progress}%` }}
-            />
-          </div>
-          <span className="text-[10px] text-[var(--muted)] uppercase tracking-wider block">
-            Click anywhere to skip
-          </span>
-        </div>
+        <Logo size="md" showWordmark={true} />
       </div>
     );
   }
@@ -321,96 +274,71 @@ export function UnboxingPreloader() {
   return (
     <div
       ref={containerRef}
+      data-wefik-preloader="true"
       aria-hidden="true"
       onClick={handleSkip}
-      className="fixed inset-0 z-[9999] bg-[var(--bg)] text-[var(--text)] flex flex-col items-center justify-center overflow-hidden cursor-pointer select-none transition-colors duration-200"
+      className="fixed inset-0 z-[9999] bg-[var(--bg)] text-[var(--text)] flex flex-col items-center justify-center cursor-pointer select-none"
     >
-      {/* 3D Scene Wrapper */}
-      <div className="relative w-80 h-80 flex items-center justify-center">
-        {/* Dust Particles for landing */}
-        <div ref={dustRef} className="absolute inset-0 pointer-events-none flex items-center justify-center">
-          {[...Array(8)].map((_, i) => (
-            <div
-              key={i}
-              className="dust-particle absolute w-2 h-2 rounded-full bg-lime/80 shadow-xs shadow-lime"
-            />
-          ))}
+      {/* 3D Scene Wrapper with perspective on parent */}
+      <div
+        className="relative w-64 h-64 flex flex-col items-center justify-center"
+        style={{ perspective: '900px' }}
+      >
+        {/* Emerging Brand Badge */}
+        <div
+          ref={badgeRef}
+          className="relative z-20 mb-2 px-3.5 py-2 rounded-xl bg-[var(--surface)] border border-lime/60 shadow-lg flex items-center gap-2 will-change-transform"
+        >
+          <Logo size="sm" showWordmark={true} />
         </div>
 
-        {/* Wefik Shipping Box (CSS 3D / Isometric Aesthetic carrying Logo) */}
+        {/* 3D Package / Gift Box */}
         <div
           ref={boxRef}
-          className="relative w-32 h-32 bg-[var(--surface)] dark:bg-[#141714] rounded-2xl border border-[var(--border)] shadow-2xl flex flex-col items-center justify-center z-10"
+          className="relative w-32 h-24 rounded-2xl bg-[var(--surface)] dark:bg-[#141714] border border-[var(--border)] shadow-xl flex items-center justify-center z-10 will-change-transform"
+          style={{ transformStyle: 'preserve-3d' }}
         >
-          {/* Lime Tape Stripe */}
-          <div className="absolute inset-y-0 w-8 bg-lime/90 flex items-center justify-center shadow-inner">
-            <span className="text-[9px] font-mono font-black text-[#0a0f0a] tracking-widest rotate-90 uppercase">
+          {/* Vertical Lime Tape Stripe */}
+          <div className="absolute inset-y-0 w-7 bg-lime/90 flex items-center justify-center">
+            <span className="text-[8px] font-mono font-black text-[#0a0f0a] tracking-widest rotate-90 uppercase">
               WEFIK
             </span>
           </div>
 
-          {/* Box Lid */}
+          {/* Front Box Seal */}
+          <div className="relative z-10 w-9 h-9 rounded-xl bg-[var(--bg)] border border-[var(--border)] flex items-center justify-center shadow-sm">
+            <Logo markOnly size={20} />
+          </div>
+
+          {/* Hinged Lid (Back-Top Edge Pivot) */}
           <div
             ref={lidRef}
-            className="absolute -top-3 inset-x-0 h-4 bg-[var(--surface-2)] dark:bg-[#1C211C] rounded-t-xl border-t border-x border-[var(--border)] shadow-md"
-          />
-
-          {/* Front Box Seal with official Logo mark */}
-          <div className="relative z-10 w-10 h-10 rounded-xl bg-[var(--bg)] border border-[var(--border)] flex items-center justify-center shadow-md">
-            <Logo markOnly size={22} />
-          </div>
-        </div>
-
-        {/* Bursting Category Items & Chips (Phase 2 & 3) */}
-        <div ref={itemsRef} className="absolute inset-0 pointer-events-none flex items-center justify-center z-20">
-          {/* 1. Hero Card (Featured Theme - The one that dives in Phase 3) */}
-          <div
-            ref={heroCardRef}
-            className="unboxing-item hero-item absolute px-3.5 py-2.5 rounded-xl bg-[#141714] border-2 border-lime text-white shadow-xl shadow-lime/20 flex items-center gap-2"
+            className="absolute -top-3 -inset-x-1 h-5 will-change-transform"
+            style={{ transformStyle: 'preserve-3d' }}
           >
-            <div className="w-4 h-4 rounded-md bg-lime text-[#0a0f0a] flex items-center justify-center font-black text-[10px]">
-              ★
+            {/* Outer Lid Face */}
+            <div
+              className="absolute inset-0 rounded-t-xl rounded-b-sm bg-[var(--surface-2)] dark:bg-[#1C211C] border border-[var(--border)] shadow-md flex items-center justify-center"
+              style={{ backfaceVisibility: 'hidden' }}
+            >
+              <div className="w-7 h-full bg-lime/90" />
             </div>
-            <span className="text-[11px] font-bold font-display tracking-tight text-white">AgencyPro Theme</span>
-          </div>
-
-          {/* 2. Plugin Puzzle */}
-          <div className="unboxing-item absolute p-2.5 rounded-xl bg-[var(--surface)] border border-[var(--border)] text-lime shadow-lg flex items-center gap-1.5">
-            <Zap className="w-3.5 h-3.5" />
-            <span className="text-[10px] font-bold text-[var(--text)]">SuperCache</span>
-          </div>
-
-          {/* 3. HTML Template Chip */}
-          <div className="unboxing-item absolute p-2.5 rounded-xl bg-[var(--surface)] border border-[var(--border)] text-sky-400 shadow-lg flex items-center gap-1.5">
-            <Palette className="w-3.5 h-3.5" />
-            <span className="text-[10px] font-bold text-[var(--text)]">Tailwind HTML</span>
-          </div>
-
-          {/* 4. Code Snippet Chip */}
-          <div className="unboxing-item absolute p-2 rounded-xl bg-[var(--surface-2)] border border-lime/40 text-lime shadow-lg flex items-center gap-1 font-mono text-[10px] font-bold">
-            <Code className="w-3 h-3" />
-            <span>&lt;/&gt;</span>
-          </div>
-
-          {/* 5. Mobile / Starter Chip */}
-          <div className="unboxing-item absolute p-2 rounded-xl bg-[var(--surface)] border border-[var(--border)] text-emerald-400 shadow-lg flex items-center gap-1">
-            <Cpu className="w-3.5 h-3.5" />
-            <span className="text-[10px] font-bold text-[var(--text)]">Next.js Starter</span>
+            {/* Inner Lid Face (prevents bleed-through when rotated open) */}
+            <div
+              className="absolute inset-0 rounded-t-xl rounded-b-sm bg-[var(--surface)] dark:bg-[#0f120f] border border-[var(--border)]"
+              style={{
+                backfaceVisibility: 'hidden',
+                transform: 'rotateX(180deg)',
+              }}
+            />
           </div>
         </div>
-      </div>
 
-      {/* Real Progress Bar & Skip Hint */}
-      <div className="mt-8 flex flex-col items-center gap-2 w-48 max-w-xs">
-        <div className="w-full h-1 bg-[var(--surface-2)] rounded-full overflow-hidden border border-[var(--border)]">
-          <div
-            className="h-full bg-lime transition-all duration-150"
-            style={{ width: `${progress}%` }}
-          />
-        </div>
-        <span className="text-[10px] font-mono text-[var(--muted)] tracking-wider uppercase">
-          Click anywhere to skip
-        </span>
+        {/* Ground Shadow responding to box weight & lid motion */}
+        <div
+          ref={shadowRef}
+          className="mt-4 w-32 h-3 rounded-full bg-black/25 dark:bg-black/60 blur-md will-change-transform"
+        />
       </div>
     </div>
   );

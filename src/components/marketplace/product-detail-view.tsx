@@ -29,6 +29,7 @@ import { useWishlist } from '@/lib/wishlist-context';
 import { useCompare } from '@/lib/compare-context';
 import { recordProductView } from '@/lib/recently-viewed';
 import { ProductData } from '@/lib/data/products';
+import { UNLIMITED_LICENSE_MULTIPLIER } from '@/lib/pricing';
 import { toast } from 'sonner';
 import { createClient } from '@/lib/supabase/client';
 import { FreebieMagnetKit } from '@/components/freebies/freebie-magnet-kit';
@@ -42,8 +43,7 @@ interface ProductDetailViewProps {
   initialReviews?: {
     id: string;
     rating: number;
-    title: string;
-    comment: string;
+    review_text: string | null;
     created_at: string;
     profile?: {
       full_name: string | null;
@@ -77,7 +77,7 @@ export function ProductDetailView({ product, initialReviews = [] }: ProductDetai
   }, [product]);
 
   const singlePrice = product.price_inr;
-  const unlimitedPrice = Math.round((product.price_inr * 2.5) / 100) * 100;
+  const unlimitedPrice = Math.round((product.price_inr * UNLIMITED_LICENSE_MULTIPLIER) / 100) * 100;
   const currentPrice = selectedLicense === 'unlimited' ? unlimitedPrice : singlePrice;
 
   const formattedSingle = (singlePrice / 100).toLocaleString('en-IN');
@@ -164,8 +164,7 @@ export function ProductDetailView({ product, initialReviews = [] }: ProductDetai
         product_id: product.id,
         user_id: session.user.id,
         rating: reviewRating,
-        title: reviewTitle.trim(),
-        comment: reviewComment.trim(),
+        review_text: `${reviewTitle.trim()}: ${reviewComment.trim()}`,
       });
 
       if (error) throw error;
@@ -175,8 +174,7 @@ export function ProductDetailView({ product, initialReviews = [] }: ProductDetai
         {
           id: 'temp-' + Date.now(),
           rating: reviewRating,
-          title: reviewTitle,
-          comment: reviewComment,
+          review_text: `${reviewTitle}: ${reviewComment}`,
           created_at: new Date().toISOString(),
           profile: {
             full_name: session.user.user_metadata?.full_name || 'Customer',
@@ -375,7 +373,15 @@ export function ProductDetailView({ product, initialReviews = [] }: ProductDetai
 
               <div className="flex items-center gap-1.5 text-[11px] text-[var(--muted)] font-medium">
                 <Clock className="w-3.5 h-3.5 text-lime" />
-                <span>Updated 6 days ago</span>
+                <span>
+                  {product.updated_at
+                    ? `Updated ${new Date(product.updated_at).toLocaleDateString('en-IN', {
+                        day: 'numeric',
+                        month: 'short',
+                        year: 'numeric',
+                      })}`
+                    : 'Latest release'}
+                </span>
               </div>
             </div>
 
@@ -655,8 +661,8 @@ export function ProductDetailView({ product, initialReviews = [] }: ProductDetai
                     ))}
                   </div>
                 </div>
-                {r.title && <p className="text-xs font-semibold text-ink">{r.title}</p>}
-                <p className="text-xs text-slate leading-relaxed">{r.comment}</p>
+                {r.review_text && <p className="text-xs font-semibold text-ink">{r.review_text}</p>}
+                <p className="text-xs text-slate leading-relaxed">{r.review_text}</p>
               </div>
             ))
           )}
@@ -707,7 +713,7 @@ export function ProductDetailView({ product, initialReviews = [] }: ProductDetai
             <Button
               type="submit"
               disabled={reviewSubmitting}
-              className="bg-ink hover:bg-black text-white text-xs h-9 px-4 rounded-xl font-semibold"
+              className="bg-[var(--surface-inverted)] hover:opacity-90 text-[var(--text-inverted)] text-xs h-9 px-4 rounded-xl font-semibold"
             >
               {reviewSubmitting ? <Loader2 className="w-3.5 h-3.5 animate-spin mr-1.5" /> : null}
               Submit Review

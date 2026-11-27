@@ -8,6 +8,7 @@ import { TransitionLink } from '@/components/transitions/transition-link';
 import { MagneticButton } from '@/components/ui/magnetic-button';
 import { useMotionGates } from '@/hooks/use-reduced-motion';
 import { Logo } from '@/components/brand/logo';
+import { MOTION_DURATION, MOTION_EASE } from '@/lib/motion';
 
 export default function NotFound() {
   const floatingCardRef = useRef<HTMLDivElement | null>(null);
@@ -31,8 +32,8 @@ export default function NotFound() {
       const tween = gsap.to(floatingCardRef.current, {
         y: -12,
         rotation: 4,
-        duration: 2.4,
-        ease: 'sine.inOut',
+        duration: MOTION_DURATION.ambient,
+        ease: MOTION_EASE.ambient,
         yoyo: true,
         repeat: -1,
       });

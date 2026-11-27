@@ -60,7 +60,7 @@ export function CouponAdminManager({ initialCoupons }: { initialCoupons: CouponI
               id: data.id,
               code: data.code,
               discount_percent: data.discount_percent,
-              used_count: data.uses_count,
+              used_count: data.used_count,
               max_uses: data.max_uses,
               is_active: true,
               valid_until: data.valid_until,
@@ -134,7 +134,7 @@ export function CouponAdminManager({ initialCoupons }: { initialCoupons: CouponI
           <Button
             type="submit"
             disabled={loading}
-            className="h-10 px-5 bg-ink hover:bg-black text-white text-xs font-bold rounded-xl"
+            className="h-10 px-5 bg-[var(--surface-inverted)] hover:opacity-90 text-[var(--text-inverted)] text-xs font-bold rounded-xl"
           >
             {loading ? <Loader2 className="w-3.5 h-3.5 animate-spin mr-1.5" /> : null}
             Create Coupon

@@ -141,7 +141,8 @@ serve(async (req: Request) => {
           );
         }
 
-        // Unlimited license is 2x price or standard 1x
+        // Unlimited license price uses shared multiplier (see src/lib/pricing.ts)
+        // Currently 2.0× — awaiting business decision (may become 2.5×)
         let itemPrice = prod.price_inr;
         if (item.license_type === "unlimited") {
           itemPrice = Math.round(prod.price_inr * 2);
@@ -233,34 +234,30 @@ serve(async (req: Request) => {
       throw new Error(`Failed to insert order items: ${itemsErr.message}`);
     }
 
-    // Create Razorpay Order
-    let razorpayOrder;
-    if (razorpay.isConfigured) {
-      razorpayOrder = await razorpay.createOrder({
-        amount: totalAmountPaise,
-        currency: "INR",
-        receipt: `order_${order.id.slice(0, 10)}`,
-        notes: {
-          order_id: order.id,
-          user_id: user.id,
-          user_email: user.email ?? "",
-        },
-      });
-
-      // Update order with razorpay_order_id
-      await supabase
-        .from("orders")
-        .update({ razorpay_order_id: razorpayOrder.id })
-        .eq("id", order.id);
-    } else {
-      // Mock order ID if keys are pending
-      const mockRzpId = `order_mock_${Date.now()}`;
-      await supabase
-        .from("orders")
-        .update({ razorpay_order_id: mockRzpId })
-        .eq("id", order.id);
-      razorpayOrder = { id: mockRzpId };
+    // Create Razorpay Order (fail closed if Razorpay is not configured)
+    if (!razorpay.isConfigured) {
+      return new Response(
+        JSON.stringify({ error: "Payment gateway is not configured. Please contact support." }),
+        { status: 503, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
     }
+
+    const razorpayOrder = await razorpay.createOrder({
+      amount: totalAmountPaise,
+      currency: "INR",
+      receipt: `order_${order.id.slice(0, 10)}`,
+      notes: {
+        order_id: order.id,
+        user_id: user.id,
+        user_email: user.email ?? "",
+      },
+    });
+
+    // Update order with razorpay_order_id
+    await supabase
+      .from("orders")
+      .update({ razorpay_order_id: razorpayOrder.id })
+      .eq("id", order.id);
 
     return new Response(
       JSON.stringify({

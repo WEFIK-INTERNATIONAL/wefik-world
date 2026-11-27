@@ -998,11 +998,11 @@ export const GLOSSARY_TERMS: Record<string, {
     definition: 'A WordPress child theme is a theme that inherits the functionality, styling, and templates of another theme (the parent theme), allowing developers to modify or add functionality without losing custom changes when the parent theme updates.',
     deepDive: 'When modifying WordPress themes, editing core parent files directly is a major technical mistake: the moment the parent theme receives an update, all direct code edits are permanently overwritten. A child theme keeps custom CSS in its own style.css and custom PHP in functions.php, ensuring parent updates never overwrite your custom work.',
     codeExample: `/*
- Theme Name:   AgencyPro Child
- Theme URI:    https://www.wefik.world/products/agencypro-theme
- Description:  Child theme for AgencyPro
+ Theme Name:   Wefik Starter Child
+ Theme URI:    https://www.wefik.world/wordpress-themes
+ Description:  Example child theme
  Author:       Wefik Agency
- Template:     agencypro
+ Template:     wefik-starter
  Version:      1.0.0
 */`,
     relatedCategory: 'wordpress-themes',
@@ -1159,7 +1159,7 @@ add_action('wp_footer', function() {
     codeExample: `{
   "@context": "https://schema.org",
   "@type": "Product",
-  "name": "AgencyPro WordPress Theme",
+  "name": "Example WordPress Theme",
   "offers": {
     "@type": "Offer",
     "price": "2499.00",

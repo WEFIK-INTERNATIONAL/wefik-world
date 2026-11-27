@@ -147,7 +147,7 @@ export function OrderSuccessView({ order }: OrderSuccessViewProps) {
                   onClick={() => handleDownload(item.product_id, item.title)}
                   disabled={downloadingId === item.product_id}
                   size="sm"
-                  className="bg-ink hover:bg-black text-white text-xs h-9 px-4 rounded-xl font-semibold flex items-center gap-1.5"
+                  className="bg-[var(--surface-inverted)] hover:opacity-90 text-[var(--text-inverted)] text-xs h-9 px-4 rounded-xl font-semibold flex items-center gap-1.5"
                 >
                   {downloadingId === item.product_id ? (
                     <Loader2 className="w-3.5 h-3.5 animate-spin" />

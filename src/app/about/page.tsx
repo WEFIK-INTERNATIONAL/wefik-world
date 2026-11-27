@@ -230,7 +230,7 @@ export default function AboutPage() {
         </div>
 
         {/* CTA */}
-        <div className="p-8 sm:p-10 rounded-3xl bg-ink text-white flex flex-col sm:flex-row items-center justify-between gap-6">
+        <div className="p-8 sm:p-10 rounded-3xl bg-[var(--surface-inverted)] text-[var(--text-inverted)] flex flex-col sm:flex-row items-center justify-between gap-6">
           <div>
             <h3 className="text-xl font-bold">Explore Our Digital Products</h3>
             <p className="text-xs text-slate-300 mt-1">

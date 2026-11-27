@@ -9,14 +9,13 @@ export const revalidate = 0;
 
 interface OrderListItem {
   id: string;
-  order_number: string | null;
-  total_amount_inr: number;
-  subtotal_inr: number;
+  total_amount: number;
+  subtotal: number;
   status: string;
   created_at: string;
   order_items: Array<{
     id: string;
-    price_inr: number;
+    price: number;
     product: {
       title: string;
     } | null;
@@ -36,14 +35,13 @@ export default async function AccountOrdersPage() {
     .from('orders')
     .select(`
       id,
-      order_number,
-      total_amount_inr,
-      subtotal_inr,
+      total_amount,
+      subtotal,
       status,
       created_at,
       order_items (
         id,
-        price_inr,
+        price,
         product:products (
           title
         )
@@ -86,7 +84,7 @@ export default async function AccountOrdersPage() {
                   return (
                     <tr key={order.id} className="hover:bg-[var(--surface-2)] transition-colors">
                       <td className="py-3.5 px-4 font-mono font-medium text-[var(--text)]">
-                        {order.order_number || order.id.slice(0, 8)}
+                        {order.id.slice(0, 8)}
                       </td>
                       <td className="py-3.5 px-4 text-slate">
                         {new Date(order.created_at).toLocaleDateString()}
@@ -95,7 +93,7 @@ export default async function AccountOrdersPage() {
                         {itemsList}
                       </td>
                       <td className="py-3.5 px-4 font-mono font-semibold text-[var(--text)] tabular-nums">
-                        {order.total_amount_inr === 0 ? 'FREE' : `₹${(order.total_amount_inr / 100).toLocaleString('en-IN')}`}
+                        {order.total_amount === 0 ? 'FREE' : `₹${(order.total_amount / 100).toLocaleString('en-IN')}`}
                       </td>
                       <td className="py-3.5 px-4">
                         <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-deep-green/10 text-deep-green capitalize">

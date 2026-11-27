@@ -59,6 +59,7 @@ export class UpstashRedis {
 
   /**
    * Check rate limit: returns { allowed: boolean, count: number }
+   * Fails closed if Redis is unconfigured or unreachable.
    */
   async checkRateLimit(
     identifier: string,
@@ -66,27 +67,49 @@ export class UpstashRedis {
     windowSeconds: number
   ): Promise<{ allowed: boolean; count: number }> {
     if (!this.isConfigured) {
-      return { allowed: true, count: 0 };
+      return { allowed: false, count: 0 };
     }
     const key = `ratelimit:${identifier}`;
-    const count = await this.incr(key);
-    if (count === 1) {
+    const res = await this.execute(["INCR", key]);
+    if (typeof res !== "number") {
+      return { allowed: false, count: 0 };
+    }
+    if (res === 1) {
       await this.expire(key, windowSeconds);
     }
     return {
-      allowed: count <= limit,
-      count,
+      allowed: res <= limit,
+      count: res,
     };
   }
 
   /**
-   * Atomically check and set an idempotency key (e.g. Razorpay event ID)
-   * Returns true if newly acquired, false if already processed.
+   * Atomically check and set an idempotency key (e.g. Razorpay event ID).
+   * Fails closed ('error') if Redis is unconfigured or unreachable.
    */
-  async acquireIdempotency(key: string, ttlSeconds: number = 86400): Promise<boolean> {
-    if (!this.isConfigured) return true;
-    const res = await this.execute(["SET", `idempotency:${key}`, "1", "NX", "EX", ttlSeconds]);
-    return res === "OK";
+  async acquireIdempotency(
+    key: string,
+    ttlSeconds: number = 86400
+  ): Promise<"acquired" | "duplicate" | "error"> {
+    if (!this.isConfigured) return "error";
+    try {
+      const res = await fetch(this.url, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${this.token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(["SET", `idempotency:${key}`, "1", "NX", "EX", ttlSeconds]),
+      });
+      if (!res.ok) return "error";
+      const data = await res.json();
+      if (data.result === "OK") return "acquired";
+      if (data.result === null) return "duplicate";
+      return "error";
+    } catch (err) {
+      console.error("Upstash Redis idempotency error:", err);
+      return "error";
+    }
   }
 }
 

@@ -17,7 +17,7 @@ export const metadata = {
 
 interface AdminOverviewOrder {
   id: string;
-  amount_inr: number;
+  total_amount: number;
   status: string;
   created_at: string;
   user: { email: string; full_name: string | null } | null;
@@ -30,11 +30,11 @@ export default async function AdminOverviewPage() {
   // 1. Total Gross Revenue & Orders
   const { data: orders } = await supabase
     .from('orders')
-    .select('id, amount_inr, status, created_at, user:profiles(email, full_name)')
+    .select('id, total_amount, status, created_at, user:profiles(email, full_name)')
     .returns<AdminOverviewOrder[]>();
 
   const paidOrders = (orders || []).filter((o) => o.status === 'paid');
-  const grossRevenuePaise = paidOrders.reduce((sum: number, o) => sum + (o.amount_inr || 0), 0);
+  const grossRevenuePaise = paidOrders.reduce((sum: number, o) => sum + (o.total_amount || 0), 0);
   const formattedRevenue = (grossRevenuePaise / 100).toLocaleString('en-IN');
 
   // 2. Active Memberships
@@ -103,7 +103,7 @@ export default async function AdminOverviewPage() {
             <span className="text-xs font-semibold">Live Products</span>
             <Package className="w-4 h-4 text-deep-green" />
           </div>
-          <p className="text-2xl font-black text-ink">{productCount ?? 6}</p>
+          <p className="text-2xl font-black text-ink">{productCount ?? 0}</p>
           <Link href="/admin/products" className="text-[11px] text-deep-green font-semibold hover:underline block">
             Manage catalog →
           </Link>
@@ -148,7 +148,7 @@ export default async function AdminOverviewPage() {
 
                 <div className="flex items-center gap-4">
                   <span className="font-extrabold text-ink">
-                    ₹{((order.amount_inr || 0) / 100).toLocaleString('en-IN')}
+                    ₹{((order.total_amount || 0) / 100).toLocaleString('en-IN')}
                   </span>
                   <span
                     className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase ${

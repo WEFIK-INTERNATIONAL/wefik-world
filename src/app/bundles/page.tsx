@@ -110,26 +110,32 @@ export default async function BundlesPage() {
       {/* Bundles Grid */}
       <div className="space-y-6">
         <h2 className="text-xl font-bold text-ink">All Available Bundles ({bundles.length})</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {bundles.map((bundle) => (
-            <ProductCard
-              key={bundle.id}
-              id={bundle.id}
-              title={bundle.title}
-              slug={bundle.slug}
-              tagline={bundle.tagline}
-              price_inr={bundle.price_inr}
-              is_free={bundle.is_free}
-              is_featured={bundle.is_featured}
-              is_bundle={bundle.is_bundle}
-              thumbnail_url={bundle.thumbnail_url}
-              category={bundle.category}
-              rating_avg={bundle.rating_avg}
-              rating_count={bundle.rating_count}
-              tech_stack={bundle.tech_stack}
-            />
-          ))}
-        </div>
+        {bundles.length === 0 ? (
+          <div className="p-12 text-center bg-soft rounded-2xl border border-border">
+            <p className="text-sm text-slate">No bundles available right now. Check back soon!</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {bundles.map((bundle) => (
+              <ProductCard
+                key={bundle.id}
+                id={bundle.id}
+                title={bundle.title}
+                slug={bundle.slug}
+                tagline={bundle.tagline}
+                price_inr={bundle.price_inr}
+                is_free={bundle.is_free}
+                is_featured={bundle.is_featured}
+                is_bundle={bundle.is_bundle}
+                thumbnail_url={bundle.thumbnail_url}
+                category={bundle.category}
+                rating_avg={bundle.rating_avg}
+                rating_count={bundle.rating_count}
+                tech_stack={bundle.tech_stack}
+              />
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Value Proposition Grid */}

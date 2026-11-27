@@ -19,16 +19,8 @@ export interface EmailValidateResult {
 }
 
 export async function checkEmailRegistered(email: string): Promise<EmailCheckResult> {
-  // If Supabase URL is placeholder or unconfigured, provide local simulation fallback
   if (!process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL.includes('placeholder')) {
-    const isMockRegistered = email.toLowerCase().includes('existing') || email.toLowerCase().includes('demo');
-    const isGoogleOnly = email.toLowerCase().includes('google');
-    return {
-      registered: isMockRegistered,
-      confirmed: true,
-      has_password: !isGoogleOnly,
-      oauth_providers: isGoogleOnly ? ['google'] : [],
-    };
+    return { registered: false, confirmed: false, has_password: false, oauth_providers: [] };
   }
 
   try {

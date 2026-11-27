@@ -1,10 +1,17 @@
 'use client';
 
 import { useState } from 'react';
+import { notFound } from 'next/navigation';
 import { CldImage } from 'next-cloudinary';
 import { analytics } from '@/lib/posthog';
 
 export default function TestServicesPage() {
+  if (
+    process.env.NODE_ENV === 'production' &&
+    process.env.NEXT_PUBLIC_ENABLE_TEST_SERVICES !== 'true'
+  ) {
+    notFound();
+  }
   const [redisStatus, setRedisStatus] = useState<string>('idle');
   const [redisValue, setRedisValue] = useState<string | null>(null);
   const [posthogStatus, setPosthogStatus] = useState<string>('idle');

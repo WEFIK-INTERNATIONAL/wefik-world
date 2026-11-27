@@ -6,6 +6,7 @@ import { getProductBySlug, getProducts } from '@/lib/data/products';
 import { ProductDetailView } from '@/components/marketplace/product-detail-view';
 import { ProductCard } from '@/components/marketplace/product-card';
 import { ArrowLeft } from 'lucide-react';
+import { createClient } from '@/lib/supabase/server';
 
 export const revalidate = 3600;
 
@@ -84,12 +85,49 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
       ? allProducts.filter((p) => p.id !== product.id).slice(0, 3)
       : relatedProducts;
 
+  // Fetch initial reviews for this product from the database
+  const supabase = await createClient();
+  const { data: reviewsData } = await supabase
+    .from('reviews')
+    .select(`
+      id,
+      rating,
+      review_text,
+      created_at,
+      profile:profiles(full_name, email)
+    `)
+    .eq('product_id', product.id)
+    .eq('is_approved', true)
+    .order('created_at', { ascending: false })
+    .limit(20);
+
+  interface ReviewRow {
+    id: string;
+    rating: number;
+    review_text: string | null;
+    created_at: string;
+    profile: { full_name: string | null; email: string } | null;
+  }
+
+  const initialReviews = ((reviewsData || []) as unknown as ReviewRow[]).map((r) => ({
+    id: r.id,
+    rating: r.rating,
+    review_text: r.review_text,
+    created_at: r.created_at,
+    profile: r.profile,
+  }));
+
   // JSON-LD Schemas
+  const images = [product.thumbnail_url, ...(product.gallery_urls || [])].filter(
+    (u): u is string => Boolean(u && typeof u === 'string' && u.trim() && !u.includes('placeholder'))
+  );
+  const hasRealReviews = initialReviews.length > 0 && product.rating_count > 0 && product.rating_avg > 0;
+
   const productJsonLd = {
     '@context': 'https://schema.org/',
     '@type': 'Product',
     name: product.title,
-    image: [product.thumbnail_url, ...(product.gallery_urls || [])],
+    ...(images.length > 0 ? { image: images } : {}),
     description: product.tagline,
     sku: product.id,
     brand: {
@@ -103,12 +141,12 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
       price: (product.price_inr / 100).toFixed(2),
       availability: 'https://schema.org/InStock',
     },
-    ...(product.rating_count > 0
+    ...(hasRealReviews
       ? {
           aggregateRating: {
             '@type': 'AggregateRating',
             ratingValue: product.rating_avg.toFixed(1),
-            reviewCount: product.rating_count,
+            reviewCount: initialReviews.length,
           },
         }
       : {}),
@@ -171,7 +209,7 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
         </div>
 
         {/* Interactive Client Product View */}
-        <ProductDetailView product={product} />
+        <ProductDetailView product={product} initialReviews={initialReviews} />
 
         {/* Related Products Grid */}
         <div className="mt-20 pt-12 border-t border-border space-y-8">

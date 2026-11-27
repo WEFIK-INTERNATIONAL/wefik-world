@@ -10,8 +10,7 @@ import { createClient } from '@/lib/supabase/client';
 interface ReviewItem {
   id: string;
   rating: number;
-  title: string;
-  comment: string;
+  review_text: string | null;
   created_at: string;
   product_title: string;
   user_email: string;
@@ -45,7 +44,7 @@ export function ReviewAndLicenseModeration({ initialReviews }: { initialReviews:
     try {
       const { data, error } = await supabase
         .from('licenses')
-        .update({ status: 'revoked', is_active: false })
+        .update({ status: 'revoked' })
         .eq('license_key', key)
         .select('*');
 
@@ -114,7 +113,7 @@ export function ReviewAndLicenseModeration({ initialReviews }: { initialReviews:
                       ))}
                     </div>
                   </div>
-                  <p className="text-slate font-medium">{r.title}: &quot;{r.comment}&quot;</p>
+                  <p className="text-slate font-medium">&quot;{r.review_text || 'No comment'}&quot;</p>
                   <span className="text-[11px] text-slate/70">Author: {r.user_email}</span>
                 </div>
 

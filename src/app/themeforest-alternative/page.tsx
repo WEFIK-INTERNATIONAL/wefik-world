@@ -112,7 +112,7 @@ export default function ThemeForestAlternativePage() {
         </div>
 
         {/* Bottom CTA */}
-        <div className="p-8 rounded-3xl bg-ink text-white flex flex-col sm:flex-row items-center justify-between gap-6">
+        <div className="p-8 rounded-3xl bg-[var(--surface-inverted)] text-[var(--text-inverted)] flex flex-col sm:flex-row items-center justify-between gap-6">
           <div>
             <h3 className="text-xl font-bold">Ready to Experience Bloat-Free Themes?</h3>
             <p className="text-xs text-slate-300 mt-1">

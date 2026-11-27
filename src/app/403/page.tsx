@@ -15,7 +15,7 @@ export default function ForbiddenPage() {
       <div className="flex gap-3 justify-center">
         <Link
           href="/"
-          className="px-6 py-3 rounded-xl bg-ink text-white font-medium hover:bg-black transition-colors"
+          className="px-6 py-3 rounded-xl bg-[var(--surface-inverted)] text-[var(--text-inverted)] font-medium hover:bg-black transition-colors"
         >
           Return Home
         </Link>

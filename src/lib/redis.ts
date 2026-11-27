@@ -1,21 +1,31 @@
 import { Redis } from '@upstash/redis';
 
-// Upstash Redis client singleton
-// Can be used for rate-limiting, cart caching, and download token tracking
-export const redis = new Redis({
-  url: process.env.UPSTASH_REDIS_REST_URL || 'https://enhanced-hog-289189.upstash.io',
-  token: process.env.UPSTASH_REDIS_REST_TOKEN || 'gQAAAAAABGmlAAIgcDI1MmYzODdlZmU4NGI0OGE4OTc3YjYyNjYzZDY1NDkwYg',
-});
+const upstashUrl = process.env.UPSTASH_REDIS_REST_URL;
+const upstashToken = process.env.UPSTASH_REDIS_REST_TOKEN;
+
+// Upstash Redis client singleton (null if unconfigured; never hardcode credentials)
+export const redis: Redis | null =
+  upstashUrl && upstashToken
+    ? new Redis({
+        url: upstashUrl,
+        token: upstashToken,
+      })
+    : null;
 
 /**
- * Basic rate-limiter helper using Upstash Redis
- * Returns { success: boolean, limit: number, remaining: number, reset: number }
+ * Rate-limiter helper using Upstash Redis.
+ * Fails closed when Redis is unconfigured or unreachable.
  */
 export async function checkRateLimit(
   identifier: string,
   limit: number = 60,
   windowSeconds: number = 60
 ): Promise<{ success: boolean; limit: number; remaining: number }> {
+  if (!redis) {
+    console.error('Redis is not configured; rate limit failing closed.');
+    return { success: false, limit, remaining: 0 };
+  }
+
   try {
     const key = `ratelimit:${identifier}`;
     const count = await redis.incr(key);
@@ -30,8 +40,7 @@ export async function checkRateLimit(
       remaining: Math.max(0, limit - count),
     };
   } catch (error) {
-    console.error('Redis rate limit error, bypassing:', error);
-    // Graceful degrade if redis is unreachable
-    return { success: true, limit, remaining: limit };
+    console.error('Redis rate limit error, failing closed:', error);
+    return { success: false, limit, remaining: 0 };
   }
 }

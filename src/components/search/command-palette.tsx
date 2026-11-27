@@ -17,7 +17,7 @@ import {
   ShieldAlert,
   ArrowRight,
 } from 'lucide-react';
-import { FALLBACK_PRODUCTS } from '@/lib/data/fallback-products';
+import { createClient } from '@/lib/supabase/client';
 import { useCart } from '@/lib/cart-context';
 import { usePageTransition } from '@/components/transitions/transition-provider';
 import { useLenis } from '@/components/providers/smooth-scroll-provider';
@@ -43,6 +43,8 @@ export function CommandPalette() {
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState('');
   const [debouncedSearch, setDebouncedSearch] = useState('');
+  const [products, setProducts] = useState<Array<{ id: string; title: string; slug: string; tagline: string; price_inr: number; is_free: boolean }>>([]);
+  const productsLoadedRef = useRef(false);
   const { setIsOpen: setCartOpen } = useCart();
   const { navigate } = usePageTransition();
   const { stopScroll, startScroll } = useLenis();
@@ -101,15 +103,31 @@ export function CommandPalette() {
     callback();
   }, [handleClose]);
 
+  // Fetch live published products once when palette opens
+  useEffect(() => {
+    if (!open || productsLoadedRef.current) return;
+    productsLoadedRef.current = true;
+    const supabase = createClient();
+    supabase
+      .from('products')
+      .select('id, title, slug, tagline, price_inr, is_free')
+      .eq('status', 'published')
+      .order('is_featured', { ascending: false })
+      .limit(20)
+      .then(({ data }) => {
+        if (data) setProducts(data);
+      });
+  }, [open]);
+
   // Debounced product filtering
   const filteredProducts = useMemo(() => {
     const q = debouncedSearch.toLowerCase();
-    if (!q) return FALLBACK_PRODUCTS.slice(0, 5);
-    return FALLBACK_PRODUCTS.filter((p) =>
+    if (!q) return products.slice(0, 5);
+    return products.filter((p) =>
       p.title.toLowerCase().includes(q) ||
       (p.tagline && p.tagline.toLowerCase().includes(q))
     ).slice(0, 5);
-  }, [debouncedSearch]);
+  }, [debouncedSearch, products]);
 
   // Lazy-mount: don't render the heavy dialog at all when closed
   if (!open) return null;
@@ -153,6 +171,18 @@ export function CommandPalette() {
 
             {/* Group 1: Products (uses debounced filter) */}
             <Command.Group heading="Digital Products" className="py-2 text-[10px] font-mono font-bold uppercase tracking-wider text-[var(--muted)] px-2">
+              {search.trim() && (
+                <Command.Item
+                  value={`search-marketplace-${search.trim()}`}
+                  onSelect={() => handleSelect(() => navigate(`/marketplace?q=${encodeURIComponent(search.trim())}`))}
+                  className="flex items-center justify-between p-2.5 rounded-xl cursor-pointer hover:bg-[var(--surface-2)] transition-colors aria-selected:bg-[var(--surface-2)] text-[var(--text)] font-semibold"
+                >
+                  <div className="flex items-center gap-2.5">
+                    <Search className="w-4 h-4 text-[var(--brand)]" />
+                    <span>Search marketplace for &ldquo;{search.trim()}&rdquo;</span>
+                  </div>
+                </Command.Item>
+              )}
               {filteredProducts.map((p) => (
                 <Command.Item
                   key={p.id}

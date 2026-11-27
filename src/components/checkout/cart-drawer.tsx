@@ -66,7 +66,7 @@ export function CartDrawer() {
             <Button
               onClick={() => setIsOpen(false)}
               asChild
-              className="bg-ink hover:bg-black text-white text-xs h-10 px-5 rounded-xl font-medium"
+              className="bg-[var(--surface-inverted)] hover:opacity-90 text-[var(--text-inverted)] text-xs h-10 px-5 rounded-xl font-medium"
             >
               <Link href="/marketplace">Browse Products</Link>
             </Button>
@@ -80,16 +80,20 @@ export function CartDrawer() {
 
               return (
                 <div key={item.productId} className="pt-4 first:pt-0 flex gap-4 items-start">
-                  <div className="relative w-16 h-16 rounded-lg overflow-hidden bg-surface border border-border flex-shrink-0">
-                    <SafeImage
-                      src={item.thumbnailUrl || 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=800'}
-                      alt={item.title}
-                      fill
-                      placeholder="blur"
-                      blurDataURL={DEFAULT_BLUR_DATA_URL}
-                      className="object-cover"
-                      sizes="64px"
-                    />
+                  <div className="relative w-16 h-16 rounded-lg overflow-hidden bg-surface border border-border flex-shrink-0 flex items-center justify-center">
+                    {item.thumbnailUrl ? (
+                      <SafeImage
+                        src={item.thumbnailUrl}
+                        alt={item.title}
+                        fill
+                        placeholder="blur"
+                        blurDataURL={DEFAULT_BLUR_DATA_URL}
+                        className="object-cover"
+                        sizes="64px"
+                      />
+                    ) : (
+                      <ShoppingBag className="w-5 h-5 text-slate/50" aria-hidden="true" />
+                    )}
                   </div>
 
                   <div className="flex-1 min-w-0">

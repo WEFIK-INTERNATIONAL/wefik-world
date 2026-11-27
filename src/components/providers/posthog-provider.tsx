@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, Suspense } from 'react';
+import { useEffect, useRef, Suspense } from 'react';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { initPostHog } from '@/lib/posthog';
 import posthog from 'posthog-js';
@@ -8,21 +8,44 @@ import posthog from 'posthog-js';
 function PostHogPageView() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const initializedRef = useRef(false);
 
+  // Defer PostHog initialization until first user interaction or idle timeout
   useEffect(() => {
-    initPostHog();
-  }, []);
-
-  useEffect(() => {
-    if (pathname) {
-      let url = window.origin + pathname;
-      if (searchParams?.toString()) {
-        url = `${url}?${searchParams.toString()}`;
+    const start = () => {
+      if (initializedRef.current) return;
+      initializedRef.current = true;
+      initPostHog();
+      if (pathname) {
+        const qs = searchParams?.toString();
+        posthog.capture('$pageview', {
+          $current_url: `${window.origin}${pathname}${qs ? `?${qs}` : ''}`,
+        });
       }
-      posthog.capture('$pageview', {
-        $current_url: url,
-      });
-    }
+      window.removeEventListener('pointerdown', start);
+      window.removeEventListener('keydown', start);
+      window.removeEventListener('scroll', start);
+    };
+
+    window.addEventListener('pointerdown', start, { once: true, passive: true });
+    window.addEventListener('keydown', start, { once: true, passive: true });
+    window.addEventListener('scroll', start, { once: true, passive: true });
+    const timer = window.setTimeout(start, 3500);
+
+    return () => {
+      window.clearTimeout(timer);
+      window.removeEventListener('pointerdown', start);
+      window.removeEventListener('keydown', start);
+      window.removeEventListener('scroll', start);
+    };
+  }, [pathname, searchParams]);
+
+  useEffect(() => {
+    if (!initializedRef.current || !pathname) return;
+    const qs = searchParams?.toString();
+    posthog.capture('$pageview', {
+      $current_url: `${window.origin}${pathname}${qs ? `?${qs}` : ''}`,
+    });
   }, [pathname, searchParams]);
 
   return null;

@@ -71,7 +71,7 @@ export function ProductAdminManager({ initialProducts }: { initialProducts: Admi
           .upload(storagePath, file, { upsert: true });
 
         if (uploadError) {
-          console.warn('Private storage upload warning:', uploadError);
+          throw new Error(`File upload failed: ${uploadError.message}`);
         }
       }
 
@@ -116,7 +116,7 @@ export function ProductAdminManager({ initialProducts }: { initialProducts: Admi
 
     // Section 9.4: Validate Image ALT text is present and descriptive
     if (!imageAlt || imageAlt.trim().length < 5) {
-      toast.error('Image ALT text is required and must be at least 5 characters (e.g. "AgencyPro theme dashboard preview")');
+      toast.error('Image ALT text is required and must be at least 5 characters (e.g. "Product dashboard preview")');
       return;
     }
 
@@ -253,7 +253,7 @@ export function ProductAdminManager({ initialProducts }: { initialProducts: Admi
                 onChange={(e) => setSeoTitle(e.target.value)}
                 required
                 maxLength={60}
-                placeholder="AgencyPro – WordPress Theme for Agencies | Wefik.world"
+                placeholder="Product Name – Category | Wefik.world"
                 className="h-9 text-xs rounded-xl"
               />
               <span className="text-[10px] text-slate font-mono block">
@@ -307,7 +307,7 @@ export function ProductAdminManager({ initialProducts }: { initialProducts: Admi
                 value={imageAlt}
                 onChange={(e) => setImageAlt(e.target.value)}
                 required
-                placeholder="AgencyPro agency theme live demo preview screenshot"
+                placeholder="Product live preview screenshot"
                 className="h-9 text-xs rounded-xl"
               />
               <span className="text-[10px] text-slate block">

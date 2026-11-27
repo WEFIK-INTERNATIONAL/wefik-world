@@ -17,8 +17,8 @@ export default async function LicensesPage() {
     license_key: string;
     license_type: string;
     status: string;
-    activations_count: number;
-    allowed_domains: string[] | null;
+    max_activations: number;
+    activated_domains: string[] | null;
     created_at: string;
     product: { title: string; slug: string } | null;
   }
@@ -30,8 +30,8 @@ export default async function LicensesPage() {
       license_key,
       license_type,
       status,
-      activations_count,
-      allowed_domains,
+      max_activations,
+      activated_domains,
       created_at,
       product:products(title, slug)
     `)
@@ -44,8 +44,8 @@ export default async function LicensesPage() {
     license_key: l.license_key,
     license_type: l.license_type,
     status: l.status,
-    activations_count: l.activations_count,
-    allowed_domains: l.allowed_domains || [],
+    max_activations: l.max_activations,
+    activated_domains: l.activated_domains || [],
     product_title: l.product?.title || 'Digital Product',
     product_slug: l.product?.slug || '',
     created_at: l.created_at,

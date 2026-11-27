@@ -17,7 +17,7 @@ export const metadata = {
 
 interface DashboardRecentOrder {
   id: string;
-  amount_inr: number;
+  total_amount: number;
   status: string;
   created_at: string;
   order_items: Array<{
@@ -57,7 +57,7 @@ export default async function DashboardOverviewPage() {
     .from('orders')
     .select(`
       id,
-      amount_inr,
+      total_amount,
       status,
       created_at,
       order_items(id, license_type, product:products(title))
@@ -86,7 +86,7 @@ export default async function DashboardOverviewPage() {
           </p>
         </div>
 
-        <Button asChild className="bg-ink hover:bg-black text-white text-xs h-10 px-4 rounded-xl font-semibold">
+        <Button asChild className="bg-[var(--surface-inverted)] hover:opacity-90 text-[var(--text-inverted)] text-xs h-10 px-4 rounded-xl font-semibold">
           <Link href="/marketplace">Browse Catalog</Link>
         </Button>
       </div>
@@ -180,7 +180,7 @@ export default async function DashboardOverviewPage() {
 
                 <div className="flex items-center gap-3">
                   <span className="font-extrabold text-ink">
-                    ₹{(order.amount_inr / 100).toLocaleString('en-IN')}
+                    ₹{(order.total_amount / 100).toLocaleString('en-IN')}
                   </span>
                   <span
                     className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase ${

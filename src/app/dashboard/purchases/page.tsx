@@ -16,13 +16,13 @@ export default async function PurchasesPage() {
   interface OrderItemWithProduct {
     id: string;
     license_type: string;
-    price_inr: number;
+    price: number;
     product: { title: string; slug: string } | null;
   }
 
   interface DashboardOrder {
     id: string;
-    amount_inr: number;
+    total_amount: number;
     status: string;
     created_at: string;
     order_items: OrderItemWithProduct[] | null;
@@ -32,10 +32,10 @@ export default async function PurchasesPage() {
     .from('orders')
     .select(`
       id,
-      amount_inr,
+      total_amount,
       status,
       created_at,
-      order_items(id, license_type, price_inr, product:products(title, slug))
+      order_items(id, license_type, price, product:products(title, slug))
     `)
     .eq('user_id', user.id)
     .order('created_at', { ascending: false })
@@ -58,7 +58,7 @@ export default async function PurchasesPage() {
       {!orders || orders.length === 0 ? (
         <div className="py-12 text-center text-xs text-slate space-y-3">
           <p>No orders found in your account.</p>
-          <Button asChild className="bg-ink hover:bg-black text-white text-xs rounded-xl h-10">
+          <Button asChild className="bg-[var(--surface-inverted)] hover:opacity-90 text-[var(--text-inverted)] text-xs rounded-xl h-10">
             <Link href="/marketplace">Browse Marketplace</Link>
           </Button>
         </div>
@@ -94,7 +94,7 @@ export default async function PurchasesPage() {
                       .join(', ')}
                   </td>
                   <td className="py-3.5 px-4 font-extrabold text-ink">
-                    ₹{(order.amount_inr / 100).toLocaleString('en-IN')}
+                    ₹{(order.total_amount / 100).toLocaleString('en-IN')}
                   </td>
                   <td className="py-3.5 px-4">
                     <span

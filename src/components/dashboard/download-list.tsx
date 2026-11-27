@@ -63,7 +63,7 @@ export function DownloadList({ products }: { products: DownloadProduct[] }) {
     return (
       <div className="py-12 text-center text-xs text-slate space-y-3">
         <p>No downloadable products found in your account.</p>
-        <Button asChild className="bg-ink hover:bg-black text-white text-xs rounded-xl h-10">
+        <Button asChild className="bg-[var(--surface-inverted)] hover:opacity-90 text-[var(--text-inverted)] text-xs rounded-xl h-10">
           <Link href="/marketplace">Browse Products</Link>
         </Button>
       </div>
@@ -103,7 +103,7 @@ export function DownloadList({ products }: { products: DownloadProduct[] }) {
             onClick={() => handleDownload(product)}
             disabled={downloadingId === product.id}
             size="sm"
-            className="bg-ink hover:bg-black text-white text-xs h-9 px-4 rounded-xl font-semibold flex items-center gap-1.5"
+            className="bg-[var(--surface-inverted)] hover:opacity-90 text-[var(--text-inverted)] text-xs h-9 px-4 rounded-xl font-semibold flex items-center gap-1.5"
           >
             {downloadingId === product.id ? (
               <Loader2 className="w-3.5 h-3.5 animate-spin" />

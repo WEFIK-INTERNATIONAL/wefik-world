@@ -33,14 +33,14 @@ export default async function OrderSuccessPage({ searchParams }: OrderSuccessPag
     id: string;
     product_id: string;
     license_type: string;
-    price_inr: number;
+    price: number;
     product: { title: string } | null;
   }
 
   interface OrderRecord {
     id: string;
     user_id: string;
-    amount_inr: number;
+    total_amount: number;
     status: string;
     created_at: string;
     order_items: OrderItemWithProductTitle[] | null;
@@ -57,14 +57,14 @@ export default async function OrderSuccessPage({ searchParams }: OrderSuccessPag
     .select(`
       id,
       user_id,
-      amount_inr,
+      total_amount,
       status,
       created_at,
       order_items (
         id,
         product_id,
         license_type,
-        price_inr,
+        price,
         product:products(title)
       )
     `)
@@ -92,14 +92,14 @@ export default async function OrderSuccessPage({ searchParams }: OrderSuccessPag
 
   const formattedOrder = {
     id: order.id,
-    amount_inr: order.amount_inr,
+    amount_inr: order.total_amount,
     created_at: order.created_at,
     items: (order.order_items || []).map((item) => ({
       id: item.id,
       product_id: item.product_id,
       title: item.product?.title || 'Digital Product',
       license_type: item.license_type,
-      price_inr: item.price_inr,
+      price_inr: item.price,
       license_key: licenseMap.get(item.product_id) || 'WFK-DEMO-SAMPLE-KEY',
     })),
   };

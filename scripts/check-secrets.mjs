@@ -12,7 +12,9 @@ const SECRET_PATTERNS = [
   { name: 'Private Key Block', regex: /-----BEGIN (?:RSA |EC |DSA |OPENSSH )?PRIVATE KEY-----/ },
   { name: 'GitHub Personal Access Token', regex: /\bghp_[0-9a-zA-Z]{36}\b/ },
   { name: 'Resend API Key', regex: /\bre_[0-9a-zA-Z]{24,}\b/ },
-  { name: 'Upstash Redis Token', regex: /\bAX[0-9a-zA-Z_-]{20,}\b/ },
+  { name: 'Upstash Redis Token (AX)', regex: /\bAX[0-9a-zA-Z_-]{20,}\b/ },
+  { name: 'Upstash Redis Token (gQ)', regex: /\bgQ[0-9a-zA-Z_-]{20,}\b/ },
+  { name: 'Hardcoded Upstash URL', regex: /https:\/\/[a-z0-9-]+\.upstash\.io\b/ },
 ];
 
 // Files and paths to ignore

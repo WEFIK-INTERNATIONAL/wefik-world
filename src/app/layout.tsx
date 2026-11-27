@@ -95,7 +95,7 @@ export const metadata: Metadata = {
   creator: "Wefik",
   openGraph: {
     type: "website",
-    locale: "en_IE",
+    locale: "en_IN",
     url: "https://www.wefik.world",
     title: "wefik.world — Premium Digital Products for Agencies & Developers",
     description:
@@ -191,10 +191,12 @@ export default function RootLayout({
       <head>
         <meta name="color-scheme" content="light dark" />
         <link rel="icon" href="/logo.svg" type="image/svg+xml" />
-        {/* Anti-flash inline script */}
-        <script
+        {/* Anti-flash theme & preloader skip flag before paint */}
+        <Script
+          id="theme-and-preloader-init"
+          strategy="beforeInteractive"
           dangerouslySetInnerHTML={{
-            __html: `(function(){try{var t=localStorage.getItem('theme');var s=window.matchMedia('(prefers-color-scheme: dark)').matches;if(t==='dark'||(!t&&s)){document.documentElement.classList.add('dark');}else{document.documentElement.classList.remove('dark');}}catch(e){}})();`,
+            __html: `(function(){try{var t=localStorage.getItem('theme');var s=window.matchMedia('(prefers-color-scheme: dark)').matches;if(t==='dark'||(!t&&s)){document.documentElement.classList.add('dark');}else{document.documentElement.classList.remove('dark');}if(sessionStorage.getItem('wfk_intro_seen')==='true'){document.documentElement.setAttribute('data-preloader','skip');}}catch(e){}})();`,
           }}
         />
         {/* Google tag (gtag.js) — lazyOnload so analytics never competes with LCP */}

@@ -13,8 +13,8 @@ interface LicenseItem {
   license_key: string;
   license_type: string;
   status: string;
-  activations_count: number;
-  allowed_domains: string[];
+  max_activations: number;
+  activated_domains: string[];
   product_title: string;
   product_slug: string;
   created_at: string;
@@ -43,28 +43,28 @@ export function LicenseList({ initialLicenses }: { initialLicenses: LicenseItem[
     const license = licenses.find((l) => l.id === licenseId);
     if (!license) return;
 
-    if (license.license_type === 'single' && license.allowed_domains.length >= 1) {
+    if (license.license_type === 'single' && license.activated_domains.length >= 1) {
       toast.error('Single Site licenses can only be bound to 1 production domain.');
       return;
     }
 
-    if (license.allowed_domains.includes(cleanDomain)) {
+    if (license.activated_domains.includes(cleanDomain)) {
       toast.info('Domain is already added.');
       return;
     }
 
-    const updatedDomains = [...license.allowed_domains, cleanDomain];
+    const updatedDomains = [...license.activated_domains, cleanDomain];
 
     try {
       const { error } = await supabase
         .from('licenses')
-        .update({ allowed_domains: updatedDomains })
+        .update({ activated_domains: updatedDomains })
         .eq('id', licenseId);
 
       if (error) throw error;
 
       setLicenses((prev) =>
-        prev.map((l) => (l.id === licenseId ? { ...l, allowed_domains: updatedDomains } : l))
+        prev.map((l) => (l.id === licenseId ? { ...l, activated_domains: updatedDomains } : l))
       );
       setNewDomain((prev) => ({ ...prev, [licenseId]: '' }));
       toast.success(`Domain ${cleanDomain} bound to license`);
@@ -77,18 +77,18 @@ export function LicenseList({ initialLicenses }: { initialLicenses: LicenseItem[
     const license = licenses.find((l) => l.id === licenseId);
     if (!license) return;
 
-    const updatedDomains = license.allowed_domains.filter((d) => d !== domainToRemove);
+    const updatedDomains = license.activated_domains.filter((d) => d !== domainToRemove);
 
     try {
       const { error } = await supabase
         .from('licenses')
-        .update({ allowed_domains: updatedDomains })
+        .update({ activated_domains: updatedDomains })
         .eq('id', licenseId);
 
       if (error) throw error;
 
       setLicenses((prev) =>
-        prev.map((l) => (l.id === licenseId ? { ...l, allowed_domains: updatedDomains } : l))
+        prev.map((l) => (l.id === licenseId ? { ...l, activated_domains: updatedDomains } : l))
       );
       toast.success(`Domain ${domainToRemove} removed from whitelist`);
     } catch {
@@ -100,7 +100,7 @@ export function LicenseList({ initialLicenses }: { initialLicenses: LicenseItem[
     return (
       <div className="py-12 text-center text-xs text-slate space-y-3">
         <p>No license keys found. Purchase a theme or claim a free template to generate keys.</p>
-        <Button asChild className="bg-ink hover:bg-black text-white text-xs rounded-xl h-10">
+        <Button asChild className="bg-[var(--surface-inverted)] hover:opacity-90 text-[var(--text-inverted)] text-xs rounded-xl h-10">
           <Link href="/marketplace">Browse Products</Link>
         </Button>
       </div>
@@ -172,17 +172,17 @@ export function LicenseList({ initialLicenses }: { initialLicenses: LicenseItem[
                 <span>Authorized Production Domains</span>
               </span>
               <span className="text-[11px] text-slate">
-                Activations: {lic.activations_count}
+                Activations: {lic.activated_domains.length} / {lic.max_activations}
               </span>
             </div>
 
-            {lic.allowed_domains.length === 0 ? (
+            {lic.activated_domains.length === 0 ? (
               <p className="text-[11px] text-slate italic">
                 No domains currently bound. Add your production domain below to activate plugin/theme updates.
               </p>
             ) : (
               <div className="flex flex-wrap gap-2">
-                {lic.allowed_domains.map((dom) => (
+                {lic.activated_domains.map((dom) => (
                   <span
                     key={dom}
                     className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-soft border border-border text-ink font-mono text-[11px]"
@@ -214,7 +214,7 @@ export function LicenseList({ initialLicenses }: { initialLicenses: LicenseItem[
               <Button
                 onClick={() => handleAddDomain(lic.id)}
                 size="sm"
-                className="h-8 px-3 text-xs rounded-lg bg-ink hover:bg-black text-white font-semibold"
+                className="h-8 px-3 text-xs rounded-lg bg-[var(--surface-inverted)] hover:opacity-90 text-[var(--text-inverted)] font-semibold"
               >
                 <Plus className="w-3 h-3 mr-1" />
                 Add

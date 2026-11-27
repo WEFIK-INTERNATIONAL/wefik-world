@@ -1,30 +1,21 @@
 'use client';
 
-import React, { useState } from 'react';
-import Link from 'next/link';
+import React from 'react';
 import { TransitionLink } from '@/components/transitions/transition-link';
 import { SafeImage } from '@/components/ui/safe-image';
-import { Star, Heart, ShoppingBag, ArrowUpRight, Sparkles, Eye, Scale } from 'lucide-react';
-import { useCart } from '@/lib/cart-context';
-import { useWishlist } from '@/lib/wishlist-context';
-import { useCompare } from '@/lib/compare-context';
-import { toast } from 'sonner';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { QuickViewModal } from './quick-view-modal';
 import { DEFAULT_BLUR_DATA_URL } from '@/lib/image-placeholder';
-import { ProductData } from '@/lib/data/products';
+import { Layout, Plug, Code2, Layers, Package } from 'lucide-react';
 
 export interface ProductCardProps {
   id: string;
   title: string;
   slug: string;
-  tagline: string;
+  tagline?: string;
   price_inr: number; // in paise
   is_free?: boolean;
   is_featured?: boolean;
   is_bundle?: boolean;
-  thumbnail_url: string;
+  thumbnail_url?: string;
   category?: {
     name: string;
     slug: string;
@@ -33,257 +24,169 @@ export interface ProductCardProps {
   rating_count?: number;
   tech_stack?: string[];
   isWishlisted?: boolean;
+  layout?: 'vertical' | 'horizontal';
+  priority?: boolean;
+  sizes?: string;
+  className?: string;
+}
+
+function isUsableImageUrl(url?: string): boolean {
+  if (!url) return false;
+  const trimmed = url.trim();
+  if (!trimmed) return false;
+  if (trimmed.includes('placeholder') || trimmed.includes('images.unsplash.com')) return false;
+  return true;
+}
+
+function formatPrice(priceInr: number, isFree: boolean): string {
+  if (isFree || priceInr <= 0) return 'Free';
+  return `₹${Math.round(priceInr / 100).toLocaleString('en-IN')}`;
+}
+
+function CategoryIcon({ slug }: { slug?: string }) {
+  switch (slug) {
+    case 'wordpress-themes':
+      return <Layout className="w-6 h-6 text-[var(--brand)]" aria-hidden="true" />;
+    case 'wordpress-plugins':
+      return <Plug className="w-6 h-6 text-[var(--brand)]" aria-hidden="true" />;
+    case 'templates-starters':
+    case 'html-templates':
+    case 'nextjs-templates':
+      return <Code2 className="w-6 h-6 text-[var(--brand)]" aria-hidden="true" />;
+    case 'bundles':
+      return <Layers className="w-6 h-6 text-[var(--brand)]" aria-hidden="true" />;
+    default:
+      return <Package className="w-6 h-6 text-[var(--brand)]" aria-hidden="true" />;
+  }
 }
 
 export function ProductCard({
-  id,
   title,
   slug,
-  tagline,
+  tagline = '',
   price_inr,
   is_free = false,
-  is_featured = false,
-  is_bundle = false,
   thumbnail_url,
   category,
-  rating_avg = 5.0,
-  rating_count = 0,
-  tech_stack = [],
+  layout = 'vertical',
+  priority = false,
+  sizes,
+  className = '',
 }: ProductCardProps) {
-  const { addItem } = useCart();
-  const { isWishlisted, toggleWishlist } = useWishlist();
-  const { isInCompare, toggleCompare } = useCompare();
-  const [isQuickViewOpen, setIsQuickViewOpen] = useState(false);
+  const showImage = isUsableImageUrl(thumbnail_url);
+  const categoryLabel = category?.name || 'Digital Product';
+  const cleanTagline = tagline.trim();
+  const priceText = formatPrice(price_inr, is_free);
+  const imageSizes =
+    sizes ||
+    (layout === 'horizontal'
+      ? '(max-width: 1024px) 100vw, 40vw'
+      : '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw');
 
-  const productData: ProductData = {
-    id,
-    title,
-    slug,
-    tagline,
-    price_inr,
-    is_free,
-    is_featured,
-    is_bundle,
-    thumbnail_url,
-    category,
-    rating_avg,
-    rating_count,
-    download_count: 0,
-    tech_stack,
-    description: tagline,
-  };
+  const mediaBlock = (
+    <div
+      className={`relative aspect-[16/10] w-full overflow-hidden bg-[var(--surface-2)] ${
+        layout === 'horizontal' ? 'sm:col-span-7 sm:h-full' : ''
+      }`}
+    >
+      {showImage ? (
+        <SafeImage
+          src={thumbnail_url!}
+          alt={title}
+          fill
+          priority={priority}
+          placeholder="blur"
+          blurDataURL={DEFAULT_BLUR_DATA_URL}
+          sizes={imageSizes}
+          className="object-cover group-hover:scale-[1.02] transition-transform duration-300"
+        />
+      ) : (
+        <div className="w-full h-full flex flex-col items-start justify-between p-5 bg-[var(--surface-2)]">
+          <div className="w-10 h-10 rounded-[var(--radius-sm)] bg-[var(--surface)] border border-[var(--border)] flex items-center justify-center">
+            <CategoryIcon slug={category?.slug} />
+          </div>
+          <p className="text-sm font-display font-semibold text-[var(--text-primary)] line-clamp-2">
+            {title}
+          </p>
+        </div>
+      )}
+    </div>
+  );
 
-  const formattedPrice = (price_inr / 100).toLocaleString('en-IN', {
-    maximumFractionDigits: 0,
-  });
+  const bodyBlock = (
+    <div
+      className={`p-5 flex flex-col flex-1 ${
+        layout === 'horizontal' ? 'sm:col-span-5' : ''
+      }`}
+    >
+      {/* 1. Category label (>= 13px, AA contrast) */}
+      <span className="text-[13px] font-medium text-[var(--brand)] truncate mb-1.5">
+        {categoryLabel}
+      </span>
 
-  const handleWishlistToggle = async (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    await toggleWishlist({ id, title });
-  };
+      {/* 2. Title (max 2 lines, strongest text on card) */}
+      <h3 className="text-base sm:text-lg font-display font-semibold text-[var(--text-primary)] group-hover:text-[var(--brand)] transition-colors line-clamp-2 leading-snug mb-1.5">
+        {title}
+      </h3>
 
-  const handleCompareToggle = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    toggleCompare(productData);
-  };
+      {/* 3. One-line description clamp (empty spacer preserves baseline alignment) */}
+      {cleanTagline ? (
+        <p className="text-sm text-[var(--text-secondary)] line-clamp-1 leading-snug mb-4">
+          {cleanTagline}
+        </p>
+      ) : (
+        <div className="min-h-[1.25rem] mb-4" aria-hidden="true" />
+      )}
 
-  const handleQuickView = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setIsQuickViewOpen(true);
-  };
-
-  const handleAddToCart = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-
-    addItem({
-      productId: id,
-      title,
-      slug,
-      thumbnailUrl: thumbnail_url,
-      licenseType: 'single',
-      singlePricePaise: price_inr,
-      unlimitedPricePaise: Math.round((price_inr * 2.5) / 100) * 100,
-      isFree: is_free,
-    });
-
-    toast.success(`Added ${title} to cart`);
-  };
-
-  const saved = isWishlisted(id);
-  const compared = isInCompare(id);
+      {/* 4. Price (pinned to bottom on shared baseline) */}
+      <div className="mt-auto pt-3 border-t border-[var(--border)] flex items-center justify-between gap-2">
+        <span
+          className={`text-[15px] font-display font-semibold tabular-nums ${
+            is_free || price_inr <= 0 ? 'text-[var(--brand)]' : 'text-[var(--text-primary)]'
+          }`}
+        >
+          {priceText}
+        </span>
+      </div>
+    </div>
+  );
 
   return (
-    <>
-      <div className="group relative flex flex-col bg-[var(--surface)] rounded-2xl border border-[var(--border)] overflow-hidden hover:border-lime/60 hover:-translate-y-1.5 hover:shadow-xl hover:shadow-lime/10 transition-all duration-300 will-change-transform">
-        {/* Thumbnail Container */}
-        <div className="relative aspect-[16/10] w-full overflow-hidden bg-[var(--surface-2)]">
-          <TransitionLink href={`/products/${slug}`} className="block w-full h-full">
-            <SafeImage
-              src={thumbnail_url || 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=800'}
-              alt={title}
-              fill
-              placeholder="blur"
-              blurDataURL={DEFAULT_BLUR_DATA_URL}
-              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-              className="object-cover group-hover:scale-[1.06] transition-transform duration-500 ease-out"
-            />
-          </TransitionLink>
+    <TransitionLink
+      href={`/products/${slug}`}
+      className={`group rounded-2xl bg-[var(--surface)] border border-[var(--border)] hover:border-[var(--brand)]/60 overflow-hidden transition-colors ${
+        layout === 'horizontal'
+          ? 'grid grid-cols-1 sm:grid-cols-12'
+          : 'flex flex-col h-full'
+      } ${className}`}
+    >
+      {mediaBlock}
+      {bodyBlock}
+    </TransitionLink>
+  );
+}
 
-          {/* Badges Overlay */}
-          <div className="absolute top-3 left-3 flex flex-wrap gap-1.5 z-10 pointer-events-none">
-            {category && (
-              <Badge variant="secondary" className="bg-[var(--surface)]/90 backdrop-blur-sm text-[var(--text)] font-semibold text-[10px] px-2 py-0.5 shadow-xs border border-[var(--border)]">
-                {category.name}
-              </Badge>
-            )}
-            {is_bundle && (
-              <Badge className="bg-lime text-[#0a0f0a] font-black text-[10px] px-2 py-0.5 shadow-xs">
-                Bundle Deal
-              </Badge>
-            )}
-            {is_free && (
-              <Badge className="bg-deep-green text-white font-bold text-[10px] px-2 py-0.5 shadow-xs">
-                Freebie
-              </Badge>
-            )}
-            {is_featured && !is_free && (
-              <Badge className="bg-[var(--text)] text-[var(--surface)] font-medium text-[10px] px-2 py-0.5 shadow-xs border-0 flex items-center gap-1">
-                <Sparkles className="w-2.5 h-2.5 text-lime" />
-                Featured
-              </Badge>
-            )}
-          </div>
-
-          {/* Action Icons Overlay (Wishlist + Compare + QuickView) */}
-          <div className="absolute top-3 right-3 z-10 flex flex-col gap-1.5">
-            {/* Wishlist Button */}
-            <button
-              onClick={handleWishlistToggle}
-              aria-label={saved ? `Remove ${title} from wishlist` : `Save ${title} to wishlist`}
-              className="w-8 h-8 rounded-full bg-[var(--surface)]/90 backdrop-blur-sm border border-[var(--border)] flex items-center justify-center text-[var(--muted)] hover:text-red-500 hover:scale-110 active:scale-95 transition-all shadow-xs"
-            >
-              <Heart
-                className={`w-4 h-4 transition-colors ${
-                  saved ? 'fill-red-500 text-red-500' : ''
-                }`}
-              />
-            </button>
-
-            {/* Compare Toggle Button */}
-            <button
-              onClick={handleCompareToggle}
-              aria-label={compared ? `Remove ${title} from comparison` : `Compare ${title}`}
-              title={compared ? 'In comparison' : 'Add to comparison'}
-              className={`w-8 h-8 rounded-full bg-[var(--surface)]/90 backdrop-blur-sm border border-[var(--border)] flex items-center justify-center hover:scale-110 active:scale-95 transition-all shadow-xs ${
-                compared ? 'text-lime border-lime bg-lime/20' : 'text-[var(--muted)] hover:text-[var(--text)]'
-              }`}
-            >
-              <Scale className="w-4 h-4" />
-            </button>
-
-            {/* Quick View Button */}
-            <button
-              onClick={handleQuickView}
-              aria-label={`Quick view ${title}`}
-              title="Quick view"
-              className="w-8 h-8 rounded-full bg-[var(--surface)]/90 backdrop-blur-sm border border-[var(--border)] flex items-center justify-center text-[var(--muted)] hover:text-[var(--text)] hover:scale-110 active:scale-95 transition-all shadow-xs"
-            >
-              <Eye className="w-4 h-4" />
-            </button>
-          </div>
-        </div>
-
-        {/* Card Content */}
-        <div className="p-5 flex flex-col flex-1">
-          {/* Rating and Tech Stack */}
-          <div className="flex items-center justify-between gap-2 mb-2 text-xs">
-            {rating_count > 0 ? (
-              <div className="flex items-center gap-1 text-[var(--text)] font-medium">
-                <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
-                <span>{rating_avg.toFixed(1)}</span>
-                <span className="text-[var(--muted)]">({rating_count})</span>
-              </div>
-            ) : (
-              <span className="text-[11px] text-[var(--muted)] italic">No reviews yet</span>
-            )}
-
-            {tech_stack.length > 0 && (
-              <div className="flex items-center gap-1">
-                {tech_stack.slice(0, 2).map((tech) => (
-                  <span
-                    key={tech}
-                    className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-[var(--surface-2)] text-[var(--muted)] border border-[var(--border)]"
-                  >
-                    {tech}
-                  </span>
-                ))}
-              </div>
-            )}
-          </div>
-
-          {/* Title with word-aware 2-line clamp */}
-          <Link href={`/products/${slug}`} className="group-hover:text-[var(--accent)] transition-colors">
-            <h3 className="heading-3 line-clamp-2 break-words [overflow-wrap:break-word] [hyphens:none] min-h-[2.5rem]" title={title}>
-              {title}
-            </h3>
-          </Link>
-
-          {/* Tagline */}
-          <p className="body-small text-[var(--muted)] line-clamp-2 mt-1 mb-4 flex-1">
-            {tagline}
-          </p>
-
-          {/* Price & Action Row */}
-          <div className="pt-3 border-t border-[var(--border)] flex items-center justify-between gap-2 mt-auto">
-            <div>
-              <span className="eyebrow text-[10px] text-[var(--muted)] block leading-tight">
-                {is_free ? 'License' : 'From'}
-              </span>
-              <div className="text-base font-display font-bold text-[var(--text)] tracking-tight tabular-nums">
-                {is_free ? (
-                  <span className="text-[var(--accent)] font-bold">Free Download</span>
-                ) : (
-                  `₹${formattedPrice}`
-                )}
-              </div>
-            </div>
-
-            <div className="flex items-center gap-1.5">
-              <Button
-                size="sm"
-                onClick={handleAddToCart}
-                className="h-9 px-3 rounded-xl bg-[var(--text)] hover:opacity-90 text-[var(--surface)] text-xs font-semibold flex items-center gap-1.5 shadow-xs transition-all"
-              >
-                <ShoppingBag className="w-3.5 h-3.5" />
-                <span>{is_free ? 'Claim' : 'Add'}</span>
-              </Button>
-
-              <Button
-                asChild
-                variant="outline"
-                size="sm"
-                className="h-9 w-9 p-0 rounded-xl border-[var(--border)] text-[var(--muted)] hover:text-[var(--text)] hover:bg-[var(--surface-2)]"
-                aria-label={`View ${title} details`}
-              >
-                <Link href={`/products/${slug}`}>
-                  <ArrowUpRight className="w-4 h-4" />
-                </Link>
-              </Button>
-            </div>
-          </div>
+export function ProductCardSkeleton({ layout = 'vertical' }: { layout?: 'vertical' | 'horizontal' }) {
+  return (
+    <div
+      aria-hidden="true"
+      className={`rounded-2xl bg-[var(--surface)] border border-[var(--border)] overflow-hidden ${
+        layout === 'horizontal' ? 'grid grid-cols-1 sm:grid-cols-12' : 'flex flex-col h-full'
+      }`}
+    >
+      <div
+        className={`aspect-[16/10] w-full bg-[var(--surface-2)] animate-pulse ${
+          layout === 'horizontal' ? 'sm:col-span-7' : ''
+        }`}
+      />
+      <div className={`p-5 flex flex-col flex-1 space-y-2.5 ${layout === 'horizontal' ? 'sm:col-span-5' : ''}`}>
+        <div className="h-3.5 w-24 rounded bg-[var(--surface-2)] animate-pulse" />
+        <div className="h-5 w-4/5 rounded bg-[var(--surface-2)] animate-pulse" />
+        <div className="h-4 w-full rounded bg-[var(--surface-2)] animate-pulse" />
+        <div className="mt-auto pt-3 border-t border-[var(--border)]">
+          <div className="h-4 w-16 rounded bg-[var(--surface-2)] animate-pulse" />
         </div>
       </div>
-
-      {/* Quick View Modal */}
-      <QuickViewModal
-        product={productData}
-        isOpen={isQuickViewOpen}
-        onClose={() => setIsQuickViewOpen(false)}
-      />
-    </>
+    </div>
   );
 }
