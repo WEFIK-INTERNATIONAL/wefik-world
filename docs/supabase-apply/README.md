@@ -17,7 +17,7 @@ Ordered SQL scripts and manual dashboard steps to bring the live Supabase projec
    4. [`04-cleanup-and-seed-products.sql`](./04-cleanup-and-seed-products.sql) — archives/deletes demo products and seeds real products as `draft`.
    5. [`05-extras-indexes-and-cron.sql`](./05-extras-indexes-and-cron.sql) — extensions, `search_path`-hardened helpers, indexes, and optional `pg_cron` reminder job.
    - *(Local scratch only)* [`99-rls-verification-test.sql`](./99-rls-verification-test.sql) — local-only rolled-back test proving RLS rules. **Do NOT run in production.**
-4. **Complete the manual dashboard steps** in [`MANUAL-CHECKLIST.md`](./MANUAL-CHECKLIST.md) (Auth URLs, SMTP, OAuth, Edge Functions, Razorpay, Vercel, Advisors).
+4. **Complete the manual dashboard steps** in [`MANUAL-CHECKLIST.md`](./MANUAL-CHECKLIST.md) and [`AUTH-LOGIN-CHECKLIST.md`](./AUTH-LOGIN-CHECKLIST.md) (Auth URLs, SMTP, OAuth, Edge Functions, Razorpay, Vercel, Advisors).
 5. **Run the end-to-end smoke test** (Section 10 of `MANUAL-CHECKLIST.md`).
 
 ## Stop & Ask Conditions

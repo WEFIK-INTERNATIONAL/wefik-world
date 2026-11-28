@@ -1,12 +1,33 @@
 const DEFAULT_PRODUCTION_ORIGIN = 'https://www.wefik.world';
+let warnedMissingProdOrigin = false;
 
 /**
  * Resolve the canonical site origin from environment configuration.
- * Throws if an explicitly configured URL is malformed.
+ * Throws if an explicitly configured URL is malformed or if NEXT_PUBLIC_SITE_URL
+ * conflicts with NEXT_PUBLIC_APP_URL.
  */
 export function getConfiguredSiteOrigin(env: NodeJS.ProcessEnv = process.env): string {
-  const raw = (env.NEXT_PUBLIC_APP_URL || env.NEXT_PUBLIC_SITE_URL || '').trim();
+  const appUrlRaw = (env.NEXT_PUBLIC_APP_URL || '').trim();
+  const siteUrlRaw = (env.NEXT_PUBLIC_SITE_URL || '').trim();
+
+  if (appUrlRaw && siteUrlRaw) {
+    const appOrigin = new URL(appUrlRaw).origin;
+    const siteOrigin = new URL(siteUrlRaw).origin;
+    if (appOrigin !== siteOrigin) {
+      throw new Error(
+        `Conflicting site URL configuration: NEXT_PUBLIC_APP_URL (${appOrigin}) !== NEXT_PUBLIC_SITE_URL (${siteOrigin})`
+      );
+    }
+  }
+
+  const raw = appUrlRaw || siteUrlRaw;
   if (!raw) {
+    if (env.NODE_ENV === 'production' && !warnedMissingProdOrigin) {
+      warnedMissingProdOrigin = true;
+      console.error(
+        `[auth/redirects] NEXT_PUBLIC_APP_URL is missing in production; defaulting to ${DEFAULT_PRODUCTION_ORIGIN}`
+      );
+    }
     return DEFAULT_PRODUCTION_ORIGIN;
   }
 
@@ -25,20 +46,20 @@ export function getConfiguredSiteOrigin(env: NodeJS.ProcessEnv = process.env): s
 }
 
 /**
- * Determine the origin to use for OAuth / magic-link `redirectTo` on the client.
- * Uses `window.location.origin` for localhost/127.0.0.1 and Vercel preview hosts,
- * and the configured canonical origin in production so sign-in and callback share the same host.
+ * Determine the origin to use for OAuth / magic-link `redirectTo` and callback redirects.
+ * Uses `requestOrClientOrigin` only for localhost/127.0.0.1 and Vercel preview hosts,
+ * and always uses the configured canonical origin otherwise (never trusting spoofed Host headers).
  */
 export function getAuthRedirectOrigin(
-  clientOrigin?: string,
+  requestOrClientOrigin?: string,
   env: NodeJS.ProcessEnv = process.env
 ): string {
-  if (clientOrigin) {
+  if (requestOrClientOrigin) {
     try {
-      const parsedClient = new URL(clientOrigin);
-      const host = parsedClient.hostname.toLowerCase();
+      const parsed = new URL(requestOrClientOrigin);
+      const host = parsed.hostname.toLowerCase();
       if (host === 'localhost' || host === '127.0.0.1' || host.endsWith('.vercel.app')) {
-        return parsedClient.origin;
+        return parsed.origin;
       }
     } catch {
       // Fall through to configured canonical origin
@@ -50,7 +71,8 @@ export function getAuthRedirectOrigin(
 
 /**
  * Sanitize the `next` redirect path to prevent open redirects.
- * Accepts relative paths (including URL-encoded ones) and same-origin full URLs.
+ * Rejects protocol-relative URLs, backslashes, control characters, javascript:, and foreign origins.
+ * Accepts valid relative paths (including encoded ones) and same-origin full URLs.
  */
 export function sanitizeNextPath(rawNext: string | null | undefined, canonicalOrigin?: string): string {
   if (!rawNext || typeof rawNext !== 'string') {
@@ -62,19 +84,31 @@ export function sanitizeNextPath(rawNext: string | null | undefined, canonicalOr
     return '/account';
   }
 
-  // Decode up to 2 times if URL-encoded (e.g. %2Faccount%2Flibrary)
+  // Decode up to 2 times for encoded relative paths, but reject if control chars or backslashes appear
   for (let i = 0; i < 2; i++) {
-    if (candidate.startsWith('%2F') || candidate.startsWith('%2f')) {
+    if (/%[0-9a-f]{2}/i.test(candidate)) {
       try {
-        candidate = decodeURIComponent(candidate);
+        const decoded = decodeURIComponent(candidate);
+        if (decoded === candidate) break;
+        candidate = decoded.trim();
       } catch {
-        break;
+        return '/account';
       }
     }
   }
 
+  // Reject ASCII control characters (0x00-0x1F, 0x7F), whitespace inside scheme/prefix, or backslashes
+  if (/[\u0000-\u001f\u007f]/.test(candidate) || candidate.includes('\\')) {
+    return '/account';
+  }
+
+  const lower = candidate.toLowerCase();
+  if (lower.startsWith('javascript:') || lower.startsWith('data:') || lower.startsWith('vbscript:')) {
+    return '/account';
+  }
+
   // Accept same-origin full URLs by extracting path + search + hash
-  if (candidate.startsWith('http://') || candidate.startsWith('https://')) {
+  if (lower.startsWith('http://') || lower.startsWith('https://')) {
     try {
       const parsed = new URL(candidate);
       const allowedOrigin = canonicalOrigin || getConfiguredSiteOrigin();
@@ -87,8 +121,8 @@ export function sanitizeNextPath(rawNext: string | null | undefined, canonicalOr
     }
   }
 
-  // Must start with a single '/' and never '//' or '/\'
-  if (!candidate.startsWith('/') || candidate.startsWith('//') || candidate.startsWith('/\\')) {
+  // Must start with a single '/' and never '//'
+  if (!candidate.startsWith('/') || candidate.startsWith('//')) {
     return '/account';
   }
 
