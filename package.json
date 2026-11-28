@@ -8,7 +8,7 @@
     "build": "next build",
     "lint": "eslint --max-warnings=0",
     "typecheck": "tsc --noEmit",
-    "test": "node tests/edge-functions.test.mjs && node tests/auth-middleware.test.mjs && npx tsx --test tests/auth-oauth-callback.test.ts && node tests/authz-matrix.test.mjs && node tests/checkout-e2e.test.mjs && npx tsx tests/auth-rls.test.mjs && node tests/launch-critical-flows.test.mjs",
+    "test": "node tests/edge-functions.test.mjs && node tests/auth-middleware.test.mjs && npx tsx --test tests/auth-oauth-callback.test.ts && node tests/authz-matrix.test.mjs && node tests/checkout-e2e.test.mjs && npx tsx tests/auth-rls.test.mjs && npx tsx tests/launch-critical-flows.test.mjs",
     "test:e2e": "playwright test",
     "audit:seo": "node scripts/audit-sitemaps-and-seo.mjs",
     "bundle-audit": "node scripts/bundle-audit.mjs",
