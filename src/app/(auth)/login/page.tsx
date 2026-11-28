@@ -76,9 +76,8 @@ function LoginFormContent() {
         const hashCode = hashParams.get('error_code');
         const hashDesc = hashParams.get('error_description');
         if (hashErr || hashCode || hashDesc) {
-          setMappedCallbackError(
-            mapAuthError({ error: hashErr, errorCode: hashCode, errorDescription: hashDesc })
-          );
+          const mapped = mapAuthError({ error: hashErr, errorCode: hashCode, errorDescription: hashDesc });
+          queueMicrotask(() => setMappedCallbackError(mapped));
           window.history.replaceState(null, '', window.location.pathname + window.location.search);
         }
       } catch {

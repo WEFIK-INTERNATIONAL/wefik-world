@@ -28,7 +28,7 @@ test.describe('Auth Login Error Mapping & Accessibility', () => {
 
       await page.goto(`/login?error=${code}&cid=req12345`, { waitUntil: 'domcontentloaded' });
 
-      const alert = page.locator('[role="alert"]');
+      const alert = page.locator('main [role="alert"]');
       await expect(alert).toBeVisible();
       await expect(alert).toContainText(expectedTitle);
       await expect(alert).toContainText('Request ID: req12345');

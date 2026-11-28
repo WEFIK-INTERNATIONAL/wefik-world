@@ -4,7 +4,8 @@ import { NextResponse, type NextRequest } from 'next/server';
 import * as Sentry from '@sentry/nextjs';
 import type { Database } from '@/types/database';
 import { classifyAuthError } from '@/lib/auth/error-mapper';
-import { sanitizeNextPath } from '@/lib/auth/redirects';
+import { getAuthRedirectOrigin, sanitizeNextPath } from '@/lib/auth/redirects';
+import { redis } from '@/lib/redis';
 
 interface CookieToSet {
   name: string;
@@ -26,11 +27,10 @@ export interface HandleCallbackDeps {
     request: Request,
     onCookiesSet: (cookiesToSet: CookieToSet[]) => void
   ) => Promise<CallbackSupabaseLike>;
-  now?: () => number;
+  checkAndMarkCodeUsed?: (codeHash: string) => Promise<boolean>;
 }
 
-const CODE_CACHE_TTL_MS = 30_000;
-const recentCodeExchanges = new Map<string, { ok: boolean; mappedError?: string; expiresAt: number }>();
+const CODE_DEDUPE_TTL_SECONDS = 60;
 
 async function hashCode(code: string): Promise<string> {
   const bytes = new TextEncoder().encode(code);
@@ -38,6 +38,22 @@ async function hashCode(code: string): Promise<string> {
   return Array.from(new Uint8Array(digest))
     .map((b) => b.toString(16).padStart(2, '0'))
     .join('');
+}
+
+/**
+ * Distributed 60s code-exchange guard backed by Upstash Redis.
+ * Fails OPEN if Redis is unconfigured or unreachable so legitimate logins are never blocked.
+ */
+async function defaultCheckAndMarkCodeUsed(codeHash: string): Promise<boolean> {
+  if (!redis) return false;
+  try {
+    const key = `oauth:code:${codeHash}`;
+    const result = await redis.set(key, '1', { nx: true, ex: CODE_DEDUPE_TTL_SECONDS });
+    // result is 'OK' on first set, null if key already existed
+    return result === null;
+  } catch {
+    return false;
+  }
 }
 
 function logStructuredAuthEvent(details: {
@@ -107,8 +123,10 @@ export async function handleAuthCallback(
   deps: HandleCallbackDeps = {}
 ): Promise<NextResponse> {
   const parsedUrl = new URL(request.url);
-  const { searchParams, origin } = parsedUrl;
-  const isHttps = parsedUrl.protocol === 'https:';
+  const { searchParams } = parsedUrl;
+  // Never trust spoofed Host / X-Forwarded-Host headers in production; use configured canonical origin
+  const origin = getAuthRedirectOrigin(parsedUrl.origin);
+  const isHttps = origin.startsWith('https://');
   const code = searchParams.get('code');
   const errorParam = searchParams.get('error');
   const errorCodeParam = searchParams.get('error_code');
@@ -141,7 +159,6 @@ export async function handleAuthCallback(
   }
 
   // 2. If no code is present, route through client hash-error inspector (/auth/callback/error)
-  //    so any #error=... fragment from the provider is captured before falling back to /login.
   if (!code) {
     logStructuredAuthEvent({
       cid,
@@ -155,25 +172,13 @@ export async function handleAuthCallback(
     );
   }
 
-  const now = (deps.now || Date.now)();
-  const codeHash = await hashCode(code);
-  const cached = recentCodeExchanges.get(codeHash);
-  if (cached && cached.expiresAt > now) {
-    if (cached.ok) {
-      return NextResponse.redirect(`${origin}${safeNext}`);
-    }
-    return NextResponse.redirect(
-      `${origin}/login?error=${encodeURIComponent(cached.mappedError || 'temporary_error')}&cid=${cid}&next=${encodeURIComponent(safeNext)}`
-    );
-  }
-
   const pendingCookies: CookieToSet[] = [];
   const createSupabase = deps.createSupabaseForResponse || defaultCreateSupabaseForResponse;
   const supabase = await createSupabase(request, (cookiesToSet) => {
     pendingCookies.push(...cookiesToSet);
   });
 
-  // 3. If a session already exists (e.g. duplicate callback hit), proceed cleanly
+  // 3. If a session already exists (e.g. refresh of callback URL), proceed cleanly
   const { data: existingData } = await supabase.auth.getUser();
   if (existingData?.user) {
     const response = NextResponse.redirect(`${origin}${safeNext}`);
@@ -181,10 +186,26 @@ export async function handleAuthCallback(
     return response;
   }
 
-  // 4. Exchange PKCE code once and bind cookies directly onto the returned response
+  // 4. Distributed duplicate-code guard (Redis 60s TTL, fails open if Redis unavailable)
+  const checkCodeUsed = deps.checkAndMarkCodeUsed || defaultCheckAndMarkCodeUsed;
+  const codeHash = await hashCode(code);
+  const alreadyConsumed = await checkCodeUsed(codeHash);
+  if (alreadyConsumed) {
+    logStructuredAuthEvent({
+      cid,
+      flow: 'duplicate_code_no_session',
+      errorName: 'DuplicateAuthCode',
+      status: 400,
+      mappedCode: 'session_lost',
+    });
+    return NextResponse.redirect(
+      `${origin}/login?error=session_lost&cid=${cid}&next=${encodeURIComponent(safeNext)}`
+    );
+  }
+
+  // 5. Exchange PKCE code once and bind cookies directly onto the returned response
   const { error } = await supabase.auth.exchangeCodeForSession(code);
   if (!error) {
-    recentCodeExchanges.set(codeHash, { ok: true, expiresAt: now + CODE_CACHE_TTL_MS });
     const response = NextResponse.redirect(`${origin}${safeNext}`);
     applyCookiesToResponse(response, pendingCookies, isHttps);
     return response;
@@ -194,12 +215,6 @@ export async function handleAuthCallback(
     error: error.name,
     errorCode: error.code,
     errorDescription: error.message,
-  });
-
-  recentCodeExchanges.set(codeHash, {
-    ok: false,
-    mappedError: mappedCode,
-    expiresAt: now + CODE_CACHE_TTL_MS,
   });
 
   logStructuredAuthEvent({
